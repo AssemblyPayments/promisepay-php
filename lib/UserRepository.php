@@ -12,9 +12,10 @@ class UserRepository extends ApiAbstract
 {
     const ENTITY = 'users';
 
-    public function getListOfUsers()
+    public function getListOfUsers($limit = 20, $offset = 0)
     {
-        $response = Request::get($this->baseUrl().'users')->authenticateWith($this->Login(), $this->Password())->send();
+        $this->paramsListCorrect($limit,$offset);
+        $response = $this->RestClient('get', 'users/', '', '');
         return $response->body->users;
     }
 

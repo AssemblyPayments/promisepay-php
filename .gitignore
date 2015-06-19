@@ -1,0 +1,8 @@
+#ignore PhpStorm files
+.idea/*
+
+#ignore log files
+lib/Log/report/*
+
+#ignore other
+lib/credentials.xml

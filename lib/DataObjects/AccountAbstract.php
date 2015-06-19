@@ -1,7 +1,7 @@
 <?php
 
 namespace PromisePay\DataObjects;
-require 'Object.php';
+
 /**
  * Class AccountAbstract
  * @package PromisePay\DataObjects

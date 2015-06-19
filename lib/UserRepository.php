@@ -1,7 +1,7 @@
 <?php
 namespace PromisePay;
 
-use Httpful\Request;
+//use Httpful\Request;
 use PromisePay\Exception;
 use PromisePay\Log;
 

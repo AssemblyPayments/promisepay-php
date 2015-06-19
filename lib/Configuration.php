@@ -13,7 +13,7 @@ class Configuration
     /**
      * @var string
      */
-    public $CredentialsFile = 'promisepay-credentials.xml';
+    public $CredentialsFile = '../lib/promisepay-credentials.xml';
 
     /**
      *

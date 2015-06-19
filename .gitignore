@@ -3,7 +3,9 @@
 #ignore .git
 .git/*
 #ignore log files
-lib/Log/report/*
+/lib/Log/report/*
 
 #ignore other
-lib/credentials.xml
+/lib/credentials.xml
+/vendor/
+composer.lock

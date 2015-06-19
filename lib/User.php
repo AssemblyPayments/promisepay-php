@@ -1,14 +1,18 @@
 <?php
 namespace PromisePay;
 
+use Httpful\Request;
 use PromisePay\Exception;
 use PromisePay\Log;
+include_once 'Configuration.php';
 
 class User extends ApiAbstract
 {
     public function getListOfUsers()
     {
-
+        $url = BaseUrl() + '/users';
+        $response = Request::get($url);
+        return $response->body->users;
     }
 
     public function getUserById()

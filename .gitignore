@@ -1,6 +1,7 @@
 #ignore PhpStorm files
 .idea/*
-
+#ignore .git
+.git/*
 #ignore log files
 lib/Log/report/*
 

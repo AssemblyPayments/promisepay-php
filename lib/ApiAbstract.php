@@ -1,6 +1,9 @@
 <?php
+
 namespace PromisePay;
 
+use PromisePay;
+use Httpful\Request;
 use PromisePay\Exception;
 use PromisePay\Log\Logger;
 
@@ -12,63 +15,81 @@ class ApiAbstract
 
     const ENTITY_LIST_LIMIT = 200;
 
-    public $credentials;
-
-    private function _getCredentials()
+    public function _construct()
     {
-        $this->credentials = new Configuration();
-        return $this->$credentials;
+
     }
 
     public function BaseUrl()
     {
+        $config = new Configuration;
 
-
-        if($this->_getCredentials()->getApiUrl() == null)
+        if($config->getApiUrl() == null)
         {
             Logger::logging('Fatal error: Api Url is empty');
             throw new Exception\Misconfiguration('Api Url is empty');
         }
 
-        $this->baseUrl = $this->_getCredentials()->getApiUrl();
+        $this->baseUrl = $config->getApiUrl();
         return $this->baseUrl;
     }
 
     public function Login()
     {
-        if($this->_getCredentials()->getUserLogin() == null)
+        $config = new Configuration;
+        if($config->getUserLogin() == null)
         {
             Logger::logging('Fatal error: Api login is empty');
             throw new Exception\Misconfiguration('Api login is empty');
         }
 
-        $this->login = $this->_getCredentials()->getUserLogin();
+        $this->login = $config->getUserLogin();
         return $this->login;
 
     }
 
     public function Password()
     {
-        if($this->_getCredentials()->getUserPassword() == null)
+        $config = new Configuration;
+        if($config->getUserPassword() == null)
         {
             Logger::logging('Fatal error: Api password is empty');
             throw new Exception\Misconfiguration('Api password is empty');
         }
 
-        $this->passWord = $this->credentials->getUserLogin();
+        $this->passWord = $config->getUserPassword();
         return $this->passWord;
     }
 
-    public function RestClient()
+    public function RestClient($method, $entity, $payload = null, $mime = null)
     {
+        $username = $this->Login();
+        $password = $this->Password();
 
+        $url = $this->BaseUrl().$entity;
+
+        switch ($method) {
+            case 'get':
+                $response = Request::get($url)->authenticateWith($username, $password)->send();
+                return $response;
+                break;
+
+            case 'post':
+                $response = Request::post($url)->body($payload, $mime)->authenticateWith($username,$password)->send();
+                return $response;
+                break;
+
+            case 'delete':
+                $response = Request::delete($url);
+                return $response;
+                break;
+
+            case 'patch':
+                $response = Request::patch($url, $payload, $mime);
+                return $response;
+                break;
+        }
     }
-
-    public function SendRequest()
-    {
-
-    }
-
 
     public function checkIdNotNull($id)
     {

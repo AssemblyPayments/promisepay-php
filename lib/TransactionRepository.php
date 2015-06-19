@@ -4,7 +4,7 @@ namespace PromisePay;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class Transaction extends ApiAbstract
+class TransactionRepository extends ApiAbstract
 {
     public function getListOfTransactions()
     {

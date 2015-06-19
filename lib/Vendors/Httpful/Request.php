@@ -196,6 +196,7 @@ class Request
      */
     public function send()
     {
+
         if (!$this->hasBeenInitialized())
             $this->_curlPrep();
 
@@ -863,7 +864,8 @@ class Request
         }
 
         $ch = curl_init($this->uri);
-
+       // for fiddler capture.
+       // curl_setopt($ch, CURLOPT_PROXY, '127.0.0.1:8888');
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->method);
         if ($this->method === Http::HEAD) {
             curl_setopt($ch, CURLOPT_NOBODY, true);

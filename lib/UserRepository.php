@@ -12,17 +12,17 @@ class UserRepository extends ApiAbstract
     public function getListOfUsers($limit = 20, $offset = 0)
     {
         $this->paramsListCorrect($limit,$offset);
-        $response = $this->RestClient('get', 'users/', '', '');
+        $response = $this->RestClient('get', 'users?limit=' . $limit . '&offset=' . $offset, '', '');
         return $response->body->users;
     }
 
     public function getUserById($id)
     {
-
     }
 
     public function createUser($user)
     {
+        $this->validateUser($user);
         $entity = 'users/';
         $mime = 'multipart/form-data';
         $payload = '';
@@ -71,7 +71,7 @@ class UserRepository extends ApiAbstract
 
     }
 
-    public function validateUser($user)
+    private function validateUser($user)
     {
         if($user->id == null)
         {
@@ -92,7 +92,7 @@ class UserRepository extends ApiAbstract
 
     }
 
-    public function isCorrectEmail($email)
+    private function isCorrectEmail($email)
     {
         if (!filter_var($email, FILTER_VALIDATE_EMAIL))
         {
@@ -104,7 +104,7 @@ class UserRepository extends ApiAbstract
         }
     }
 
-    public function isCorrectCountryCode($Country)
+    private function isCorrectCountryCode($Country)
     {
         $allowedCountryCode = array(
             "AFG", "ALA", "ALB", "DZA", "ASM", "AND", "AGO", "AIA", "ATA",

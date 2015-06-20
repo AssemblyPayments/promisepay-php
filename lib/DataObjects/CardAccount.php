@@ -9,7 +9,12 @@ class CardAccount extends AccountAbstract
     /**
      * @var
      */
-    public $_card;
+    private $_card;
+
+    public function __construct()
+    {
+
+    }
 
     /**
      * @return mixed

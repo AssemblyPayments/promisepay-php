@@ -6,18 +6,30 @@ namespace PromisePay\DataObjects;
  */
 abstract class Object
 {
+    private $_id;
     /**
      * @var
      */
-    public $_links;
+    private $_links;
     /**
      * @var
      */
-    public $_createdAt;
+    private $_createdAt;
     /**
      * @var
      */
-    public $_updatedAt;
+    private $_updatedAt;
+
+    public function __construct($jsonData = array())
+    {
+        if (count($jsonData)>0)
+        {
+            $this->_id = $jsonData['id'];
+            $this->_createdAt = $jsonData['created_at'];
+            $this->_updatedAt = $jsonData['updated_at'];
+            $this->_links = $jsonData['links'];
+        }
+    }
 
     /**
      * @return mixed
@@ -65,6 +77,22 @@ abstract class Object
     public function setUpdatedAt($updatedAt)
     {
         $this->_updatedAt = $updatedAt;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->_id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->_id = $id;
     }
 
 }

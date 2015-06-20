@@ -10,60 +10,101 @@ class User extends Object
     /**
      * @var
      */
-    public $_firstName;
-    /**
-     * @var
-     */
-    public $_lastName;
-    /**
-     * @var
-     */
-    public $_email;
-    /**
-     * @var
-     */
-    public $_mobile;
-    /**
-     * @var
-     */
-    public $_addressLine1;
-    /**
-     * @var
-     */
-    public $_addressLine2;
-    /**
-     * @var
-     */
-    public $_city;
-    /**
-     * @var
-     */
-    public $_zip;
-    /**
-     * @var
-     */
-    public $_state;
-    /**
-     * @var
-     */
-    public $_country;
-    /**
-     * @var
-     */
-    public $_dob;
-    /**
-     * @var
-     */
-    public $_fullName;
-    /**
-     * @var
-     */
-    public $_verificationState;
-    /**
-     * @var
-     */
-    public $_driversLicense;
+    private  $_firstName;
 
+    /**
+     * @var
+     */
+    private $_lastName;
+
+    /**
+     * @var
+     */
+    private $_email;
+
+    /**
+     * @var
+     */
+    private $_mobile;
+
+    /**
+     * @var
+     */
+    private $_addressLine1;
+
+    /**
+     * @var
+     */
+    private $_addressLine2;
+
+    /**
+     * @var
+     */
+    private $_city;
+
+    /**
+     * @var
+     */
+    private $_zip;
+
+    /**
+     * @var
+     */
+    private $_state;
+
+    /**
+     * @var
+     */
+    private $_country;
+
+    /**
+     * @var
+     */
+    private $_dob;
+
+    /**
+     * @var
+     */
+    private $_fullName;
+
+    /**
+     * @var
+     */
+    private $_verificationState;
+
+    /**
+     * @var
+     */
+    private $_driversLicense;
+
+    /**
+     * @var
+     */
+    private $_phone;
+
+    public function __construct($jsonData = array())
+    {
+        if(count($jsonData)>0)
+        {
+            $this->_firstName         = $jsonData['first_name'];
+            $this->_fullName          = $jsonData['full_name'];
+            $this->_lastName          = $jsonData['last_name'];
+            $this->_email             = $jsonData['email'];
+            $this->_mobile            = $jsonData['mobile'];
+            $this->_phone             = $jsonData['phone'];
+            $this->_country           = $jsonData['country'];
+            $this->_addressLine1      = $jsonData['address_line1'];
+            $this->_addressLine2      = $jsonData['address_line2'];
+            $this->_city              = $jsonData['city'];
+            $this->_state             = $jsonData['state'];
+            $this->_zip               = $jsonData['zip'];
+            $this->_verificationState = $jsonData['verification_state'];
+            $this->_dob               = $jsonData['dob'];
+            $this->_driversLicense    = $jsonData['drivers_license'];
+
+        }
+        parent::__construct($jsonData);
+    }
     /**
      * @return mixed
      */
@@ -286,5 +327,21 @@ class User extends Object
     public function setDriversLicense($driversLicense)
     {
         $this->_driversLicense = $driversLicense;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPhone()
+    {
+        return $this->_phone;
+    }
+
+    /**
+     * @param mixed $phone
+     */
+    public function setPhone($phone)
+    {
+        $this->_phone = $phone;
     }
 }

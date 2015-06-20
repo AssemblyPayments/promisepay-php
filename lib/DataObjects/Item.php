@@ -10,76 +10,80 @@ class Item extends Object
     /**
      * @var
      */
-    public $_name;
+    private $_name;
     /**
      * @var
      */
-    public $_description;
+    private $_description;
     /**
      * @var
      */
-    public $_state;
+    private $_state;
     /**
      * @var
      */
-    public $_depositReference;
+    private $_depositReference;
     /**
      * @var
      */
-    public $_paymentType;
+    private $_paymentType;
     /**
      * @var
      */
-    public $_status;
+    private $_status;
     /**
      * @var
      */
-    public $_amount;
+    private $_amount;
     /**
      * @var
      */
-    public $_buyerId;
+    private $_buyerId;
     /**
      * @var
      */
-    public $_buyerName;
+    private $_buyerName;
     /**
      * @var
      */
-    public $_buyerCountry;
+    private $_buyerCountry;
     /**
      * @var
      */
-    public $_buyerEmail;
+    private $_buyerEmail;
     /**
      * @var
      */
-    public $_sellerId;
+    private $_sellerId;
     /**
      * @var
      */
-    public $_SellerName;
+    private $_SellerName;
     /**
      * @var
      */
-    public $_sellerCountry;
+    private $_sellerCountry;
     /**
      * @var
      */
-    public $_sellerEmail;
+    private $_sellerEmail;
     /**
      * @var
      */
-    public $_currency;
+    private $_currency;
     /**
      * @var
      */
-    public $_fees;
+    private $_fees;
     /**
      * @var
      */
-    public $_feeIds;
+    private $_feeIds;
 
+    public function __construct()
+    {
+
+    }
     /**
      * @return mixed
      */

@@ -8,10 +8,14 @@ namespace PromisePay\DataObjects;
  */
 class BankAccount extends AccountAbstract
 {
+    public function __construct()
+    {
+
+    }
     /**
      * @var
      */
-    public $_bank;
+    private $_bank;
 
     /**
      * @return mixed

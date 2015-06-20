@@ -9,27 +9,32 @@ class Card
     /**
      * @var
      */
-    public $_type;
+    private $_type;
     /**
      * @var
      */
-    public $_fullName;
+    private $_fullName;
     /**
      * @var
      */
-    public $_number;
+    private $_number;
     /**
      * @var
      */
-    public $_expMonth;
+    private $_expMonth;
     /**
      * @var
      */
-    public $_expYear;
+    private $_expYear;
     /**
      * @var
      */
-    public $_CVV;
+    private $_CVV;
+
+    public function __construct()
+    {
+
+    }
 
     /**
      * @return mixed

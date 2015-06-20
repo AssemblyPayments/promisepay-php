@@ -2,19 +2,23 @@
 namespace PromisePay\DataObjects;
 class WireDetails
 {
-    public $_beneficiary;
-    public $_addressLine1;
-    public $_city;
-    public $_state;
-    public $_zip;
-    public $_routingNumber;
-    public $_accountNumber;
-    public $_bankName;
-    public $_swift;
-    public $_reference;
-    public $_amount;
-    public $_currency;
+    private $_beneficiary;
+    private $_addressLine1;
+    private $_city;
+    private $_state;
+    private $_zip;
+    private $_routingNumber;
+    private $_accountNumber;
+    private $_bankName;
+    private $_swift;
+    private $_reference;
+    private $_amount;
+    private $_currency;
 
+    public function __construct()
+    {
+
+    }
     /**
      * @return mixed
      */

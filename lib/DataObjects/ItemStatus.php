@@ -9,16 +9,20 @@ class ItemStatus
     /**
      * @var
      */
-    public $_id;
+    private $_id;
     /**
      * @var
      */
-    public $_status;
+    private $_status;
     /**
      * @var
      */
-    public $_state;
+    private $_state;
 
+    public function __construct()
+    {
+
+    }
     /**
      * @return mixed
      */

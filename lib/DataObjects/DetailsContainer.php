@@ -9,16 +9,20 @@ class DetailsContainer
     /**
      * @var
      */
-    public $_id;
+    private $_id;
     /**
      * @var
      */
-    public $_BPayDetails;
+    private $_BPayDetails;
     /**
      * @var
      */
-    public $_wireDetails;
+    private $_wireDetails;
 
+    public function __construct()
+    {
+
+    }
     /**
      * @return mixed
      */

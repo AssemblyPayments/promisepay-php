@@ -9,31 +9,36 @@ class Bank
     /**
      * @var
      */
-    public $_bankName;
+    private $_bankName;
     /**
      * @var
      */
-    public $_country;
+    private $_country;
     /**
      * @var
      */
-    public $_accountName;
+    private $_accountName;
     /**
      * @var
      */
-    public $_routingNumber;
+    private $_routingNumber;
     /**
      * @var
      */
-    public $_accountNumber;
+    private $_accountNumber;
     /**
      * @var
      */
-    public $_holderType;
+    private $_holderType;
     /**
      * @var
      */
-    public $_accountType;
+    private $_accountType;
+
+    public function __construct()
+    {
+
+    }
 
     /**
      * @return mixed

@@ -10,24 +10,28 @@ class Upload extends Object
     /**
      * @var
      */
-    public $_totalLines;
+    private $_totalLines;
     /**
      * @var
      */
-    public $_processedLines;
+    private $_processedLines;
     /**
      * @var
      */
-    public $_updateLines;
+    private $_updateLines;
     /**
      * @var
      */
-    public $_errorLines;
+    private $_errorLines;
     /**
      * @var
      */
-    public $_progress;
+    private $_progress;
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
     /**
      * @return mixed
      */

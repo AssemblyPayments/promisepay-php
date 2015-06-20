@@ -8,6 +8,8 @@
 namespace PromisePay;
 
 
+use PromisePay\DataObjects\User;
+
 include_once '../init.php';
 include_once 'GUID.php';
 
@@ -42,33 +44,39 @@ class UserTest extends \PHPUnit_Framework_TestCase {
     {
         $repo = new UserRepository();
         $id = GUID();
-        $user = new User();
-        $user.setId()
+        //$user = new User();
+        //$user->setId();
         $arr = array(
             "id"            => $id,
-            "FirstName"    => 'Test',
-            "LastName"     => 'Test',
-            "email"         => $id . 'google.com',
+            "first_name"    => 'Test',
+            "last_name"     => 'Test',
+            "email"         => $id . '@google.com',
             "mobile"        => '3213121223',
             "address_line1" => 'a line 1',
             "address_line2" => 'a line 2',
             "state"         => 'state',
             "city"          => 'city',
             "zip"           => '90210',
-            "country"       => 'AUS',
+            "location"      => 'AUS',
         );
 
-        $user = json_decode(json_encode($arr), FALSE);
+        $user = new User($arr);
+
+        //$user = json_decode(json_encode($arr), FALSE);
 
         $createdUser = $repo->createUser($user);
 
-        $this->assertEquals($user->id, $createdUser->id);
+        $findUser = $repo->getUserById($id);
 
-        $this->assertEquals($user->first_name, $createdUser->first_name);
-        $this->assertEquals($user->last_name, $createdUser->last_name);
-        $this->assertEquals($user->email, $createdUser->email);
-        $this->assertNotNull($user->createdAt);
-        $this->assertNotNull($user->updatedAt);
+        $this->assertEquals($createdUser->getId(), $findUser->getId());
+
+        $this->assertEquals($user->getId(), $createdUser->id);
+
+        $this->assertEquals($user->getFirstName(), $createdUser->first_name);
+        $this->assertEquals($user->getLastName(), $createdUser->last_name);
+        $this->assertEquals($user->getEmail(), $createdUser->email);
+        $this->assertNotNull($user->getCreatedAt());
+        $this->assertNotNull($user->getUpdatedAt());
     }
 
 

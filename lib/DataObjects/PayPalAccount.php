@@ -9,8 +9,12 @@ class PayPalAccount extends AccountAbstract
     /**
      * @var
      */
-    public $_PayPal;
+    private $_PayPal;
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
     /**
      * @return mixed
      */

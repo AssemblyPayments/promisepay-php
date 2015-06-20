@@ -6,22 +6,28 @@ namespace PromisePay\DataObjects;
  */
 class BPayDetails
 {
+
     /**
      * @var
      */
-    public $_billerCode;
+    private $_billerCode;
     /**
      * @var
      */
-    public $_reference;
+    private $_reference;
     /**
      * @var
      */
-    public $_amount;
+    private $_amount;
     /**
      * @var
      */
-    public $_currency;
+    private $_currency;
+
+    public function __construct()
+    {
+
+    }
 
     /**
      * @return mixed

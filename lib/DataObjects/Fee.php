@@ -9,32 +9,36 @@ class Fee extends Object
     /**
      * @var
      */
-    public $_name;
+    private $_name;
     /**
      * @var
      */
-    public $_feeType;
+    private $_feeType;
     /**
      * @var
      */
-    public $_amount;
+    private $_amount;
     /**
      * @var
      */
-    public $_cap;
+    private $_cap;
     /**
      * @var
      */
-    public $_min;
+    private $_min;
     /**
      * @var
      */
-    public $_max;
+    private $_max;
     /**
      * @var
      */
-    public $_to;
+    private $_to;
 
+    public function __construct()
+    {
+
+    }
     /**
      * @return mixed
      */

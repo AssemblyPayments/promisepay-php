@@ -7,5 +7,9 @@ namespace PromisePay\DataObjects;
  */
 class DisbursementAccount extends Object
 {
+    public function __construct()
+    {
+
+    }
     //void
 }

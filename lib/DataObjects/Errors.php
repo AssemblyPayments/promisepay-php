@@ -9,8 +9,12 @@ class Errors
     /**
      * @var
      */
-    public $_errors;
+    private $_errors;
 
+    public function __construct()
+    {
+
+    }
     /**
      * @return mixed
      */

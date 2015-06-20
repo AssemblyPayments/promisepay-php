@@ -9,43 +9,48 @@ class Company extends Object
     /**
      * @var
      */
-    public $_legalName;
+    private $_legalName;
     /**
      * @var
      */
-    public $_name;
+    private $_name;
     /**
      * @var
      */
-    public $_taxNumber;
+    private $_taxNumber;
     /**
      * @var
      */
-    public $_chargeTax;
+    private $_chargeTax;
     /**
      * @var
      */
-    public $_addressLine1;
+    private $_addressLine1;
     /**
      * @var
      */
-    public $_addressLine2;
+    private $_addressLine2;
     /**
      * @var
      */
-    public $_city;
+    private $_city;
     /**
      * @var
      */
-    public $_state;
+    private $_state;
     /**
      * @var
      */
-    public $_zip;
+    private $_zip;
     /**
      * @var
      */
-    public $_country;
+    private $_country;
+
+    public function __construct()
+    {
+
+    }
 
     /**
      * @return mixed

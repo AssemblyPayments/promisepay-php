@@ -10,11 +10,16 @@ class PayPal
     /**
      * @var
      */
-    public $_PayPalAccountEmail;
+    private $_PayPalAccountEmail;
 
     /**
      * @return mixed
      */
+    public function __construct()
+    {
+
+    }
+
     public function getPayPalAccountEmail()
     {
         return $this->_PayPalAccountEmail;

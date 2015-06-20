@@ -11,16 +11,20 @@ class AccountAbstract extends Object
     /**
      * @var
      */
-    public  $_currency;
+    private   $_currency;
     /**
      * @var
      */
-    public  $_userId;
+    private  $_userId;
     /**
      * @var
      */
-    public  $_isActive;
+    private  $_isActive;
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
     /**
      * @return mixed
      */

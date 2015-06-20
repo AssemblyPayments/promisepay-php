@@ -1,44 +1,70 @@
 <?php
 namespace PromisePay;
 
+use PromisePay\DataObjects\User;
 use PromisePay\Exception;
 use PromisePay\Log;
 
 
 class UserRepository extends ApiAbstract
 {
-    const ENTITY = 'users';
 
     public function getListOfUsers($limit = 20, $offset = 0)
     {
         $this->paramsListCorrect($limit,$offset);
         $response = $this->RestClient('get', 'users?limit=' . $limit . '&offset=' . $offset, '', '');
-        return $response->body->users;
+        $allUsers = array();
+        $jsonData = json_decode($response->raw_body, true)['users'];
+        foreach($jsonData as $oneUser )
+        {
+            $user = new User($oneUser);
+            array_push($allUsers, $user);
+        }
+        return $allUsers;
     }
 
     public function getUserById($id)
     {
+        $this->checkIdNotNull($id);
+        $response = $this->RestClient('get', 'users/' . $id);
+        $jsonData = json_decode($response->raw_body, true)['users'];
+        $user = new User($jsonData);
+        return $user;
     }
 
-    public function createUser($user)
+    public function createUser(User $user)
     {
         $this->validateUser($user);
-        $entity = 'users/';
-        $mime = 'multipart/form-data';
+        //$mime = 'multipart/form-data';
         $payload = '';
-        foreach ($user as $key => $value)
+        $preparePayload = array(
+                "id"            => $user->getId(),
+                "first_name"    => $user->getFirstName(),
+                "last_name"     => $user->getLastName(),
+                "email"         => $user->getEmail(),
+                "mobile"        => $user->getMobile(),
+                "address_line1" => $user->getAddressLine1(),
+                "address_line2" => $user->getAddressLine2(),
+                "state"         => $user->getState(),
+                "city"          => $user->getCity(),
+                "zip"           => $user->getZip(),
+                "location"      => $user->getCountry(),
+            );
+        foreach ($preparePayload as $key => $value)
         {
             $payload .= $key . '=';
-        $payload .= urlencode($value);
-        $payload .= "&";
+            $payload .= urlencode($value);
+            $payload .= "&";
         }
-        $response = $this->RestClient('post', $entity, $payload, $mime);
+        $response = $this->RestClient('post', 'users/', $payload, '');
         return $response;
     }
 
     public function deleteUser($id)
     {
-        Request::delete($this->baseUrl().self::ENTITY.$id)->send();
+        $this->checkIdNotNull($id);
+        $response = $this->RestClient('delete', 'users/'.$id);
+        return $response;
     }
 
     public function sendMobilePin()
@@ -73,19 +99,19 @@ class UserRepository extends ApiAbstract
 
     private function validateUser($user)
     {
-        if($user->id == null)
+        if($user->getId() == null)
         {
             throw new Exception\Validation('Field User.ID should not be empty');
         }
-        if($user->FirstName == null)
+        if($user->getFirstName() == null)
         {
             throw new Exception\Validation('Field User.ID should not be empty');
         }
-        if($this->isCorrectCountryCode($user->_country) != true)
+        if($this->isCorrectCountryCode($user->getCountry()) != true)
         {
             throw new Exception\Validation('Field Country should contain 3-letter ISO country code!');
         }
-        if($this->isCorrectEmail($user->_email) != true)
+        if($this->isCorrectEmail($user->getEmail()) != true)
         {
             throw new Exception\Validation('Incorrect email address');
         }

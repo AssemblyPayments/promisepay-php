@@ -10,111 +10,116 @@ class Widget
     /**
      * @var
      */
-    public $_itemName;
+    private $_itemName;
     /**
      * @var
      */
-    public $_fullAmount;
+    private $_fullAmount;
     /**
      * @var
      */
-    public $_amount;
+    private $_amount;
     /**
      * @var
      */
-    public $_fees;
+    private $_fees;
     /**
      * @var
      */
-    public $_feename;
+    private $_feename;
     /**
      * @var
      */
-    public $_remainingAmount;
+    private $_remainingAmount;
     /**
      * @var
      */
-    public $_releaseRequestAccount;
+    private $_releaseRequestAccount;
     /**
      * @var
      */
-    public $_currency;
+    private $_currency;
     /**
      * @var
      */
-    public $_description;
+    private $_description;
     /**
      * @var
      */
-    public $_actionNAme;
+    private $_actionNAme;
     /**
      * @var
      */
-    public $_status;
+    private $_status;
     /**
      * @var
      */
-    public $_hasPendingRelease;
+    private $_hasPendingRelease;
     /**
      * @var
      */
-    public $_verificationState;
+    private $_verificationState;
     /**
      * @var
      */
-    public $_verificationInformation;
+    private $_verificationInformation;
     /**
      * @var
      */
-    public $_disbursementAccount;
+    private $_disbursementAccount;
     /**
      * @var
      */
-    public $_paymentMethod;
+    private $_paymentMethod;
     /**
      * @var
      */
-    public $_disputeUser;
+    private $_disputeUser;
     /**
      * @var
      */
-    public $_role;
+    private $_role;
     /**
      * @var
      */
-    public $_otherUsername;
+    private $_otherUsername;
     /**
      * @var
      */
-    public $_primaryColor;
+    private $_primaryColor;
     /**
      * @var
      */
-    public $_secondaryColor;
+    private $_secondaryColor;
     /**
      * @var
      */
-    public $_thirdColor;
+    private $_thirdColor;
     /**
      * @var
      */
-    public $_fourthColor;
+    private $_fourthColor;
     /**
      * @var
      */
-    public $_bankAccount;
+    private $_bankAccount;
     /**
      * @var
      */
-    public $_taxInvoice;
+    private $_taxInvoice;
     /**
      * @var
      */
-    public $_buyerUrl;
+    private $_buyerUrl;
     /**
      * @var
      */
-    public $_sellerUrl;
+    private $_sellerUrl;
+
+    public function __construct()
+    {
+
+    }
 
     /**
      * @return mixed

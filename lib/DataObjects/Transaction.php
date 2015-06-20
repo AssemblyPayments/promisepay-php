@@ -10,32 +10,36 @@ class Transaction extends Object
     /**
      * @var
      */
-    public $_description;
+    private $_description;
     /**
      * @var
      */
-    public $_amount;
+    private $_amount;
     /**
      * @var
      */
-    public $_currency;
+    private $_currency;
     /**
      * @var
      */
-    public $_type;
+    private $_type;
     /**
      * @var
      */
-    public $_from;
+    private $_from;
     /**
      * @var
      */
-    public $_to;
+    private $_to;
     /**
      * @var
      */
-    public $_related;
+    private $_related;
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
     /**
      * @return mixed
      */

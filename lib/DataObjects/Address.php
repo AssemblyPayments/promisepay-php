@@ -9,28 +9,32 @@ class Address extends Object
     /**
      * @var
      */
-    public $_addressLine1;
+    private $_addressLine1;
     /**
      * @var
      */
-    public $_addressLine2;
+    private $_addressLine2;
     /**
      * @var
      */
-    public $_postalCode;
+    private $_postalCode;
     /**
      * @var
      */
-    public $_city;
+    private $_city;
     /**
      * @var
      */
-    public $_state;
+    private $_state;
     /**
      * @var
      */
-    public $_country;
+    private $_country;
 
+    public function __construct()
+    {
+
+    }
     /**
      * @return mixed
      */

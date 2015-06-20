@@ -10,68 +10,72 @@ class Token
     /**
      * @var
      */
-    public $_currentUserID;
+    private $_currentUserID;
     /**
      * @var
      */
-    public $_itemName;
+    private $_itemName;
     /**
      * @var
      */
-    public $_amount;
+    private $_amount;
     /**
      * @var
      */
-    public $_sellerLastName;
+    private $_sellerLastName;
     /**
      * @var
      */
-    public $_sellerFirstName;
+    private $_sellerFirstName;
     /**
      * @var
      */
-    public $_sellerCountry;
+    private $_sellerCountry;
     /**
      * @var
      */
-    public $_buyerLastName;
+    private $_buyerLastName;
     /**
      * @var
      */
-    public $_buyerFirstName;
+    private $_buyerFirstName;
     /**
      * @var
      */
-    public $_buyerCountry;
+    private $_buyerCountry;
     /**
      * @var
      */
-    public $_sellerEmail;
+    private $_sellerEmail;
     /**
      * @var
      */
-    public $_buyerEmail;
+    private $_buyerEmail;
     /**
      * @var
      */
-    public $_externalItemId;
+    private $_externalItemId;
     /**
      * @var
      */
-    public $_externalSellerId;
+    private $_externalSellerId;
     /**
      * @var
      */
-    public $_externalBuyerId;
+    private $_externalBuyerId;
     /**
      * @var
      */
-    public $_feeIds;
+    private $_feeIds;
     /**
      * @var
      */
-    public $_paymentType;
+    private $_paymentType;
 
+    public function __construct()
+    {
+
+    }
     /**
      * @return mixed
      */

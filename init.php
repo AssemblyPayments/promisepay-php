@@ -1,4 +1,5 @@
 <?php
+//error_reporting(0);
 //configuration
 require(dirname(__FILE__) . '/lib/Configuration.php');
 //repos
@@ -62,3 +63,4 @@ require(dirname(__FILE__) . '/lib/Vendors/Httpful/Bootstrap.php');
 require(dirname(__FILE__) . '/lib/Vendors/Httpful/Http.php');
 require(dirname(__FILE__) . '/lib/Vendors/Httpful/Request.php');
 
+//require(dirname(__FILE__) . '/lib/Constructor.php');

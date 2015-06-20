@@ -52,7 +52,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
             "first_name"    => 'Test',
             "last_name"     => 'Test',
             "email"         => $id . '@google.com',
-            "mobile"        => $id . '3213125551223',
+            "mobile"        => $id.'3213125551223',
             "address_line1" => 'a line 1',
             "address_line2" => 'a line 2',
             "state"         => 'state',
@@ -76,8 +76,8 @@ class UserTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($user->getFirstName(), $createdUser->first_name);
         $this->assertEquals($user->getLastName(), $createdUser->last_name);
         $this->assertEquals($user->getEmail(), $createdUser->email);
-        $this->assertNotNull($user->getCreatedAt());
-        $this->assertNotNull($user->getUpdatedAt());
+        $this->assertNotNull($createdUser->created_at);
+        $this->assertNotNull($createdUser->updated_at);
     }
 
 

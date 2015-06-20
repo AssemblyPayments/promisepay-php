@@ -11,9 +11,9 @@ class Errors
      */
     private $_errors;
 
-    public function __construct()
+    public function __construct($errors = array())
     {
-
+        $this->_errors = $errors;
     }
     /**
      * @return mixed

@@ -13,14 +13,14 @@ $arr = array(
     "id"            => $id,
     "first_name"    => 'Test',
     "last_name"     => 'Test',
-    "email"         => 'teststsetsetse'.'@google.com',
+    "email"         => 'teststseere1231231231s1231213rser2131223tsetse666678889998'.'@google.com',
     "mobile"        => $id,
     "address_line1" => 'a line 1',
     "address_line2" => 'a line 2',
     "state"         => 'state',
     "city"          => 'city',
     "zip"           => '90210',
-    "country"       => 'RUS',
+    "country"       => 'AFG',
     "dob"           => '11/01/1971'
 );
 $test = new UserRepository();

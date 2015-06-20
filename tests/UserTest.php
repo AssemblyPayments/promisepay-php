@@ -42,6 +42,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
 
     public function testUserCreateSuccessful()
     {
+        \PHPUnit_Framework_Error_Notice::$enabled = FALSE;
         $repo = new UserRepository();
         $id = GUID();
         //$user = new User();
@@ -51,13 +52,13 @@ class UserTest extends \PHPUnit_Framework_TestCase {
             "first_name"    => 'Test',
             "last_name"     => 'Test',
             "email"         => $id . '@google.com',
-            "mobile"        => '3213121223',
+            "mobile"        => $id . '3213125551223',
             "address_line1" => 'a line 1',
             "address_line2" => 'a line 2',
             "state"         => 'state',
             "city"          => 'city',
             "zip"           => '90210',
-            "location"      => 'AUS',
+            "country"       => 'AUS',
         );
 
         $user = new User($arr);
@@ -68,7 +69,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
 
         $findUser = $repo->getUserById($id);
 
-        $this->assertEquals($createdUser->getId(), $findUser->getId());
+        $this->assertEquals($createdUser->id, $findUser->getId());
 
         $this->assertEquals($user->getId(), $createdUser->id);
 

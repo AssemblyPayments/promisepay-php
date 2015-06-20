@@ -1,6 +1,7 @@
 <?php
 namespace PromisePay;
 
+use PromisePay\DataObjects\Errors;
 use PromisePay\DataObjects\User;
 use PromisePay\Exception;
 use PromisePay\Log;
@@ -48,7 +49,7 @@ class UserRepository extends ApiAbstract
                 "state"         => $user->getState(),
                 "city"          => $user->getCity(),
                 "zip"           => $user->getZip(),
-                "location"      => $user->getCountry(),
+                "country"       => $user->getCountry(),
             );
         foreach ($preparePayload as $key => $value)
         {
@@ -56,15 +57,26 @@ class UserRepository extends ApiAbstract
             $payload .= urlencode($value);
             $payload .= "&";
         }
+
         $response = $this->RestClient('post', 'users/', $payload, '');
-        return $response;
+
+        if($response->body->errors)
+        {
+            $errors = new Errors(get_object_vars($response->body->errors));
+            return $errors;
+        }
+        else
+        {
+            return $response->body->users;
+        }
+
     }
 
     public function deleteUser($id)
     {
         $this->checkIdNotNull($id);
         $response = $this->RestClient('delete', 'users/'.$id);
-        return $response;
+        return json_decode($response->raw_body, true)['users'];
     }
 
     public function sendMobilePin()

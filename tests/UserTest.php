@@ -9,7 +9,7 @@ namespace PromisePay;
 
 
 include_once '../init.php';
-
+//chdir("../tests");
 
 class UserTest extends \PHPUnit_Framework_TestCase {
 

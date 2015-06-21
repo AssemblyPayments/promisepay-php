@@ -35,9 +35,19 @@ class Fee extends Object
      */
     private $_to;
 
-    public function __construct()
+    public function __construct($jsonData = array())
     {
-
+        if(count($jsonData)>0)
+        {
+            $this->_name         = $jsonData['name'];
+            $this->_feeType      = $jsonData['fee_type'];
+            $this->_amount       = $jsonData['amount'];
+            $this->_cap          = $jsonData['cap'];
+            $this->_min          = $jsonData['min'];
+            $this->_max          = $jsonData['max'];
+            $this->_to           = $jsonData['to'];
+        }
+        parent::__construct($jsonData);
     }
     /**
      * @return mixed

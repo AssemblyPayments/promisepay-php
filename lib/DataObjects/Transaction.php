@@ -38,6 +38,16 @@ class Transaction extends Object
 
     public function __construct()
     {
+        if(count($jsonData = array()))
+        {
+            $this->_description         = $jsonData['description'];
+            $this->_amount              = $jsonData['amount'];
+            $this->_currency            = $jsonData['currency'];
+            $this->_type                = $jsonData['type'];
+            $this->_from                = $jsonData['from'];
+            $this->_to                  = $jsonData['to'];
+            $this->_related             = $jsonData['related'];
+        }
         parent::__construct();
     }
     /**

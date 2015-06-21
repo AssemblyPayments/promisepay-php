@@ -15,9 +15,23 @@ class WireDetails
     private $_amount;
     private $_currency;
 
-    public function __construct()
+    public function __construct($jsonData = array())
     {
-
+        if(count($jsonData)>0)
+        {
+            $this->_beneficiary           = $jsonData['beneficiary'];
+            $this->_addressLine1          = $jsonData['address_line1'];
+            $this->_city                  = $jsonData['city'];
+            $this->_state                 = $jsonData['state'];
+            $this->_zip                   = $jsonData['zip'];
+            $this->_routingNumber         = $jsonData['routing_number'];
+            $this->_accountNumber         = $jsonData['account_number'];
+            $this->_bankName              = $jsonData['bank_name'];
+            $this->_swift                 = $jsonData['swift'];
+            $this->_reference             = $jsonData['reference'];
+            $this->_amount                = $jsonData['amount'];
+            $this->_currency              = $jsonData['currency'];
+        }
     }
     /**
      * @return mixed

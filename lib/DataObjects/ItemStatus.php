@@ -19,9 +19,14 @@ class ItemStatus
      */
     private $_state;
 
-    public function __construct()
+    public function __construct($jsonData = array())
     {
-
+        if(count($jsonData)>0)
+        {
+            $this->_id               = $jsonData['id'];
+            $this->_status        = $jsonData['status'];
+            $this->_state              = $jsonData['state'];
+        }
     }
     /**
      * @return mixed

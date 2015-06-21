@@ -24,9 +24,15 @@ class BPayDetails
      */
     private $_currency;
 
-    public function __construct()
+    public function __construct($jsonData = array())
     {
-
+        if(count($jsonData)>0)
+        {
+            $this->_billerCode        = $jsonData['biller_code'];
+            $this->_reference         = $jsonData['reference'];
+            $this->_amount            = $jsonData['amount'];
+            $this->_currency          = $jsonData['currency'];
+        }
     }
 
     /**

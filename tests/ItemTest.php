@@ -199,7 +199,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $wireDetails = $repo->getWireDetailsForIem("7c269f52-2236-4aa5-899e-a2e3ecadbc3f");
         $this->assertNotNull($wireDetails);
     }
-    public function testGetSellerForItem()
+    public function testGetBpayDetailsForItem()
     {
         \PHPUnit_Framework_Error_Notice::$enabled = FALSE;
         $repo = new ItemRepository();

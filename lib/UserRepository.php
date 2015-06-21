@@ -67,7 +67,9 @@ class UserRepository extends ApiAbstract
         }
         else
         {
-            return $response->body->users;
+            $jsonData = json_decode($response->raw_body, true)['users'];
+            $user = new User($jsonData);
+            return $user;
         }
 
     }

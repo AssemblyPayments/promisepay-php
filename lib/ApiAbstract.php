@@ -80,12 +80,12 @@ class ApiAbstract
                 break;
 
             case 'delete':
-                $response = Request::delete($url);
+                $response = Request::delete($url)->authenticateWith($username, $password)->send();
                 return $response;
                 break;
 
             case 'patch':
-                $response = Request::patch($url, $payload, $mime);
+                $response = Request::patch($url, $payload, $mime)->authenticateWith($username, $password)->send();
                 return $response;
                 break;
         }

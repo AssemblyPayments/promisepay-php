@@ -58,7 +58,7 @@ class Item extends Object
     /**
      * @var
      */
-    private $_SellerName;
+    private $_sellerName;
     /**
      * @var
      */
@@ -80,9 +80,29 @@ class Item extends Object
      */
     private $_feeIds;
 
-    public function __construct()
+    public function __construct($jsonData = array())
     {
-
+        if(count($jsonData)>0)
+        {
+            $this->_name               = $jsonData['name'];
+            $this->_description        = $jsonData['description'];
+            $this->_state              = $jsonData['state'];
+            $this->_depositReference   = $jsonData['deposit_reference'];
+            $this->_paymentType        = $jsonData['payment_type_id'];
+            $this->_status             = $jsonData['status'];
+            $this->_amount             = $jsonData['amount'];
+            $this->_buyerName          = $jsonData['buyer_name'];
+            $this->_buyerCountry       = $jsonData['buyer_country'];
+            $this->_buyerId            = $jsonData['buyer_id'];
+            $this->_buyerEmail         = $jsonData['buyer_email'];
+            $this->_sellerName         = $jsonData['seller_name'];
+            $this->_sellerCountry      = $jsonData['seller_country'];
+            $this->_sellerId           = $jsonData['seller_id'];
+            $this->_sellerEmail        = $jsonData['seller_email'];
+            $this->_currency           = $jsonData['currency'];
+            $this->_feeIds             = $jsonData['feeIds'];
+        }
+        parent::__construct($jsonData);
     }
     /**
      * @return mixed
@@ -265,7 +285,7 @@ class Item extends Object
      */
     public function getSellerName()
     {
-        return $this->_SellerName;
+        return $this->_sellerName;
     }
 
     /**
@@ -273,7 +293,7 @@ class Item extends Object
      */
     public function setSellerName($SellerName)
     {
-        $this->_SellerName = $SellerName;
+        $this->_sellerName = $SellerName;
     }
 
     /**

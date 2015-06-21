@@ -220,53 +220,288 @@ class ItemRepository extends ApiAbstract
         return null;
     }
 
-    public function makePayment()
+    public function makePayment($itemId, $accountId, $userId)
     {
+        $this->checkIdNotNull($itemId);
+        $this->checkIdNotNull($accountId);
+        $this->checkIdNotNull($userId);
+        $payload = '';
+        $preparePayload = array(
+            "account_id"          => $accountId,
+            "user_id"        => $userId
+        );
+        foreach ($preparePayload as $key => $value)
+        {
+            $payload .= $key . '=';
+            $payload .= urlencode($value);
+            $payload .= "&";
+        }
+        $payload = substr($payload,0,-1);
 
+        $response = $this->RestClient('patch', 'items/' . $itemId . '/make_payment',$payload);
+        $jsonRaw = json_decode($response->raw_body, true);
+        if (array_key_exists("items", $jsonRaw))
+        {
+            $jsonData = $jsonRaw["items"];
+            $itemStatus = new Item($jsonData);
+            return $itemStatus;
+        }
+        return null;
     }
 
-    public function requestPayment()
+    public function requestPayment($itemId, $sellerId)
     {
+        $this->checkIdNotNull($itemId);
+        $this->checkIdNotNull($sellerId);
+        $payload = '';
+        $preparePayload = array(
+            "user_id"        => $sellerId
+        );
+        foreach ($preparePayload as $key => $value)
+        {
+            $payload .= $key . '=';
+            $payload .= urlencode($value);
+            $payload .= "&";
+        }
+        $payload = substr($payload,0,-1);
 
+        $response = $this->RestClient('patch', 'items/' . $itemId . '/request_payment', $payload);
+        $jsonRaw = json_decode($response->raw_body, true);
+        if (array_key_exists("items", $jsonRaw))
+        {
+            $jsonData = $jsonRaw["items"];
+            $itemStatus = new Item($jsonData);
+            return $itemStatus;
+        }
+        return null;
     }
 
-    public function releasePayment()
+    public function releasePayment($itemId, $buyerId, $releaseAmount)
     {
+        $this->checkIdNotNull($itemId);
+        $this->checkIdNotNull($buyerId);
+        $this->checkIdNotNull($releaseAmount);
 
+        $payload = '';
+        $preparePayload = array(
+            "user_id"        => $buyerId,
+            "release_amount" => $releaseAmount
+        );
+
+        foreach ($preparePayload as $key => $value)
+        {
+            $payload .= $key . '=';
+            $payload .= urlencode($value);
+            $payload .= "&";
+        }
+        $payload = substr($payload,0,-1);
+
+        $response = $this->RestClient('patch', 'items/' . $itemId . '/release_payment', $payload);
+        $jsonRaw = json_decode($response->raw_body, true);
+        if (array_key_exists("items", $jsonRaw))
+        {
+            $jsonData = $jsonRaw["items"];
+            $itemStatus = new Item($jsonData);
+            return $itemStatus;
+        }
+        return null;
     }
 
-    public function requestRelease()
+    public function requestRelease($itemId, $sellerId, $releaseAmount)
     {
+        $this->checkIdNotNull($itemId);
+        $this->checkIdNotNull($sellerId);
+        $this->checkIdNotNull($releaseAmount);
 
+        $payload = '';
+        $preparePayload = array(
+            "user_id"        => $sellerId,
+            "release_amount" => $releaseAmount
+        );
+
+        foreach ($preparePayload as $key => $value)
+        {
+            $payload .= $key . '=';
+            $payload .= urlencode($value);
+            $payload .= "&";
+        }
+        $payload = substr($payload,0,-1);
+
+        $response = $this->RestClient('patch', 'items/' . $itemId . '/request_release', $payload);
+        $jsonRaw = json_decode($response->raw_body, true);
+        if (array_key_exists("items", $jsonRaw))
+        {
+            $jsonData = $jsonRaw["items"];
+            $itemStatus = new Item($jsonData);
+            return $itemStatus;
+        }
+        return null;
     }
 
-    public function cancelItem()
+    public function cancelItem($itemId)
     {
-
+        $this->checkIdNotNull($itemId);
+        $response = $this->RestClient('patch', 'items/' . $itemId . '/cancel');
+        $jsonRaw = json_decode($response->raw_body, true);
+        if (array_key_exists("items", $jsonRaw))
+        {
+            $jsonData = $jsonRaw["items"];
+            $itemStatus = new Item($jsonData);
+            return $itemStatus;
+        }
+        return null;
     }
 
-    public function acknowledgeWire()
+    public function acknowledgeWire($itemId, $buyerId)
     {
+        $this->checkIdNotNull($itemId);
+        $this->checkIdNotNull($buyerId);
 
+        $payload = '';
+        $preparePayload = array(
+            "user_id"        => $buyerId,
+        );
+
+        foreach ($preparePayload as $key => $value)
+        {
+            $payload .= $key . '=';
+            $payload .= urlencode($value);
+            $payload .= "&";
+        }
+        $payload = substr($payload,0,-1);
+
+        $response = $this->RestClient('patch', 'items/' . $itemId . '/acknowledge_wire', $payload);
+        $jsonRaw = json_decode($response->raw_body, true);
+        if (array_key_exists("items", $jsonRaw))
+        {
+            $jsonData = $jsonRaw["items"];
+            $itemStatus = new Item($jsonData);
+            return $itemStatus;
+        }
+        return null;
     }
 
-    public function acknowledgePayPal()
+    public function acknowledgePayPal($itemId, $buyerId)
     {
+        $this->checkIdNotNull($itemId);
+        $this->checkIdNotNull($buyerId);
 
+        $payload = '';
+        $preparePayload = array(
+            "user_id"        => $buyerId,
+        );
+
+        foreach ($preparePayload as $key => $value)
+        {
+            $payload .= $key . '=';
+            $payload .= urlencode($value);
+            $payload .= "&";
+        }
+        $payload = substr($payload,0,-1);
+
+        $response = $this->RestClient('patch', 'items/' . $itemId . '/acknowledge_paypal', $payload);
+        $jsonRaw = json_decode($response->raw_body, true);
+        if (array_key_exists("items", $jsonRaw))
+        {
+            $jsonData = $jsonRaw["items"];
+            $itemStatus = new Item($jsonData);
+            return $itemStatus;
+        }
+        return null;
     }
 
-    public function revertWire()
+    public function revertWire($itemId, $buyerId)
     {
+        $this->checkIdNotNull($itemId);
+        $this->checkIdNotNull($buyerId);
 
+        $payload = '';
+        $preparePayload = array(
+            "user_id"        => $buyerId,
+        );
+
+        foreach ($preparePayload as $key => $value)
+        {
+            $payload .= $key . '=';
+            $payload .= urlencode($value);
+            $payload .= "&";
+        }
+        $payload = substr($payload,0,-1);
+
+        $response = $this->RestClient('patch', 'items/' . $itemId . '/revert_wire', $payload);
+        $jsonRaw = json_decode($response->raw_body, true);
+        if (array_key_exists("items", $jsonRaw))
+        {
+            $jsonData = $jsonRaw["items"];
+            $itemStatus = new Item($jsonData);
+            return $itemStatus;
+        }
+        return null;
     }
 
-    public function requestRefund()
+    public function requestRefund( $itemId,  $buyerId,  $refundAmount,  $refundMessage)
     {
+        $this->checkIdNotNull($itemId);
+        $this->checkIdNotNull($buyerId);
+        $this->checkIdNotNull($refundAmount);
+        $this->checkIdNotNull($refundMessage);
 
+        $payload = '';
+        $preparePayload = array(
+            "user_id"        => $buyerId,
+            "refund_amount"  => $refundAmount,
+            "refund_message" => $refundMessage
+        );
+
+        foreach ($preparePayload as $key => $value)
+        {
+            $payload .= $key . '=';
+            $payload .= urlencode($value);
+            $payload .= "&";
+        }
+        $payload = substr($payload,0,-1);
+
+        $response = $this->RestClient('patch', 'items/' . $itemId . '/request_refund', $payload);
+        $jsonRaw = json_decode($response->raw_body, true);
+        if (array_key_exists("items", $jsonRaw))
+        {
+            $jsonData = $jsonRaw["items"];
+            $itemStatus = new Item($jsonData);
+            return $itemStatus;
+        }
+        return null;
     }
 
-    public function Refund()
+    public function refund( $itemId,  $sellerId,  $refundAmount,  $refundMessage)
     {
+        $this->checkIdNotNull($itemId);
+        $this->checkIdNotNull($sellerId);
+        $this->checkIdNotNull($refundAmount);
+        $this->checkIdNotNull($refundMessage);
 
+        $payload = '';
+        $preparePayload = array(
+            "user_id"        => $sellerId,
+            "refund_amount"  => $refundAmount,
+            "refund_message" => $refundMessage
+        );
+
+        foreach ($preparePayload as $key => $value)
+        {
+            $payload .= $key . '=';
+            $payload .= urlencode($value);
+            $payload .= "&";
+        }
+        $payload = substr($payload,0,-1);
+
+        $response = $this->RestClient('patch', 'items/' . $itemId . '/refund', $payload);
+        $jsonRaw = json_decode($response->raw_body, true);
+        if (array_key_exists("items", $jsonRaw))
+        {
+            $jsonData = $jsonRaw["items"];
+            $itemStatus = new Item($jsonData);
+            return $itemStatus;
+        }
+        return null;
     }
 }

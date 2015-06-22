@@ -2,6 +2,7 @@
 namespace PromisePay;
 
 use PromisePay\DataObjects\Card;
+use PromisePay\DataObjects\User;
 use PromisePay\Exception;
 use PromisePay\Log;
 
@@ -16,13 +17,13 @@ class CardAccountRepository extends ApiAbstract
         return $accounts;
     }
 
-    public function createCardAccount(Card $card, $id)
+    public function createCardAccount(Card $card)
     {
-        $this->checkIdNotNull($id);
+
         $payload = '';
 
         $preparePayload = array(
-                "id" =>$id,
+                "id" =>$card->getId(),
                 "full_name"=>$card->getFullName(),
                 "number"=>$card->getNumber(),
                 "expiry_month"=>$card->getExpMonth(),
@@ -45,6 +46,14 @@ class CardAccountRepository extends ApiAbstract
     {
         $this->checkIdNotNull($id);
         $response = $this->RestClient('delete', 'card_accounts/'.$id);
+        $jsonRaw = json_decode($response->raw_body, true);
+        if (array_key_exists("errors", $jsonRaw)){
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 
     public function getUserForCardAccount($id)
@@ -52,10 +61,10 @@ class CardAccountRepository extends ApiAbstract
         $this->checkIdNotNull($id);
         $response = $this->RestClient('get','users/'.$id.'/bank_accounts');
         $jsonRaw = json_decode($response->raw_body, true);
-        if (array_key_exists("bank_accounts", $jsonRaw))
+        if (array_key_exists("users", $jsonRaw))
         {
-            $jsonData = $jsonRaw["bank_accounts"];
-            $bankAccount = new Card($jsonData);
+            $jsonData = $jsonRaw["users"];
+            $bankAccount = new User($jsonData);
             return $bankAccount;
         }
         return null;

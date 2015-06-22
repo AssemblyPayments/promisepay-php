@@ -53,8 +53,12 @@ class FeeRepository extends ApiAbstract
         return $response;
     }
 
-    public function ValidateFee()
+    public function ValidateFee(Fee $fee)
     {
+        if ($fee == null)
+        {
+            throw new Exception\Argument ('fee is empty');
+        }
 
     }
 }

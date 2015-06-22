@@ -23,6 +23,10 @@ $arr = array(
     "country"       => 'AFG',
     "dob"           => '11/01/1971'
 );
-$test = new UserRepository();
-$userObj = new User($arr);
-print_r($test->createUser($userObj));
+//$test = new UserRepository();
+//$userObj = new User($arr);
+//print_r($test->createUser($userObj));
+
+$test = new BankAccountRepository();
+$id = '1233123';
+print_r($test->deleteBankAccount($id));

@@ -31,9 +31,12 @@ class Card
      */
     private $_CVV;
 
-    public function __construct()
+    public function __construct($jsonRaw = array())
     {
+        if(count($jsonRaw))
+        {
 
+        }
     }
 
     /**

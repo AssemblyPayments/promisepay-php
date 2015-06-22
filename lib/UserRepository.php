@@ -79,12 +79,30 @@ class UserRepository extends ApiAbstract
     {
         $this->checkIdNotNull($id);
         $response = $this->RestClient('delete', 'users/'.$id);
-        return json_decode($response->raw_body, true)['users'];
+        $jsonRaw = json_decode($response->raw_body, true);
+        if (array_key_exists("errors", $jsonRaw)){
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 
-    public function sendMobilePin()
+    public function sendMobilePin($id)
     {
-        //?
+        $this->checkIdNotNull($id);
+        $response = $this->RestClient('post','/users/'.$id.'/mobile_pin');
+        $jsonRaw = json_decode($response->raw_body, true);
+
+        if (array_key_exists("errors", $jsonRaw))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 
     public function getListOfItemsForUser($id)
@@ -116,16 +134,16 @@ class UserRepository extends ApiAbstract
 
     public function getDisbursementAccount()
     {
-        //?
+        throw new \Exception('no fields for this method');
     }
 
-    public function updateUser(User $user, $id)
+    public function updateUser(User $user)
     {
-        $this->checkIdNotNull($id);
         $this->validateUser($user);
 
         $payload = '';
         $preparePayload = array(
+            "id"            => $user->getId(),
             "first_name"    => $user->getFirstName(),
             "last_name"     => $user->getLastName(),
             "email"         => $user->getEmail(),
@@ -144,8 +162,19 @@ class UserRepository extends ApiAbstract
             $payload .= "&";
         }
 
-       $response = $this->RestClient('patch', 'users/'.$id, $payload);
-       return $response->body->users;
+        $response = $this->RestClient('patch', 'users/'.$payload);
+
+        if($response->body->errors)
+        {
+            $errors = new Errors(get_object_vars($response->body->errors));
+            return $errors;
+        }
+        else
+        {
+            $jsonData = json_decode($response->raw_body, true)['users'];
+            $user = new User($jsonData);
+            return $user;
+        }
     }
 
     private function validateUser($user)

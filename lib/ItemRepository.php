@@ -2,7 +2,9 @@
 namespace PromisePay;
 
 use PromisePay\DataObjects\BPayDetails;
+use PromisePay\DataObjects\Fee;
 use PromisePay\DataObjects\ItemStatus;
+use PromisePay\DataObjects\Transaction;
 use PromisePay\DataObjects\WireDetails;
 use PromisePay\Exception;
 use PromisePay\Log;
@@ -40,7 +42,7 @@ class ItemRepository extends ApiAbstract
         return $item;
     }
 
-    public function createItem($item)
+    public function createItem(Item $item)
     {
         $payload = '';
         $preparePayload = array(

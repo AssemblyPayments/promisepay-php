@@ -9,7 +9,8 @@ namespace PromisePay;
 
 
 use PromisePay\DataObjects\User;
-
+use PromisePay\Exception\Validation;
+use PromisePay\Exception\Argument;
 include_once '../init.php';
 include_once 'GUID.php';
 
@@ -85,7 +86,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
     /**
      * @expectedException PromisePay\Exception\Validation
      */
-    public function CreateUserIdMissing()
+    public function testCreateUserIdMissing()
     {
         \PHPUnit_Framework_Error_Notice::$enabled = FALSE;
         $repo = new UserRepository();
@@ -114,7 +115,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
     /**
      * @expectedException PromisePay\Exception\Validation
      */
-    public function createUserMissedFirstname()
+    public function testcreateUserMissedFirstname()
     {
         \PHPUnit_Framework_Error_Notice::$enabled = FALSE;
         $repo = new UserRepository();
@@ -141,7 +142,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
     /**
      * @expectedException PromisePay\Exception\Validation
      */
-    public function createUserWrongCountry()
+    public function testcreateUserWrongCountry()
     {
         \PHPUnit_Framework_Error_Notice::$enabled = FALSE;
         $repo = new UserRepository();
@@ -168,7 +169,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
     /**
      * @expectedException PromisePay\Exception\Validation
      */
-    public function createUserWrongEmail()
+    public function testcreateUserWrongEmail()
     {
         \PHPUnit_Framework_Error_Notice::$enabled = FALSE;
         $repo = new UserRepository();
@@ -192,7 +193,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
     }
 
 
-    public function getUserSuccess()
+    public function testgetUserSuccess()
     {
         \PHPUnit_Framework_Error_Notice::$enabled = FALSE;
         $repo = new UserRepository();
@@ -221,7 +222,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
     /**
      * @expectedException PromisePay\Exception\Argument
      */
-    public function getUserMissedID()
+    public function testgetUserMissedID()
     {
 
         \PHPUnit_Framework_Error_Notice::$enabled = FALSE;
@@ -248,7 +249,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
 
 
 
-    public function deleteUserbyIdsuccessful()
+    public function testdeleteUserbyIdsuccessful()
     {
         \PHPUnit_Framework_Error_Notice::$enabled = FALSE;
         $repo = new UserRepository();
@@ -259,12 +260,11 @@ class UserTest extends \PHPUnit_Framework_TestCase {
     /**
      * @expectedException PromisePay\Exception\Argument
      */
-    public function deleteUserbyIdmissedId()
+    public function testdeleteUserbyIdmissedId()
     {
         \PHPUnit_Framework_Error_Notice::$enabled = FALSE;
         $repo = new UserRepository();
         $repo->deleteUser('');
-
     }
 
 

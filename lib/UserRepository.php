@@ -2,6 +2,8 @@
 namespace PromisePay;
 
 use PromisePay\DataObjects\Errors;
+use PromisePay\DataObjects\Item;
+use PromisePay\DataObjects\PayPalAccount;
 use PromisePay\DataObjects\User;
 use PromisePay\Exception;
 use PromisePay\Log;
@@ -36,7 +38,6 @@ class UserRepository extends ApiAbstract
     public function createUser(User $user)
     {
         $this->validateUser($user);
-        //$mime = 'multipart/form-data';
         $payload = '';
         $preparePayload = array(
                 "id"            => $user->getId(),
@@ -83,32 +84,68 @@ class UserRepository extends ApiAbstract
 
     public function sendMobilePin()
     {
-
+        //?
     }
 
-    public function getListOfItemsForUsers()
+    public function getListOfItemsForUser($id)
     {
-
+        $this->checkIdNotNull($id);
+        $response = $this->RestClient('get', 'users/'.$id.'/items');
+        $jsonData = json_decode($response->raw_body, true)['items'];
+        $ItemsList = new Item($jsonData);
+        return $ItemsList;
     }
 
-    public function getListOfPayPalAccountsForUser()
+    public function getListOfPayPalAccountsForUser($id)
     {
-
+        $this->checkIdNotNull($id);
+        $response = $this->RestClient('get', 'users/'.$id.'/paypal_accounts');
+        $jsonData =  $jsonData = json_decode($response->raw_body, true)['paypal_accounts'];
+        $PayPalAccounts = new PayPalAccount($jsonData);
+        return $PayPalAccounts;
     }
 
-    public function getListOfBankAccountsForUser()
+    public function getListOfBankAccountsForUser($id)
     {
-
+        $this->checkIdNotNull($id);
+        $response = $this->RestClient('get', 'users/'.$id.'/bank_accounts');
+        $jsonData =  $jsonData = json_decode($response->raw_body, true)['bank_accounts'];
+        $BankAccounts = new PayPalAccount($jsonData);
+        return $BankAccounts;
     }
 
     public function getDisbursementAccount()
     {
-
+        //?
     }
 
-    public function updateUser($id)
+    public function updateUser(User $user, $id)
     {
+        $this->checkIdNotNull($id);
+        $this->validateUser($user);
 
+        $payload = '';
+        $preparePayload = array(
+            "first_name"    => $user->getFirstName(),
+            "last_name"     => $user->getLastName(),
+            "email"         => $user->getEmail(),
+            "mobile"        => $user->getMobile(),
+            "address_line1" => $user->getAddressLine1(),
+            "address_line2" => $user->getAddressLine2(),
+            "state"         => $user->getState(),
+            "city"          => $user->getCity(),
+            "zip"           => $user->getZip(),
+            "country"       => $user->getCountry(),
+        );
+        foreach ($preparePayload as $key => $value)
+        {
+            $payload .= $key . '=';
+            $payload .= urlencode($value);
+            $payload .= "&";
+        }
+
+       $response = $this->RestClient('patch', 'users/'.$id, $payload);
+       return $response->body->users;
     }
 
     private function validateUser($user)

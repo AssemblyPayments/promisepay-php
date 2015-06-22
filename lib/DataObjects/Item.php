@@ -58,7 +58,7 @@ class Item extends Object
     /**
      * @var
      */
-    private $_sellerName;
+    private $_SellerName;
     /**
      * @var
      */
@@ -82,26 +82,25 @@ class Item extends Object
 
     public function __construct($jsonData = array())
     {
-        if(count($jsonData)>0)
-        {
-            $this->_name               = $jsonData['name'];
-            $this->_description        = $jsonData['description'];
-            $this->_state              = $jsonData['state'];
-            $this->_depositReference   = $jsonData['deposit_reference'];
-            $this->_paymentType        = $jsonData['payment_type_id'];
-            $this->_status             = $jsonData['status'];
-            $this->_amount             = $jsonData['amount'];
-            $this->_buyerName          = $jsonData['buyer_name'];
-            $this->_buyerCountry       = $jsonData['buyer_country'];
-            $this->_buyerId            = $jsonData['buyer_id'];
-            $this->_buyerEmail         = $jsonData['buyer_email'];
-            $this->_sellerName         = $jsonData['seller_name'];
-            $this->_sellerCountry      = $jsonData['seller_country'];
-            $this->_sellerId           = $jsonData['seller_id'];
-            $this->_sellerEmail        = $jsonData['seller_email'];
-            $this->_currency           = $jsonData['currency'];
-            $this->_feeIds             = $jsonData['feeIds'];
-        }
+        $this->_amount           = $jsonData['amount'];
+        $this->_buyerCountry     = $jsonData['buyer_country'];
+        $this->_buyerEmail       = $jsonData['buyer_email'];
+        $this->_buyerId          = $jsonData['buyer_id'];
+        $this->_buyerName        = $jsonData['buyer_name'];
+        $this->_currency         = $jsonData['currency'];
+        $this->_depositReference = $jsonData['deposit_reference'];
+        $this->_description      = $jsonData['description'];
+        $this->_feeIds           = $jsonData['fee_ids'];
+        $this->_fees             = $jsonData['fees'];
+        $this->_name             = $jsonData['name'];
+        $this->_paymentType      = $jsonData['payment_type'];
+        $this->_sellerCountry    = $jsonData['seller_country'];
+        $this->_sellerEmail      = $jsonData['seller_email'];
+        $this->_sellerId         = $jsonData['seller_id'];
+        $this->_SellerName       = $jsonData['seller_name'];
+        $this->_state            = $jsonData['state'];
+        $this->_status           = $jsonData['status'];
+
         parent::__construct($jsonData);
     }
     /**
@@ -285,7 +284,7 @@ class Item extends Object
      */
     public function getSellerName()
     {
-        return $this->_sellerName;
+        return $this->_SellerName;
     }
 
     /**
@@ -293,7 +292,7 @@ class Item extends Object
      */
     public function setSellerName($SellerName)
     {
-        $this->_sellerName = $SellerName;
+        $this->_SellerName = $SellerName;
     }
 
     /**

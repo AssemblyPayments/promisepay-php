@@ -47,9 +47,22 @@ class Company extends Object
      */
     private $_country;
 
-    public function __construct()
+    public function __construct($jsonData)
     {
-
+        if (count($jsonData))
+        {
+            $this->_legalName    = array_key_exists('legal_name',    $jsonData)?$jsonData['legal_name']:'';
+            $this->_name         = array_key_exists('name',          $jsonData)?$jsonData['name']:'';
+            $this->_taxNumber    = array_key_exists('tax_number',    $jsonData)?$jsonData['tax_number']:'';
+            $this->_chargeTax    = array_key_exists('charge_tax',    $jsonData)?$jsonData['charge_tax']:'';
+            $this->_addressLine1 = array_key_exists('address_line1', $jsonData)?$jsonData['address_line1']:'';
+            $this->_addressLine2 = array_key_exists('address_line2', $jsonData)?$jsonData['address_line2']:'';
+            $this->_city         = array_key_exists('city',          $jsonData)?$jsonData['city']:'';
+            $this->_state        = array_key_exists('state',         $jsonData)?$jsonData['state']:'';
+            $this->_zip          = array_key_exists('zip',           $jsonData)?$jsonData['zip']:'';
+            $this->_country      = array_key_exists('country',       $jsonData)?$jsonData['country']:'';
+        }
+        parent::__construct($jsonData);
     }
 
     /**

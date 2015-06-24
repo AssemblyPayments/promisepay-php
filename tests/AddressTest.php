@@ -9,5 +9,14 @@ namespace PromisePay;
 
 class AddressTest extends \PHPUnit_Framework_TestCase {
 
+    public function testGetAddressByIdSuccessfully()
+    {
+
+    }
+
+    public function testGetAddressByIdMissedId()
+    {
+
+    }
 }
  

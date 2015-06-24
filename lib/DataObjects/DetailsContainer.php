@@ -19,9 +19,13 @@ class DetailsContainer
      */
     private $_wireDetails;
 
-    public function __construct()
+    public function __construct($jsonData)
     {
-
+        if(count($jsonData)) {
+            $this->_id = array_key_exists('id', $jsonData) ? $jsonData['id'] : '';
+            $this->_id = array_key_exists('bpay_details', $jsonData) ? $jsonData['bpay_details'] : '';
+            $this->_id = array_key_exists('wire_details', $jsonData) ? $jsonData['wire_details'] : '';
+        }
     }
     /**
      * @return mixed

@@ -36,19 +36,19 @@ class Transaction extends Object
      */
     private $_related;
 
-    public function __construct()
+    public function __construct($jsonData)
     {
-        if(count($jsonData = array()))
+        if(count($jsonData))
         {
-            $this->_description         = $jsonData['description'];
-            $this->_amount              = $jsonData['amount'];
-            $this->_currency            = $jsonData['currency'];
-            $this->_type                = $jsonData['type'];
-            $this->_from                = $jsonData['from'];
-            $this->_to                  = $jsonData['to'];
-            $this->_related             = $jsonData['related'];
+            $this->_description         = array_key_exists('description',$jsonData)?$jsonData['description']:'';
+            $this->_amount              = array_key_exists('amount',$jsonData)?$jsonData['amount']:'';
+            $this->_currency            = array_key_exists('currency', $jsonData)?$jsonData['currency']:'';
+            $this->_type                = array_key_exists('type', $jsonData)?$jsonData['type']:'';
+            $this->_from                = array_key_exists('from', $jsonData)?$jsonData['from']:'';
+            $this->_to                  = array_key_exists('to',$jsonData)?$jsonData['to']:'';
+            $this->_related             = array_key_exists('related',$jsonData)?$jsonData['related']:'';
         }
-        parent::__construct();
+        parent::__construct($jsonData);
     }
     /**
      * @return mixed

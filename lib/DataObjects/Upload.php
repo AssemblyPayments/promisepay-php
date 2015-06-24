@@ -28,9 +28,17 @@ class Upload extends Object
      */
     private $_progress;
 
-    public function __construct()
+    public function __construct($jsonData = array())
     {
-        parent::__construct();
+        if(count($jsonData))
+        {
+            $this->$_totalLines = array_key_exists('total_lines', $jsonData) ? $jsonData['total_lines'] : '';
+            $this->$_processedLines = array_key_exists('processed_lines', $jsonData) ? $jsonData['processed_lines'] : '';
+            $this->$_updateLines = array_key_exists('update_lines', $jsonData) ? $jsonData['update_lines'] : '';
+            $this->$_errorLines = array_key_exists('error_lines', $jsonData) ? $jsonData['error_lines'] : '';
+            $this->$_progress = array_key_exists('progress', $jsonData) ? $jsonData['progress'] : '';
+        }
+        parent::__construct($jsonData);
     }
     /**
      * @return mixed

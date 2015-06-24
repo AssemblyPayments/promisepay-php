@@ -82,25 +82,26 @@ class Item extends Object
 
     public function __construct($jsonData = array())
     {
-        $this->_amount           = $jsonData['amount'];
-        $this->_buyerCountry     = $jsonData['buyer_country'];
-        $this->_buyerEmail       = $jsonData['buyer_email'];
-        $this->_buyerId          = $jsonData['buyer_id'];
-        $this->_buyerName        = $jsonData['buyer_name'];
-        $this->_currency         = $jsonData['currency'];
-        $this->_depositReference = $jsonData['deposit_reference'];
-        $this->_description      = $jsonData['description'];
-        $this->_feeIds           = $jsonData['fee_ids'];
-        $this->_fees             = $jsonData['fees'];
-        $this->_name             = $jsonData['name'];
-        $this->_paymentType      = $jsonData['payment_type'];
-        $this->_sellerCountry    = $jsonData['seller_country'];
-        $this->_sellerEmail      = $jsonData['seller_email'];
-        $this->_sellerId         = $jsonData['seller_id'];
-        $this->_SellerName       = $jsonData['seller_name'];
-        $this->_state            = $jsonData['state'];
-        $this->_status           = $jsonData['status'];
-
+        if(count($jsonData)) {
+            $this->_amount           = array_key_exists('amount', $jsonData) ? $jsonData['amount'] : '';
+            $this->_buyerCountry     = array_key_exists('buyer_country', $jsonData) ? $jsonData['buyer_country'] : '';
+            $this->_buyerEmail       = array_key_exists('buyer_email', $jsonData) ? $jsonData['buyer_email'] : '';
+            $this->_buyerId          = array_key_exists('buyer_id', $jsonData) ? $jsonData['buyer_id'] : '';
+            $this->_buyerName        = array_key_exists('buyer_name', $jsonData) ? $jsonData['buyer_name'] : '';
+            $this->_currency         = array_key_exists('currency', $jsonData) ? $jsonData['currency'] : '';
+            $this->_depositReference = array_key_exists('deposit_reference', $jsonData) ? $jsonData['deposit_reference'] : '';
+            $this->_description      = array_key_exists('description', $jsonData) ? $jsonData['description'] : '';
+            $this->_feeIds           = array_key_exists('fee_isd', $jsonData) ? $jsonData['fee_ids'] : '';
+            $this->_fees             = array_key_exists('fees', $jsonData) ? $jsonData['fees'] : '';
+            $this->_name             = array_key_exists('name', $jsonData) ? $jsonData['name'] : '';
+            $this->_paymentType      = array_key_exists('payment_type', $jsonData) ? $jsonData['payment_type'] : '';
+            $this->_sellerCountry    = array_key_exists('seller_country', $jsonData) ? $jsonData['seller_country'] : '';
+            $this->_sellerEmail      = array_key_exists('seller_email', $jsonData) ? $jsonData['seller_email'] : '';
+            $this->_sellerId         = array_key_exists('seller_id', $jsonData) ? $jsonData['seller_id'] : '';
+            $this->_SellerName       = array_key_exists('seller_name', $jsonData) ? $jsonData['seller_name'] : '';
+            $this->_state            = array_key_exists('state', $jsonData) ? $jsonData['state'] : '';
+            $this->_status           = array_key_exists('status', $jsonData) ? $jsonData['status'] : '';
+        }
         parent::__construct($jsonData);
     }
     /**

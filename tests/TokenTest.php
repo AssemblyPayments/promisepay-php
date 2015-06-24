@@ -9,7 +9,16 @@
 namespace PromisePay;
 
 
-class TokenTest extends \PHPUnit_Framework_TestCase {
+class TokenTest extends \PHPUnit_Framework_TestCase
+{
+    public function testRequestSessionToken()
+    {
 
+    }
+
+    public function testGetWidget()
+    {
+
+    }
 }
  

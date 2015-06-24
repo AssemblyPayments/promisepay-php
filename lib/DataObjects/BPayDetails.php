@@ -28,10 +28,10 @@ class BPayDetails
     {
         if(count($jsonData)>0)
         {
-            $this->_billerCode        = $jsonData['biller_code'];
-            $this->_reference         = $jsonData['reference'];
-            $this->_amount            = $jsonData['amount'];
-            $this->_currency          = $jsonData['currency'];
+            $this->_billerCode        = array_key_exists('biller_code', $jsonData)?$jsonData['biller_code']:'';
+            $this->_reference         = array_key_exists('reference', $jsonData)?$jsonData['reference']:'';
+            $this->_amount            = array_key_exists('amount', $jsonData)?$jsonData['amount']:'';
+            $this->_currency          = array_key_exists('currency',$jsonData)?$jsonData['currency']:'';
         }
     }
 

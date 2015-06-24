@@ -19,18 +19,18 @@ class WireDetails
     {
         if(count($jsonData)>0)
         {
-            $this->_beneficiary           = $jsonData['beneficiary'];
-            $this->_addressLine1          = $jsonData['address_line1'];
-            $this->_city                  = $jsonData['city'];
-            $this->_state                 = $jsonData['state'];
-            $this->_zip                   = $jsonData['zip'];
-            $this->_routingNumber         = $jsonData['routing_number'];
-            $this->_accountNumber         = $jsonData['account_number'];
-            $this->_bankName              = $jsonData['bank_name'];
-            $this->_swift                 = $jsonData['swift'];
-            $this->_reference             = $jsonData['reference'];
-            $this->_amount                = $jsonData['amount'];
-            $this->_currency              = $jsonData['currency'];
+            $this->_beneficiary           = array_key_exists('beneficiary', $jsonData)?$jsonData['beneficiary']:'';
+            $this->_addressLine1          = array_key_exists('address_line1', $jsonData)?$jsonData['address_line1']:'';
+            $this->_city                  = array_key_exists('city', $jsonData)?$jsonData['city']:'';
+            $this->_state                 = array_key_exists('state', $jsonData)? $jsonData['state']:'';
+            $this->_zip                   = array_key_exists('zip', $jsonData)?$jsonData['zip']:'';
+            $this->_routingNumber         = array_key_exists('routing_number', $jsonData)?$jsonData['routing_number']:'';
+            $this->_accountNumber         = array_key_exists('account_number', $jsonData)?$jsonData['account_number']:'';
+            $this->_bankName              = array_key_exists('bank_name', $jsonData)?$jsonData['bank_name']:'';
+            $this->_swift                 = array_key_exists('swift', $jsonData)?$jsonData['swift']:'';
+            $this->_reference             = array_key_exists('reference', $jsonData)?$jsonData['reference']:'';
+            $this->_amount                = array_key_exists('amount', $jsonData)?$jsonData['amount']:'';
+            $this->_currency              = array_key_exists('currency', $jsonData)?$jsonData['currency']:'';
         }
     }
     /**

@@ -11,13 +11,13 @@ class PayPal
      * @var
      */
     private $_PayPalAccountEmail;
-
     /**
-     * @return mixed
+     * @var array
      */
-    public function __construct()
-    {
 
+    public function __construct($jsonData = array())
+    {
+        $this->_PayPalAccountEmail = array_key_exists('email', $jsonData)?$jsonData['email']:'';
     }
 
     public function getPayPalAccountEmail()

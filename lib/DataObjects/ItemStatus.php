@@ -23,9 +23,9 @@ class ItemStatus
     {
         if(count($jsonData)>0)
         {
-            $this->_id               = $jsonData['id'];
-            $this->_status        = $jsonData['status'];
-            $this->_state              = $jsonData['state'];
+            $this->_id     = array_key_exists('id', $jsonData)?$jsonData['id']:'';
+            $this->_status = array_key_exists('status', $jsonData)?$jsonData['status']:'';
+            $this->_state  = array_key_exists('state', $jsonData)?$jsonData['state']:'';
         }
     }
     /**

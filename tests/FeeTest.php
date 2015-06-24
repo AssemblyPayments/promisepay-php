@@ -9,7 +9,26 @@
 namespace PromisePay;
 
 
-class FeeTest extends \PHPUnit_Framework_TestCase {
+class FeeTest extends \PHPUnit_Framework_TestCase
+{
+    public function testCreateFeeSuccessfully()
+    {
 
+    }
+
+    public function testCreateFeeWrongTo()
+    {
+
+    }
+
+    public function testGetFeeByIdSuccessfull()
+    {
+
+    }
+
+    public function testListSuccessfull()
+    {
+
+    }
 }
  

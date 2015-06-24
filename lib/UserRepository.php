@@ -60,10 +60,10 @@ class UserRepository extends ApiAbstract
         }
 
         $response = $this->RestClient('post', 'users/', $payload, '');
-
-        if($response->body->errors)
+        $jsonRaw = json_decode($response->raw_body, true);
+        if(array_key_exists("errors", $jsonRaw))
         {
-            $errors = new Errors(get_object_vars($response->body->errors));
+            $errors = new Errors($jsonRaw);
             return $errors;
         }
         else
@@ -79,14 +79,14 @@ class UserRepository extends ApiAbstract
     {
         $this->checkIdNotNull($id);
         $response = $this->RestClient('delete', 'users/'.$id);
-        $jsonRaw = json_decode($response->raw_body, true);
-        if (array_key_exists("errors", $jsonRaw)){
+        if ($response->code){
             return false;
         }
         else
         {
             return true;
         }
+
     }
 
     public function sendMobilePin($id)
@@ -94,15 +94,6 @@ class UserRepository extends ApiAbstract
         $this->checkIdNotNull($id);
         $response = $this->RestClient('post','/users/'.$id.'/mobile_pin');
         $jsonRaw = json_decode($response->raw_body, true);
-
-        if (array_key_exists("errors", $jsonRaw))
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
     }
 
     public function getListOfItemsForUser($id)
@@ -137,13 +128,13 @@ class UserRepository extends ApiAbstract
         throw new \Exception('no fields for this method');
     }
 
-    public function updateUser(User $user)
+    public function updateUser(User $user, $id)
     {
         $this->validateUser($user);
 
         $payload = '';
         $preparePayload = array(
-            "id"            => $user->getId(),
+          //  "id"            => $id,
             "first_name"    => $user->getFirstName(),
             "last_name"     => $user->getLastName(),
             "email"         => $user->getEmail(),
@@ -162,7 +153,7 @@ class UserRepository extends ApiAbstract
             $payload .= "&";
         }
 
-        $response = $this->RestClient('patch', 'users/'.$payload);
+        $response = $this->RestClient('patch', 'users/'.$id.'/', $payload);
 
         if($response->body->errors)
         {

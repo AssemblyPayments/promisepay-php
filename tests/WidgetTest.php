@@ -9,7 +9,8 @@
 namespace PromisePay;
 
 
-class WidgetTest extends \PHPUnit_Framework_TestCase {
+class WidgetTest extends \PHPUnit_Framework_TestCase
+{
 
 }
  

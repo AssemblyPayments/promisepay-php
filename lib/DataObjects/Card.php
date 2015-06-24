@@ -31,12 +31,19 @@ class Card
      */
     private $_CVV;
 
-    public function __construct($jsonRaw = array())
+    public function __construct($jsonData = array())
     {
-        if(count($jsonRaw))
+        if(count($jsonData))
         {
+            $this->_type     = array_key_exists('card_type',$jsonData)?$jsonData['card_type']:'';
+            $this->_fullName = array_key_exists('full_name',$jsonData)?$jsonData['full_name']:'';
+            $this->_number   = array_key_exists('number',$jsonData)?$jsonData['number']:'';
+            $this->_expMonth = array_key_exists('expiry_month',$jsonData)?$jsonData['expiry_month']:'';
+            $this->_expYear  = array_key_exists('expiry_year',$jsonData)?$jsonData['expiry_year']:'';
+            $this->_CVV      = array_key_exists('cvv',$jsonData)?$jsonData['cvv']:'';
 
         }
+
     }
 
     /**

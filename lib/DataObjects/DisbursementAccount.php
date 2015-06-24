@@ -7,9 +7,9 @@ namespace PromisePay\DataObjects;
  */
 class DisbursementAccount extends Object
 {
-    public function __construct()
+    public function __construct($jsonData)
     {
-
+        parent::__construct($jsonData);
     }
     //void
 }

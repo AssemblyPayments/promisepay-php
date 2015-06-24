@@ -9,7 +9,29 @@
 namespace PromisePay;
 
 
-class BankAccountTest extends \PHPUnit_Framework_TestCase {
+class BankAccountTest extends \PHPUnit_Framework_TestCase
+{
+
+    public function testCreateBankAccountSuccessfully()
+    {
+
+    }
+
+    public function testGetBankAccountSuccessfully()
+    {
+
+    }
+
+    public function testGetBankAccountByIdMissedId()
+    {
+
+    }
+
+    public function testDeleteBankAccountSuccessfully()
+    {
+
+    }
+
 
 }
  

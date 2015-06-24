@@ -69,15 +69,15 @@ class UserTest extends \PHPUnit_Framework_TestCase {
 
         $findUser = $repo->getUserById($id);
 
-        $this->assertEquals($createdUser->id, $findUser->getId());
+        $this->assertEquals($createdUser->getId(), $findUser->getId());
 
-        $this->assertEquals($user->getId(), $createdUser->id);
+        $this->assertEquals($user->getId(), $createdUser->getId());
 
-        $this->assertEquals($user->getFirstName(), $createdUser->first_name);
-        $this->assertEquals($user->getLastName(), $createdUser->last_name);
-        $this->assertEquals($user->getEmail(), $createdUser->email);
-        $this->assertNotNull($createdUser->created_at);
-        $this->assertNotNull($createdUser->updated_at);
+        $this->assertEquals($user->getFirstName(), $createdUser->getFirstName());
+        $this->assertEquals($user->getLastName(), $createdUser->getLastName());
+        $this->assertEquals($user->getEmail(), $createdUser->getEmail());
+        $this->assertNotNull($createdUser->getCreatedAt());
+        $this->assertNotNull($createdUser->getUpdatedAt());
     }
 
 
@@ -216,7 +216,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
         $createdUser = $repo->createUser($user);
 
         $findUser = $repo->getUserById($id);
-        $this->assertEquals($createdUser->id, $findUser->getId());
+        $this->assertEquals($createdUser->getId(), $findUser->getId());
     }
 
     /**
@@ -268,17 +268,74 @@ class UserTest extends \PHPUnit_Framework_TestCase {
     }
 
 
-// edit user success
-// edit user missed id
+    public function testEditUserSuccess()
+    {
+        $repo = new UserRepository();
+        $id = GUID();
 
+        $arr = array(
+            "id"            => $id,
+            "first_name"    => 'test',
+            "last_name"     => 'Test',
+            "email"         => $id . '@google.com',
+            "mobile"        => $id.'3213125551223',
+            "address_line1" => 'a line 1',
+            "address_line2" => 'a line 2',
+            "state"         => 'state',
+            "city"          => 'city',
+            "zip"           => '90210',
+            "country"       => 'AUS',
+        );
+        $user = new User($arr);
+        $createdUser = $repo->createUser($user);
 
-// send mibilepin successful
+            $edit = array(
+                "first_name"    => 'test',
+                "last_name"     => 'Test',
+                "email"         => $id . '@google.com',
+                "mobile"        => $id.'3213125551223',
+                "address_line1" => 'a line 1',
+                "address_line2" => 'a line 2',
+                "state"         => 'state',
+                "city"          => 'city',
+                "zip"           => '90210',
+                "country"       => 'AUS',
+            );
+        $user = new User($edit);
+        $repo->updateUser(User);
+        $findUser = $repo->getUserById($id);
+        $this->assertEquals($createdUser->getId(), $findUser->getId());
+    }
+
+    public function testEditUserMissedId()
+    {
+
+    }
+    // send mibilepin successful
+    // no method in entity
 
 // list user items successful
-// list user bank accounts
-// list user CardAccounts
-// list user Ppal accounts
-//list user disbursement accounts successful
+    public function testListItemSuccessfully()
+    {
 
+    }
+// list user bank accounts
+    public function testListUserCardAccounts()
+    {
+
+    }
+// list user CardAccounts
+
+    public function testListUserBankAccounts()
+    {
+
+    }
+// list user Ppal accounts
+    public function testListPpalAccounts()
+    {
+
+    }
+//list user disbursement accounts successful
+//disbursement not ready
 }
  

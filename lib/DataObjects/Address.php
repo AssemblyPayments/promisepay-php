@@ -31,8 +31,18 @@ class Address extends Object
      */
     private $_country;
 
-    public function __construct()
+    public function __construct($jsonData = array())
     {
+        if (count($jsonData))
+        {
+            $this->_addressLine1 = array_key_exists('address_line1', $jsonData) ? $jsonData['address_line1'] : '';
+            $this->_addressLine2 = array_key_exists('address_line2', $jsonData) ? $jsonData['address_line2'] : '';
+            $this->_postalCode = array_key_exists('postal_code', $jsonData) ? $jsonData['postal_code'] : '';
+            $this->_city = array_key_exists('city', $jsonData) ? $jsonData['city'] : '';
+            $this->_state = array_key_exists('stats', $jsonData) ? $jsonData['state'] : '';
+            $this->_country = array_key_exists('country', $jsonData) ? $jsonData['country'] : '';
+        }
+        parent::__construct($jsonData);
 
     }
     /**

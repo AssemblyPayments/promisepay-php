@@ -27,6 +27,10 @@ $arr = array(
 //$userObj = new User($arr);
 //print_r($test->createUser($userObj));
 
-$test = new BankAccountRepository();
-$id = '1233123';
-print_r($test->deleteBankAccount($id));
+//$test = new BankAccountRepository();
+//$id = '1233123';
+//print_r($test->deleteBankAccount($id));
+
+$repo = new UserRepository();
+print_r($repo->deleteUser('d8cc55d2-a5ab-476d-9816-9d7491d522c5'));
+//$repo->getUserById('d8cc55d2-a5ab-476d-9816-9d7491d522c5');

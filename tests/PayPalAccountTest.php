@@ -9,7 +9,27 @@
 namespace PromisePay;
 
 
-class PayPalAccountTest extends \PHPUnit_Framework_TestCase {
+class PayPalAccountTest extends \PHPUnit_Framework_TestCase
+{
 
+    public function testCreatePaypalAccount()
+    {
+
+    }
+
+    public function testGetAccountSuccessfully()
+    {
+
+    }
+
+    public function testGetUserForAccountSuccessfully()
+    {
+
+    }
+
+    public function deletePayPalAccountTest()
+    {
+
+    }
 }
  

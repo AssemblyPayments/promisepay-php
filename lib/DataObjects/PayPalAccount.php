@@ -11,9 +11,9 @@ class PayPalAccount extends AccountAbstract
      */
     private $_PayPal;
 
-    public function __construct()
+    public function __construct($jsonData)
     {
-        parent::__construct();
+        parent::__construct($jsonData);
     }
     /**
      * @return mixed

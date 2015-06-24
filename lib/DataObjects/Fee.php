@@ -39,13 +39,13 @@ class Fee extends Object
     {
         if(count($jsonData)>0)
         {
-            $this->_name         = $jsonData['name'];
-            $this->_feeType      = $jsonData['fee_type'];
-            $this->_amount       = $jsonData['amount'];
-            $this->_cap          = $jsonData['cap'];
-            $this->_min          = $jsonData['min'];
-            $this->_max          = $jsonData['max'];
-            $this->_to           = $jsonData['to'];
+            $this->_name         = array_key_exists('name',$jsonData)?$jsonData['name']:'';
+            $this->_feeType      = array_key_exists('fee_type', $jsonData)?$jsonData['fee_type']:'';
+            $this->_amount       = array_key_exists('amount', $jsonData)?$jsonData['amount']:'';
+            $this->_cap          = array_key_exists('cap', $jsonData)?$jsonData['cap']:'';
+            $this->_min          = array_key_exists('min',$jsonData)?$jsonData['min']:'';
+            $this->_max          = array_key_exists('max', $jsonData)?$jsonData['max']:'';
+            $this->_to           = array_key_exists('to', $jsonData)?$jsonData['to']:'';
         }
         parent::__construct($jsonData);
     }

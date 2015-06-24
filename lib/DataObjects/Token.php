@@ -72,8 +72,27 @@ class Token
      */
     private $_paymentType;
 
-    public function __construct()
+    public function __construct($jsonData)
     {
+       if (count($jsonData))
+       {
+           $this->_currentUserID    = array_key_exists('current_user_id', $jsonData) ? $jsonData['current_user_id'] : '';
+           $this->_itemName         = array_key_exists('item_name', $jsonData) ? $jsonData['item_name'] : '';
+           $this->_amount           = array_key_exists('amount', $jsonData) ? $jsonData['amount'] : '';
+           $this->_externalItemId   = array_key_exists('external_item_id', $jsonData) ? $jsonData['external_item_id'] : '';
+           $this->_paymentType      = array_key_exists('payment_type_id', $jsonData) ? $jsonData['payment_type_id'] : '';
+           $this->_feeIds           = array_key_exists('fee_ids', $jsonData) ? $jsonData['fee_ids'] : '';
+           $this->_sellerEmail      = array_key_exists('seller_email', $jsonData) ? $jsonData['seller_email'] : '';
+           $this->_sellerFirstName  = array_key_exists('seller_firstname', $jsonData) ? $jsonData['seller_firstname'] : '';
+           $this->_sellerLastName   = array_key_exists('seller_lastname', $jsonData) ? $jsonData['seller_lastname'] : '';
+           $this->_sellerCountry    = array_key_exists('seller_country', $jsonData) ? $jsonData['seller_country'] : '';
+           $this->_externalSellerId = array_key_exists('external_seller_id', $jsonData) ? $jsonData['external_seller_id'] : '';
+           $this->_buyerEmail       = array_key_exists('buyer_email', $jsonData) ? $jsonData['buyer_email'] : '';
+           $this->_buyerFirstName   = array_key_exists('buyer_firstname', $jsonData) ? $jsonData['buyer_firstname'] : '';
+           $this->_buyerLastName    = array_key_exists('buyer_lastname', $jsonData) ? $jsonData['buyer_lastname'] : '';
+           $this->_buyerCountry     = array_key_exists('buyer_country', $jsonData) ? $jsonData['buyer_country'] : '';
+           $this->_externalBuyerId  = array_key_exists('external_buyer_id', $jsonData) ? $jsonData['external_buyer_id'] : '';
+       }
 
     }
     /**

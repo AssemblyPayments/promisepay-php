@@ -24,10 +24,10 @@ abstract class Object
     {
         if (count($jsonData)>0)
         {
-            $this->_id = $jsonData['id'];
-            $this->_createdAt = $jsonData['created_at'];
-            $this->_updatedAt = $jsonData['updated_at'];
-            $this->_links = $jsonData['links'];
+            $this->_id        = array_key_exists('id',$jsonData)?$jsonData['id']:'';
+            $this->_createdAt = array_key_exists('created_at',$jsonData)?$jsonData['created_at']:'';
+            $this->_updatedAt = array_key_exists('updated_at',$jsonData)?$jsonData['updated_at']:'';
+            $this->_links     = array_key_exists('links',$jsonData)?$jsonData['links']:'';
         }
     }
 

@@ -11,9 +11,9 @@ class CardAccount extends AccountAbstract
      */
     private $_card;
 
-    public function __construct()
+    public function __construct($jsonData= array())
     {
-
+        parent::__construct($jsonData);
     }
 
     /**

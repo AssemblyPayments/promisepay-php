@@ -9,7 +9,22 @@
 namespace PromisePay;
 
 
-class CompanyTest extends \PHPUnit_Framework_TestCase {
+class CompanyTest extends \PHPUnit_Framework_TestCase
+{
+    public function testListOfCompanies()
+    {
+
+    }
+
+    public function testGetCompanyByIdSuccessfully()
+    {
+
+    }
+
+    public function testEditCompanySuccessfully()
+    {
+
+    }
 
 }
  

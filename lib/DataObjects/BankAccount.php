@@ -8,14 +8,13 @@ namespace PromisePay\DataObjects;
  */
 class BankAccount extends AccountAbstract
 {
-    public function __construct()
-    {
-
-    }
-    /**
-     * @var
-     */
     private $_bank;
+
+    public function __construct($jsonData)
+    {
+        $this->_bank = array_key_exists('bank', $jsonData)?$jsonData['bank']:'';
+        parent::__construct($jsonData);
+    }
 
     /**
      * @return mixed

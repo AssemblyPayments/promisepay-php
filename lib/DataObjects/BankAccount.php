@@ -12,7 +12,7 @@ class BankAccount extends AccountAbstract
 
     public function __construct($jsonData)
     {
-        $this->_bank = array_key_exists('bank', $jsonData)?$jsonData['bank']:'';
+        $this->_bank = new Bank($jsonData);
         parent::__construct($jsonData);
     }
 

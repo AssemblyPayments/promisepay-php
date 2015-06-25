@@ -85,7 +85,7 @@ class ApiAbstract
                 break;
 
             case 'patch':
-                $response = Request::patch($url, $payload, $mime)->authenticateWith($username, $password)->send();
+                $response = Request::patch($url)->body($payload, $mime)->authenticateWith($username, $password)->send();
                 return $response;
                 break;
         }

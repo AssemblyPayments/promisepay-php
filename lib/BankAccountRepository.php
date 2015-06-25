@@ -18,20 +18,20 @@ class BankAccountRepository extends ApiAbstract
         return $bankAccounts;
     }
 
-    public function createBankAccount(Bank $bank)
+    public function createBankAccount(BankAccount $bankAccount)
     {
 
         $payload = '';
-
+//bank_accounts?user_id&bank_name&account_name&routing_number&account_number&account_type&holder_type&bank_country
         $preparePayload = array(
-            "user_id" =>$bank->getId(),
-            "bank_name"=>$bank->getBankName(),
-            "account_name"=>$bank->getAccountName(),
-            "routing_number"=>$bank->getRoutingNumber(),
-            "account_number"=>$bank->getAccountNumber(),
-            "account_type"=>$bank->getAccountType(),
-            "holder_type"=>$bank->getHolderType(),
-            "bank_country"=>$bank->getCountry(),
+            "user_id" =>$bankAccount->getUserId(),
+            "bank_name"=>$bankAccount->getBank()->getBankName(),
+            "account_name"=>$bankAccount->getBank()->getAccountName(),
+            "routing_number"=>$bankAccount->getBank()->getRoutingNumber(),
+            "account_number"=>$bankAccount->getBank()->getAccountNumber(),
+            "account_type"=>$bankAccount->getBank()->getAccountType(),
+            "holder_type"=>$bankAccount->getBank()->getHolderType(),
+            "bank_country"=>$bankAccount->getBank()->getCountry(),
         );
         foreach ($preparePayload as $key => $value)
         {
@@ -39,7 +39,11 @@ class BankAccountRepository extends ApiAbstract
             $payload .= urlencode($value);
             $payload .= "&";
         }
+        $payload = substr($payload, 0, -1);
         $response = $this->RestClient('post', 'bank_accounts/', $payload);
+        $jsonData = json_decode($response->raw_body, true);
+
+       // return new BankAccount($jsonData);
         return $response;
     }
 

@@ -26,7 +26,7 @@ class AccountAbstract extends Object
         if (count($jsonData))
         {
             $this->_currency = array_key_exists('currency', $jsonData) ? $jsonData['currency'] : '';
-            $this->_userId = array_key_exists('userId', $jsonData) ? $jsonData['userId'] : '';
+            $this->_userId = array_key_exists('user_id', $jsonData) ? $jsonData['user_id'] : '';
             $this->_isActive = array_key_exists('is_active', $jsonData) ? $jsonData['is_active'] : '';
         }
         parent::__construct($jsonData);

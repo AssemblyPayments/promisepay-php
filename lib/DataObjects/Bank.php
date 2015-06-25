@@ -37,10 +37,11 @@ class Bank
 
     public function __construct($jsonData = array())
     {
+        $jsonData = $jsonData['bank'];
         if (count($jsonData))
         {
             $this->_bankName      = array_key_exists('bank_name',      $jsonData)?$jsonData['bank_name']:'';
-            $this->_country       = array_key_exists('country',        $jsonData)?$jsonData['country']:'';
+            $this->_country       = array_key_exists('bank_country',   $jsonData)?$jsonData['bank_country']:'';
             $this->_accountName   = array_key_exists('account_name',   $jsonData)?$jsonData['account_name']:'' ;
             $this->_accountNumber = array_key_exists('account_number', $jsonData)?$jsonData['account_number']:'';
             $this->_accountType   = array_key_exists('account_type',   $jsonData)?$jsonData['account_type']:'';

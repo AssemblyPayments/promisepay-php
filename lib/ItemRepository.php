@@ -63,15 +63,15 @@ class ItemRepository extends ApiAbstract
         }
 
         $response = $this->RestClient('post', 'items/', $payload, '');
-
-        if($response->body->errors)
+        $jsonData = json_decode($response->raw_body, true);
+        if(array_key_exists("errors", $jsonData))
         {
-            $errors = new Errors(get_object_vars($response->body->errors));
+            $errors = new Errors($jsonData);
             return $errors;
         }
         else
         {
-            $jsonData = json_decode($response->raw_body, true)['items'];
+            $jsonData = $jsonData['items'];
             $item = new Item($jsonData);
             return $item;
         }
@@ -81,36 +81,49 @@ class ItemRepository extends ApiAbstract
     {
         $this->checkIdNotNull($id);
         $response = $this->RestClient('delete', 'items/' . $id);
+        if ($response->code){
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 
-    public function updateItem($item)
+    public function updateItem(Item $item, $user = null, $operation = null, $account = null, $releaseAmount = null)
     {
         $payload = '';
         $preparePayload = array(
-            "name"          => $item->getName(),
-            "amount"        => $item->getAmount(),
-            "buyer_id"      => $item->getBuyerId(),
-            "seller_id"     => $item->getSellerId(),
-            "fee_ids"       => $item->getFeeIds(),
-            "description"   => $item->getDescription()
+           'id'=>$item->getId(),
+           'user'=>$user,
+          // 'operation'=>$operation,
+           'amount'=>$item->getAmount(),
+           'name'=>$item->getName(),
+           'account'=>$account,
+           'release_amount'=>$releaseAmount,
+           'description'=>$item->getDescription(),
+           'buyer_id'=>$item->getBuyerId(),
+           'seller_id'=>$item->getSellerId(),
         );
+        array_shift($preparePayload);
         foreach ($preparePayload as $key => $value)
         {
             $payload .= $key . '=';
             $payload .= urlencode($value);
             $payload .= "&";
         }
-        $payload = substr($payload,0,-1);
-        $response = $this->RestClient('patch', 'items/' . $item->getId(), $payload, '');
 
-        if($response->body->errors)
+        $response = $this->RestClient('patch', 'items/'.$item->getId().'?'.$payload);
+//        return $response;
+        $jsonData = json_decode($response->raw_body, true);
+        if(array_key_exists("errors", $jsonData))
         {
-            $errors = new Errors(get_object_vars($response->body->errors));
+            $errors = new Errors($jsonData);
             return $errors;
         }
         else
         {
-            $jsonData = json_decode($response->raw_body, true)['items'];
+            $jsonData = $jsonData['items'];
             $editedItem = new Item($jsonData);
             return $editedItem;
         }

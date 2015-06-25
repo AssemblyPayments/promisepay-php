@@ -1,6 +1,8 @@
 <?php
 namespace PromisePay;
 
+use PromisePay\DataObjects\BankAccount;
+use PromisePay\DataObjects\CardAccount;
 use PromisePay\DataObjects\Errors;
 use PromisePay\DataObjects\Item;
 use PromisePay\DataObjects\PayPalAccount;
@@ -101,8 +103,28 @@ class UserRepository extends ApiAbstract
         $this->checkIdNotNull($id);
         $response = $this->RestClient('get', 'users/'.$id.'/items');
         $jsonData = json_decode($response->raw_body, true)['items'];
-        $ItemsList = new Item($jsonData);
-        return $ItemsList;
+        $listItems = array();
+        foreach($jsonData as $part )
+        {
+            $Item = new Item($part);
+            array_push($listItems, $user);
+        }
+        return $listItems;
+    }
+
+    public function getListOfCardAccountsForUser($id)
+    {
+        $this->checkIdNotNull($id);
+        $response = $this->RestClient('get', 'users/'.$id.'/card_accounts');
+        $jsonData = json_decode($response->raw_body, true)['card_accounts'];
+
+        $cardAccounts = array();
+        foreach($jsonData as $part )
+        {
+            $cardAccount = new CardAccount($part);
+            array_push($cardAccounts, $cardAccount);
+        }
+        return $cardAccounts;
     }
 
     public function getListOfPayPalAccountsForUser($id)
@@ -110,8 +132,13 @@ class UserRepository extends ApiAbstract
         $this->checkIdNotNull($id);
         $response = $this->RestClient('get', 'users/'.$id.'/paypal_accounts');
         $jsonData =  $jsonData = json_decode($response->raw_body, true)['paypal_accounts'];
-        $PayPalAccounts = new PayPalAccount($jsonData);
-        return $PayPalAccounts;
+        $PpalAccounts = array();
+        foreach($jsonData as $part )
+        {
+            $Account = new PayPalAccount($part);
+            array_push($PpalAccounts, $Account);
+        }
+        return $PpalAccounts;
     }
 
     public function getListOfBankAccountsForUser($id)
@@ -119,7 +146,12 @@ class UserRepository extends ApiAbstract
         $this->checkIdNotNull($id);
         $response = $this->RestClient('get', 'users/'.$id.'/bank_accounts');
         $jsonData =  $jsonData = json_decode($response->raw_body, true)['bank_accounts'];
-        $BankAccounts = new PayPalAccount($jsonData);
+        $BankAccounts = array();
+        foreach($jsonData as $part )
+        {
+            $Account = new BankAccount($part);
+            array_push($BankAccounts, $Account);
+        }
         return $BankAccounts;
     }
 
@@ -128,13 +160,13 @@ class UserRepository extends ApiAbstract
         throw new \Exception('no fields for this method');
     }
 
-    public function updateUser(User $user, $id)
+    public function updateUser(User $user)
     {
         $this->validateUser($user);
 
         $payload = '';
         $preparePayload = array(
-          //  "id"            => $id,
+            "id"            => $user->getId(),
             "first_name"    => $user->getFirstName(),
             "last_name"     => $user->getLastName(),
             "email"         => $user->getEmail(),
@@ -146,6 +178,7 @@ class UserRepository extends ApiAbstract
             "zip"           => $user->getZip(),
             "country"       => $user->getCountry(),
         );
+        array_shift($preparePayload);
         foreach ($preparePayload as $key => $value)
         {
             $payload .= $key . '=';
@@ -153,7 +186,8 @@ class UserRepository extends ApiAbstract
             $payload .= "&";
         }
 
-        $response = $this->RestClient('patch', 'users/'.$id.'/', $payload);
+        $response = $this->RestClient('patch', 'users/'.$user->getId(), $payload);
+       // return $response;
 
         if($response->body->errors)
         {

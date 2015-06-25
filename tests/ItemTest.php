@@ -146,13 +146,13 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $item = new Item($itemArr);
         $createdItem = $repo->createItem($item);
 
-        $item->setName('Test123');
-        $item->setDescription('Test123');
+        $item->setName('Test123update');
+        $item->setDescription('Test123description');
 
         $updatedItem = $repo->updateItem($item);
 
-        $this->assertEquals("Test123", $updatedItem->getName());
-        $this->assertEquals("Test123", $updatedItem->getDescription());
+        $this->assertEquals("Test123update", $updatedItem->getName());
+        $this->assertEquals("Test123description", $updatedItem->getDescription());
     }
 
     public function testListTransactionsForItem()

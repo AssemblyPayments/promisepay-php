@@ -13,6 +13,7 @@ class CardAccount extends AccountAbstract
 
     public function __construct($jsonData= array())
     {
+        $this->_card = new Card($jsonData);
         parent::__construct($jsonData);
     }
 

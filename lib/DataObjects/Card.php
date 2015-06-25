@@ -33,6 +33,7 @@ class Card
 
     public function __construct($jsonData = array())
     {
+        $jsonData = $jsonData['card'];
         if(count($jsonData))
         {
             $this->_type     = array_key_exists('card_type',$jsonData)?$jsonData['card_type']:'';

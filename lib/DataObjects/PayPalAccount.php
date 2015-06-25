@@ -13,6 +13,7 @@ class PayPalAccount extends AccountAbstract
 
     public function __construct($jsonData)
     {
+        $this->_PayPal = new PayPal($jsonData);
         parent::__construct($jsonData);
     }
     /**

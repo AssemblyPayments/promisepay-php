@@ -8,6 +8,7 @@
 namespace PromisePay;
 
 
+use PromisePay\DataObjects\BankAccount;
 use PromisePay\DataObjects\User;
 use PromisePay\Exception\Validation;
 use PromisePay\Exception\Argument;
@@ -290,7 +291,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
         $createdUser = $repo->createUser($user);
 
             $edit = array(
-                "first_name"    => 'test',
+                "first_name"    => 'test edited',
                 "last_name"     => 'Test',
                 "email"         => $id . '@google.com',
                 "mobile"        => $id.'3213125551223',
@@ -301,15 +302,53 @@ class UserTest extends \PHPUnit_Framework_TestCase {
                 "zip"           => '90210',
                 "country"       => 'AUS',
             );
-        $user = new User($edit);
-        $repo->updateUser(User);
+        $edituser = new User($edit);
+        $repo->updateUser($edituser);
         $findUser = $repo->getUserById($id);
-        $this->assertEquals($createdUser->getId(), $findUser->getId());
+        $this->assertEquals($edituser->getFirstName(), $findUser->getFirstName());
     }
 
+    /**
+     * @expectedException PromisePay\Exception\Argument
+     */
     public function testEditUserMissedId()
     {
+        $repo = new UserRepository();
+        $id = GUID();
 
+        $arr = array(
+            "id"            => $id,
+            "first_name"    => 'test',
+            "last_name"     => 'Test',
+            "email"         => $id . '@google.com',
+            "mobile"        => $id.'3213125551223',
+            "address_line1" => 'a line 1',
+            "address_line2" => 'a line 2',
+            "state"         => 'state',
+            "city"          => 'city',
+            "zip"           => '90210',
+            "country"       => 'AUS',
+        );
+        $user = new User($arr);
+        $createdUser = $repo->createUser($user);
+
+        $edit = array(
+            "id"            => '',
+            "first_name"    => 'test',
+            "last_name"     => 'Test',
+            "email"         => $id . '@google.com',
+            "mobile"        => $id.'3213125551223',
+            "address_line1" => 'a line 1',
+            "address_line2" => 'a line 2',
+            "state"         => 'state',
+            "city"          => 'city',
+            "zip"           => '90210',
+            "country"       => 'AUS',
+        );
+        $edituser = new User($edit);
+        $repo->updateUser($edituser);
+        $findUser = $repo->getUserById($id);
+        $this->assertEquals($createdUser->getId(), $findUser->getId());
     }
     // send mibilepin successful
     // no method in entity
@@ -317,23 +356,27 @@ class UserTest extends \PHPUnit_Framework_TestCase {
 // list user items successful
     public function testListItemSuccessfully()
     {
-
+        $repo = new UserRepository();
+        $repo->getListOfItemsForUser('89592d8a-6cdb-4857-a90d-b41fc817d639');
     }
 // list user bank accounts
     public function testListUserCardAccounts()
     {
-
+        $repo = new UserRepository();
+        $repo->getListOfCardAccountsForUser('89592d8a-6cdb-4857-a90d-b41fc817d639');
     }
 // list user CardAccounts
 
     public function testListUserBankAccounts()
     {
-
+        $repo = new UserRepository();
+        $repo->getListOfBankAccountsForUser('89592d8a-6cdb-4857-a90d-b41fc817d639');
     }
 // list user Ppal accounts
     public function testListPpalAccounts()
     {
-
+        $repos = new UserRepository();
+        $repos->getListOfPayPalAccountsForUser('89592d8a-6cdb-4857-a90d-b41fc817d639');
     }
 //list user disbursement accounts successful
 //disbursement not ready

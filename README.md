@@ -7,7 +7,7 @@ download latest sources from GitHub, require init.php
 	See http://docs.promisepay.com/v2.2/docs/request_token for more information.
 #3. Client
 	#3.1 Base Settings
-		create promise-pay credetials config file
+		create promise-pay credentials config file
 		<?xml version='1.0'?>
  		<ApiCredentials>
     			<ApiUrl>API URL</ApiUrl>
@@ -33,7 +33,7 @@ download latest sources from GitHub, require init.php
             "country"       => 'AUS'//country code,));
 	$repo->createUser($user)
 
-#4. Contibuting
+#4. Contributing
 	#1. Fork it ( https://github.com/PromisePay/promisepay-php/fork )
 	#2. Create your feature branch (`git checkout -b my-new-feature`)
 	#3. Commit your changes (`git commit -am 'Add some feature'`)

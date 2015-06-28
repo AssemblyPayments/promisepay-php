@@ -17,6 +17,7 @@ class PayPal
 
     public function __construct($jsonData = array())
     {
+        $jsonData = $jsonData['paypal'];
         $this->_PayPalAccountEmail = array_key_exists('email', $jsonData)?$jsonData['email']:'';
     }
 

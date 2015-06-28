@@ -2,6 +2,7 @@
 namespace PromisePay;
 
 use PromisePay\DataObjects\PayPal;
+use PromisePay\DataObjects\PayPalAccount;
 use PromisePay\Exception;
 use PromisePay\Log;
 
@@ -16,14 +17,13 @@ class PayPalAccountRepository extends ApiAbstract
         return $accounts;
     }
 
-    public function createPayPalAccount(PayPal $paypal, $id)
+    public function createPayPalAccount(PayPalAccount $paypal)
     {
-        $this->checkIdNotNull($id);
         $payload = '';
 
         $preparePayload = array(
-            "id" =>$id,
-            "paypal_email"=>$paypal->getPayPalAccountEmail(),
+            "user_id" =>$paypal->getUserId(),
+            "paypal_email"=>$paypal->getPayPal()->getPayPalAccountEmail(),
 
         );
         foreach ($preparePayload as $key => $value)
@@ -33,7 +33,8 @@ class PayPalAccountRepository extends ApiAbstract
             $payload .= "&";
         }
         $response = $this->RestClient('post', 'paypal_accounts/', $payload);
-        return $response;
+        $jsonData = json_decode($response->raw_body, true);
+        return new PayPalAccount($jsonData);
     }
 
     public function deletePayPalAccount($id)

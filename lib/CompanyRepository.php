@@ -63,21 +63,21 @@ class CompanyRepository extends ApiAbstract
     }
 
 //id?name&legal_name&tax_number&charge_tax&address_line1&address_line2&city&state&zip&country
-    public function editCompany($id, $legal_name, $tax_number, $charge_tax, $address_line1, $address_line2, $city, $state, $zip, $country)
+    public function editCompany(Company $company)
     {
-        $this->checkIdNotNull($id);
+
         $payload='';
         $preparePayload = array(
-            "id"=>$id,
-            "legal_name"=>$legal_name,
-            "tax_number"=>$tax_number,
-            "charge_tax"=>$charge_tax,
-            "address_line1"=>$address_line1,
-            "address_line2"=>$address_line2,
-            "city"=>$city,
-            "state"=>$state,
-            "zip"=>$$zip,
-            "country"=>$country,
+            "id"=>$company->getId(),
+            "legal_name"=>$company->getLegalName(),
+            "tax_number"=>$company->getTaxNumber(),
+            "charge_tax"=>$company->getChargeTax(),
+            "address_line1"=>$company->getAddressLine1(),
+            "address_line2"=>$company->getAddressLine2(),
+            "city"=>$company->getCity(),
+            "state"=>$company->getState(),
+            "zip"=>$company->getZip(),
+            "country"=>$company->getCountry(),
         );
         foreach ($preparePayload as $key => $value)
         {

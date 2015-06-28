@@ -42,17 +42,52 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBankAccountSuccessfully()
     {
-
+        $userid = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';//user id created before
+        $info = array(
+            "user_id" => $userid,
+            "active"=> 'true',
+            "bank" => array(
+                "bank_name"=>'bank for test',
+                "account_name"=>'test acc',
+                "routing_number"=>'12344455512',
+                "account_number"=>'123334242134',
+                "account_type"=>'savings',
+                "holder_type"=>'personal',
+                "bank_country"=>'AUS',
+            ));
+        $bankAccount = new BankAccount($info);
+        $create = new BankAccountRepository();
+        $create->createBankAccount($bankAccount);
+        $this->assertEquals($bankAccount->getUserId(),$create->getBankAccountById($userid));
     }
 
-    public function testGetBankAccountByIdMissedId()
+    public function testGetUserForBankAccountSuccessfully()
     {
+        $userid = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';//user id created before
+        $info = array(
+            "user_id" => $userid,
+            "active"=> 'true',
+            "bank" => array(
+                "bank_name"=>'bank for test',
+                "account_name"=>'test acc',
+                "routing_number"=>'12344455512',
+                "account_number"=>'123334242134',
+                "account_type"=>'savings',
+                "holder_type"=>'personal',
+                "bank_country"=>'AUS',
+            ));
+        $bankAccount = new BankAccount($info);
+        $create = new BankAccountRepository();
 
+
+        $this->assertEquals($create->createBankAccount($bankAccount)->getUserId(), $create->getUserForBankAccount($userid)->getUserId());
     }
 
     public function testDeleteBankAccountSuccessfully()
     {
-
+        $bankAccount = new BankAccountRepository();
+        $bankAccount->deleteBankAccount('ec9bf096-c505-4bef-87f6-18822b9dbf2c');
+        $bankAccount->getBankAccountById('ec9bf096-c505-4bef-87f6-18822b9dbf2c');
     }
 
 

@@ -14,7 +14,7 @@ class BankAccountRepository extends ApiAbstract
         $this->checkIdNotNull($id);
         $response = $this->RestClient('get', 'bank_accounts/'.$id);
         $jsonData = json_decode($response->raw_body, true)['bank_accounts'];
-        $bankAccounts = new Bank($jsonData);
+        $bankAccounts = new BankAccount($jsonData);
         return $bankAccounts;
     }
 
@@ -22,7 +22,6 @@ class BankAccountRepository extends ApiAbstract
     {
 
         $payload = '';
-//bank_accounts?user_id&bank_name&account_name&routing_number&account_number&account_type&holder_type&bank_country
         $preparePayload = array(
             "user_id" =>$bankAccount->getUserId(),
             "bank_name"=>$bankAccount->getBank()->getBankName(),
@@ -43,8 +42,8 @@ class BankAccountRepository extends ApiAbstract
         $response = $this->RestClient('post', 'bank_accounts/', $payload);
         $jsonData = json_decode($response->raw_body, true);
 
-       // return new BankAccount($jsonData);
-        return $response;
+        return new BankAccount($jsonData);
+
     }
 
     public function deleteBankAccount($id)

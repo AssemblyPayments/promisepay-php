@@ -22,7 +22,78 @@ Open the file **libs/promisepay-credentials.xml** and replace the existing crede
 		</ApiCredentials>
 	
 #3. Examples
-**Create a user**
+##Tokens
+##### Example 1 - Request session token
+The below example shows the request for a marketplace configured to have the Item and User IDs generated automatically for them.
+
+	$repo = new TokenRepository();
+	$sessionToken = new Token($arr = array(
+				   'current_user' 			=> 'seller',
+            	   'item_name'				=> 'Test Item',
+           		   'amount'					=> '2500',
+            	   'seller_lastname' 		=> 'Seller',
+            	   'seller_firstname'		=> 'Sally',
+            	   'buyer_lastname'			=> 'Buyer',
+            	   'buyer_firstname'		=> 'Bobby',
+            	   'buyer_country'			=> 'AUS',
+            	   'seller_country'			=> 'USA',
+            	   'seller_email'			=> 'sally.seller@promisepay.com',
+            	   'buyer_email'			=> 'bobby.buyer@promisepay.com',
+            	   'fee_ids'				=> '',
+            	   'payment_type_id'		=> '2'))
+	$repo->requestSessionToken($sessionToken)
+#####Example 2 - Request session token
+The below example shows the request for a marketplace that passes the Item and User IDs.
+
+	$repo = new TokenRepository();
+	$sessionToken = new Token($arr = array(
+				   'current_user_id' 		=> 'seller1234',
+            	   'item_name'				=> 'Test Item',
+           		   'amount'					=> '2500',
+            	   'seller_lastname' 		=> 'Seller',
+            	   'seller_firstname'		=> 'Sally',
+            	   'buyer_lastname'			=> 'Buyer',
+            	   'buyer_firstname'		=> 'Bobby',
+            	   'buyer_country'			=> 'AUS',
+            	   'seller_country'			=> 'USA',
+            	   'seller_email'			=> 'sally.seller@promisepay.com',
+            	   'buyer_email'			=> 'bobby.buyer@promisepay.com',
+            	   'external_item_id'		=> 'TestItemId1234',
+            	   'external_seller_id'		=> 'seller1234',
+            	   'external_buyer_id'		=> 'buyer1234',
+            	   'fee_ids'				=> '',
+            	   'payment_type_id'		=> '2'))
+	$repo->requestSessionToken($sessionToken)
+##Items
+
+#####Create an item
+
+	$repo = new ItemRepository();
+	$user = new Item($arr = array(
+            'id'            => 'External_id',
+            'name'          => 'Item Name',
+            'amount'        => '2000',
+            'payment_type'  => '1',
+            'buyer_id'      => 'External_buyer_id',
+            'seller_id'     => 'External_seller_id',
+            'fee_ids'       => 'fee_id_1,fee_id_2',
+            'description'   => 'Item Description'));
+	$repo->createItem($user)
+#####Get an item
+#####Get a list of items
+#####Update an item
+#####Delete an item
+#####Get an item status
+#####Get an item's buyer
+#####Get an item's seller
+#####Get an item's fees
+#####Get an item's transactions
+#####Get an item's wire details
+#####Get an item's BPAY details
+
+##Users
+
+#####Create a user
 
 	$repo = new UserRepository();
 	$user = new User($arr = array(
@@ -39,7 +110,35 @@ Open the file **libs/promisepay-credentials.xml** and replace the existing crede
             'country'       => 'AUS'//country code,));
 	$repo->createUser($user)
 	
-**Create a card account**
+#####Get a user
+#####Get a list of users
+
+	var repo = container.Resolve<IUserRepository>();
+	var users = repo.ListUsers();
+#####Delete a User
+#####Get a user's card accounts
+#####Get a user's PayPal accounts
+#####Get a user's bank accounts
+#####Get a user's items
+#####Set a user's disbursement account
+
+##Item Actions
+#####Make payment
+
+	$repo = new ItemRepository();
+	$repo->makePayment('External_item_id', 'Card_account_id', 'User_id')
+#####Request payment
+#####Release payment
+#####Request release
+#####Cancel
+#####Acknowledge wire
+#####Acknowledge PayPal
+#####Revert wire
+#####Request refund
+#####Refund
+
+##Card Accounts
+#####Create a card account
 
 	$repo = new CardAccountRepository();
 	$user = new CardAccount($arr = array(
@@ -50,27 +149,12 @@ Open the file **libs/promisepay-credentials.xml** and replace the existing crede
             'expiry_year'   => '2016'
             'cvv' 			=> '123'));
 	$repo->createCardAccount($user)
-	
-**Create an item**
+#####Get a card account
+#####Delete a card account
+#####Get a card account's users
 
-	$repo = new ItemRepository();
-	$user = new Item($arr = array(
-            'id'            => 'External_id',
-            'name'          => 'Item Name',
-            'amount'        => '2000',
-            'payment_type'  => '1',
-            'buyer_id'      => 'External_buyer_id',
-            'seller_id'     => 'External_seller_id',
-            'fee_ids'       => 'fee_id_1,fee_id_2',
-            'description'   => 'Item Description'));
-	$repo->createItem($user)
-	
-**Make a payment**
-
-	$repo = new ItemRepository();
-	$repo->makePayment('External_item_id', 'Card_account_id', 'User_id')
-	
-**Create a bank account**
+##Bank Accounts
+#####Create a bank account
 
 	$repo = new BankAccountRepository();
 	$bankAccount = new BankAccount($arr = array(
@@ -83,16 +167,64 @@ Open the file **libs/promisepay-credentials.xml** and replace the existing crede
             	   'holder_type'		=> 'personal',
             	   'bank_country'		=> 'AUS'))
 	$repo->createBankAccount($bankAccount)
+#####Get a bank account
+#####Delete a bank account
+#####Get a bank account's users
+
+##PayPal Accounts
+#####Create a PayPal account
+#####Get a PayPal account
+#####Delete a PayPal account
+#####Get a PayPal account's users
+
+##Fees
+#####Get a list of fees
+#####Get a fee
+#####Create a fee
+
+##Transactions
+#####Get a list of transactions
+#####Get a transactions
+#####Get a transaction's users
+#####Get a transaction's fees
+
+
+**Create a user**
+
+	
+**Create a card account**
+
+	
+	
+**Create an item**
+
+
+	
+**Make a payment**
+
+
+	
+**Create a bank account**
+
+
 
 **Assign as payout account**
 
 To be finished.
 
+**Request a session token**
 
+The below example shows the request for a marketplace configured to have the Item and User IDs generated automatically for them.
+
+
+
+The below example shows the request for a marketplace that passes the Item and User IDs.
+
+	
 
 #4. Contributing
-	#1. Fork it ( https://github.com/PromisePay/promisepay-php/fork )
-	#2. Create your feature branch (`git checkout -b my-new-feature`)
-	#3. Commit your changes (`git commit -am 'Add some feature'`)
-	#4. Push to the branch (`git push origin my-new-feature`)
-	#5. Create a new Pull Request
+	1. Fork it ( https://github.com/PromisePay/promisepay-php/fork )
+	2. Create your feature branch (`git checkout -b my-new-feature`)
+	3. Commit your changes (`git commit -am 'Add some feature'`)
+	4. Push to the branch (`git push origin my-new-feature`)
+	5. Create a new Pull Request

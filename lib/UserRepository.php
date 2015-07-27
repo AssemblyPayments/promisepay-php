@@ -155,9 +155,34 @@ class UserRepository extends ApiAbstract
         return $BankAccounts;
     }
 
-    public function getDisbursementAccount()
+    public function setDisbursementAccount($id, $accountId)
     {
         throw new \Exception('no fields for this method');
+
+        $this->checkIdNotNull($id);
+        $this->checkIdNotNull($accountId);
+
+        $payload = '';
+        $preparePayload = array(
+            "account_id"            => $accountId
+        );
+        array_shift($preparePayload);
+        foreach ($preparePayload as $key => $value)
+        {
+            $payload .= $key . '=';
+            $payload .= urlencode($value);
+            $payload .= "&";
+        }
+
+        $response = $this->RestClient('post', 'users/'.$id.'/disbursement_account', $payload);
+        if ($response->code){
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+
     }
 
     public function updateUser(User $user)
@@ -176,7 +201,7 @@ class UserRepository extends ApiAbstract
             "state"         => $user->getState(),
             "city"          => $user->getCity(),
             "zip"           => $user->getZip(),
-            "country"       => $user->getCountry(),
+            "country"       => $user->getCountry()
         );
         array_shift($preparePayload);
         foreach ($preparePayload as $key => $value)

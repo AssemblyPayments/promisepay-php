@@ -1,6 +1,8 @@
 
 #PHP SDK - PromisePay API
 
+[![Join the chat at https://gitter.im/PromisePay/promisepay-php](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/PromisePay/promisepay-php?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 #1. Installation
 Download the latest release from GitHub, then include the **init.php** file - see below.
 

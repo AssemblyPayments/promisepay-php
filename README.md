@@ -13,72 +13,81 @@ Once you have recorded your API token, configure the PHP package - see below.
 
 Open the file **libs/promisepay-credentials.xml** and replace the existing credentials with the following:
 
-		<?xml version='1.0'?>
- 		<ApiCredentials>
-    			<ApiUrl>https://test.api.promisepay.com/</ApiUrl>
-    			<ApiLogin>user.name@yourdomain.com</ApiLogin>
-    			<ApiPassword>Password</ApiPassword>
-    			<ApiKey>APIToken</ApiKey>
-		</ApiCredentials>
-	
+```xml
+	<?xml version='1.0'?>
+		<ApiCredentials>
+   			<ApiUrl>https://test.api.promisepay.com/</ApiUrl>
+   			<ApiLogin>user.name@yourdomain.com</ApiLogin>
+   			<ApiPassword>Password</ApiPassword>
+   			<ApiKey>APIToken</ApiKey>
+	</ApiCredentials>
+```
+
 #3. Examples
 ##Tokens
 ##### Example 1 - Request session token
 The below example shows the request for a marketplace configured to have the Item and User IDs generated automatically for them.
 
-	$repo = new TokenRepository();
-	$sessionToken = new Token($arr = array(
-				   'current_user' 			=> 'seller',
-            	   'item_name'				=> 'Test Item',
-           		   'amount'					=> '2500',
-            	   'seller_lastname' 		=> 'Seller',
-            	   'seller_firstname'		=> 'Sally',
-            	   'buyer_lastname'			=> 'Buyer',
-            	   'buyer_firstname'		=> 'Bobby',
-            	   'buyer_country'			=> 'AUS',
-            	   'seller_country'			=> 'USA',
-            	   'seller_email'			=> 'sally.seller@promisepay.com',
-            	   'buyer_email'			=> 'bobby.buyer@promisepay.com',
-            	   'fee_ids'				=> '',
-            	   'payment_type_id'		=> '2'))
-	$repo->requestSessionToken($sessionToken)
+```php
+$repo = new TokenRepository();
+$sessionToken = new Token($arr = array(
+			   'current_user' 			=> 'seller',
+           	   'item_name'				=> 'Test Item',
+          		   'amount'					=> '2500',
+           	   'seller_lastname' 		=> 'Seller',
+           	   'seller_firstname'		=> 'Sally',
+           	   'buyer_lastname'			=> 'Buyer',
+           	   'buyer_firstname'		=> 'Bobby',
+           	   'buyer_country'			=> 'AUS',
+           	   'seller_country'			=> 'USA',
+           	   'seller_email'			=> 'sally.seller@promisepay.com',
+           	   'buyer_email'			=> 'bobby.buyer@promisepay.com',
+           	   'fee_ids'				=> '',
+           	   'payment_type_id'		=> '2'))
+$repo->requestSessionToken($sessionToken)
+```
+
 #####Example 2 - Request session token
 The below example shows the request for a marketplace that passes the Item and User IDs.
 
-	$repo = new TokenRepository();
-	$sessionToken = new Token($arr = array(
-				   'current_user_id' 		=> 'seller1234',
-            	   'item_name'				=> 'Test Item',
-           		   'amount'					=> '2500',
-            	   'seller_lastname' 		=> 'Seller',
-            	   'seller_firstname'		=> 'Sally',
-            	   'buyer_lastname'			=> 'Buyer',
-            	   'buyer_firstname'		=> 'Bobby',
-            	   'buyer_country'			=> 'AUS',
-            	   'seller_country'			=> 'USA',
-            	   'seller_email'			=> 'sally.seller@promisepay.com',
-            	   'buyer_email'			=> 'bobby.buyer@promisepay.com',
-            	   'external_item_id'		=> 'TestItemId1234',
-            	   'external_seller_id'		=> 'seller1234',
-            	   'external_buyer_id'		=> 'buyer1234',
-            	   'fee_ids'				=> '',
-            	   'payment_type_id'		=> '2'))
-	$repo->requestSessionToken($sessionToken)
+```php
+$repo = new TokenRepository();
+$sessionToken = new Token($arr = array(
+			   'current_user_id' 		=> 'seller1234',
+           	   'item_name'				=> 'Test Item',
+          		   'amount'					=> '2500',
+           	   'seller_lastname' 		=> 'Seller',
+           	   'seller_firstname'		=> 'Sally',
+           	   'buyer_lastname'			=> 'Buyer',
+           	   'buyer_firstname'		=> 'Bobby',
+           	   'buyer_country'			=> 'AUS',
+           	   'seller_country'			=> 'USA',
+           	   'seller_email'			=> 'sally.seller@promisepay.com',
+           	   'buyer_email'			=> 'bobby.buyer@promisepay.com',
+           	   'external_item_id'		=> 'TestItemId1234',
+           	   'external_seller_id'		=> 'seller1234',
+           	   'external_buyer_id'		=> 'buyer1234',
+           	   'fee_ids'				=> '',
+           	   'payment_type_id'		=> '2'))
+$repo->requestSessionToken($sessionToken)
+```
 ##Items
 
 #####Create an item
 
-	$repo = new ItemRepository();
-	$user = new Item($arr = array(
-            'id'            => 'External_id',
-            'name'          => 'Item Name',
-            'amount'        => '2000',
-            'payment_type'  => '1',
-            'buyer_id'      => 'External_buyer_id',
-            'seller_id'     => 'External_seller_id',
-            'fee_ids'       => 'fee_id_1,fee_id_2',
-            'description'   => 'Item Description'));
-	$repo->createItem($user)
+```php
+$repo = new ItemRepository();
+$user = new Item($arr = array(
+           'id'            => 'External_id',
+           'name'          => 'Item Name',
+           'amount'        => '2000',
+           'payment_type'  => '1',
+           'buyer_id'      => 'External_buyer_id',
+           'seller_id'     => 'External_seller_id',
+           'fee_ids'       => 'fee_id_1,fee_id_2',
+           'description'   => 'Item Description'));
+$repo->createItem($user)
+```
 #####Get an item
 #####Get a list of items
 #####Update an item
@@ -95,26 +104,31 @@ The below example shows the request for a marketplace that passes the Item and U
 
 #####Create a user
 
-	$repo = new UserRepository();
-	$user = new User($arr = array(
-            'id'            => id,
-            'first_name'    => 'First Name',
-            'last_name'     => 'Last Name',
-            'email'         => 'email'
-            'mobile'        => 'mobile phone'
-            'address_line1' => 'a line 1',
-            'address_line2' => 'a line 2',
-            'state'         => 'state',
-            'city'          => 'city',
-            'zip'           => '90210',
-            'country'       => 'AUS'//country code,));
-	$repo->createUser($user)
-	
+```php
+$repo = new UserRepository();
+$user = new User($arr = array(
+           'id'            => id,
+           'first_name'    => 'First Name',
+           'last_name'     => 'Last Name',
+           'email'         => 'email'
+           'mobile'        => 'mobile phone'
+           'address_line1' => 'a line 1',
+           'address_line2' => 'a line 2',
+           'state'         => 'state',
+           'city'          => 'city',
+           'zip'           => '90210',
+           'country'       => 'AUS'//country code,));
+$repo->createUser($user)
+```
+
 #####Get a user
 #####Get a list of users
 
-	var repo = container.Resolve<IUserRepository>();
-	var users = repo.ListUsers();
+```php
+var repo = container.Resolve<IUserRepository>();
+var users = repo.ListUsers();
+```
+
 #####Delete a User
 #####Get a user's card accounts
 #####Get a user's PayPal accounts
@@ -125,8 +139,11 @@ The below example shows the request for a marketplace that passes the Item and U
 ##Item Actions
 #####Make payment
 
-	$repo = new ItemRepository();
-	$repo->makePayment('External_item_id', 'Card_account_id', 'User_id')
+```php
+$repo = new ItemRepository();
+$repo->makePayment('External_item_id', 'Card_account_id', 'User_id')
+```
+
 #####Request payment
 #####Release payment
 #####Request release
@@ -140,15 +157,18 @@ The below example shows the request for a marketplace that passes the Item and U
 ##Card Accounts
 #####Create a card account
 
-	$repo = new CardAccountRepository();
-	$user = new CardAccount($arr = array(
-            'user_id'       => id,
-            'full_name'     => 'Bobby Buyer',
-            'number'        => '4111111111111111',
-            'expiry_month'  => '06'
-            'expiry_year'   => '2016'
-            'cvv' 			=> '123'));
-	$repo->createCardAccount($user)
+```php
+$repo = new CardAccountRepository();
+$user = new CardAccount($arr = array(
+           'user_id'       => id,
+           'full_name'     => 'Bobby Buyer',
+           'number'        => '4111111111111111',
+           'expiry_month'  => '06'
+           'expiry_year'   => '2016'
+           'cvv' 			=> '123'));
+$repo->createCardAccount($user)
+```
+
 #####Get a card account
 #####Delete a card account
 #####Get a card account's users
@@ -156,17 +176,20 @@ The below example shows the request for a marketplace that passes the Item and U
 ##Bank Accounts
 #####Create a bank account
 
-	$repo = new BankAccountRepository();
-	$bankAccount = new BankAccount($arr = array(
-				   'user_id' 			=> 'External_seller_id',
-            	   'bank_name'			=> 'Test Bank',
-           		   'account_name'		=> 'Sally Seller',
-            	   'routing_number' 	=> '123456',
-            	   'account_number'		=> '12345678',
-            	   'account_type'		=> 'checking',
-            	   'holder_type'		=> 'personal',
-            	   'bank_country'		=> 'AUS'))
-	$repo->createBankAccount($bankAccount)
+```php
+$repo = new BankAccountRepository();
+$bankAccount = new BankAccount($arr = array(
+			   'user_id' 			=> 'External_seller_id',
+           	   'bank_name'			=> 'Test Bank',
+          		   'account_name'		=> 'Sally Seller',
+           	   'routing_number' 	=> '123456',
+           	   'account_number'		=> '12345678',
+           	   'account_type'		=> 'checking',
+           	   'holder_type'		=> 'personal',
+           	   'bank_country'		=> 'AUS'))
+$repo->createBankAccount($bankAccount)
+```
+
 #####Get a bank account
 #####Delete a bank account
 #####Get a bank account's users
@@ -187,40 +210,6 @@ The below example shows the request for a marketplace that passes the Item and U
 #####Get a transactions
 #####Get a transaction's users
 #####Get a transaction's fees
-
-
-**Create a user**
-
-	
-**Create a card account**
-
-	
-	
-**Create an item**
-
-
-	
-**Make a payment**
-
-
-	
-**Create a bank account**
-
-
-
-**Assign as payout account**
-
-To be finished.
-
-**Request a session token**
-
-The below example shows the request for a marketplace configured to have the Item and User IDs generated automatically for them.
-
-
-
-The below example shows the request for a marketplace that passes the Item and User IDs.
-
-	
 
 #4. Contributing
 	1. Fork it ( https://github.com/PromisePay/promisepay-php/fork )

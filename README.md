@@ -5,7 +5,6 @@
 [![PHP version](https://badge.fury.io/ph/PromisePay%2Fpromisepay-php.svg)](http://badge.fury.io/ph/PromisePay%2Fpromisepay-php)
 [![Build Status](https://travis-ci.org/PromisePay/promisepay-php.svg)](https://travis-ci.org/PromisePay/promisepay-php) [![Code Climate](https://codeclimate.com/github/PromisePay/promisepay-php/badges/gpa.svg)](https://codeclimate.com/github/PromisePay/promisepay-php)
 
-
 #1. Installation
 Download the latest release from GitHub, then include the **init.php** file - see below.
 

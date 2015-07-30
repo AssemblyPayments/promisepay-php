@@ -1,14 +1,15 @@
 {
-    "name":"promisepay/promisepay-php",
-    "description":"PromisePay PHP Library",
-    "keywords":[
-        "payment",
-        "promisepay",
-        "api"
-    ],
-
-    "homepage":"https://promisepay.com/",
-
+    "name": "promisepay/promisepay-php",
+    "description": "PHP SDK for the PromisePay API",
+    "keywords": [
+	    "promisepay",
+	    "marketplace",
+	    "api",
+	    "payments",
+	    "escrow",
+	    "marketplace payments"
+  	],
+    "homepage": "https://promisepay.com/",
     "require": {
         "php": ">=5.3.3",
         "ext-json": "*",

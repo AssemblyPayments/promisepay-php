@@ -2,13 +2,40 @@
 
 [![Join the chat at https://gitter.im/PromisePay/promisepay-php](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/PromisePay/promisepay-php?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[![PHP version](https://badge.fury.io/ph/PromisePay%2Fpromisepay-php.svg)](http://badge.fury.io/ph/PromisePay%2Fpromisepay-php)
-[![Build Status](https://travis-ci.org/PromisePay/promisepay-php.svg)](https://travis-ci.org/PromisePay/promisepay-php) [![Code Climate](https://codeclimate.com/github/PromisePay/promisepay-php/badges/gpa.svg)](https://codeclimate.com/github/PromisePay/promisepay-php)
+[![Build Status](https://travis-ci.org/PromisePay/promisepay-php.svg)](https://travis-ci.org/PromisePay/promisepay-php) [![Latest Stable Version](https://poser.pugx.org/promisepay/promisepay-php/v/stable)](https://packagist.org/packages/promisepay/promisepay-php)
+[![Total Downloads](https://poser.pugx.org/promisepay/promisepay-php/downloads)](https://packagist.org/packages/promisepay/promisepay-php)
+ [![Code Climate](https://codeclimate.com/github/PromisePay/promisepay-php/badges/gpa.svg)](https://codeclimate.com/github/PromisePay/promisepay-php)
 
 #1. Installation
+
+###Composer
+
+You can include this package via Composer.
+
+```json
+{
+  "require": {
+    "promisepay/promisepay-php": "1.*"
+  }
+}
+```
+
+Install the package.
+
+	composer install
+	
+Require the package.
+
+```php
+require init.php
+```
+
+###Manual Installation
 Download the latest release from GitHub, then include the **init.php** file - see below.
 
-	require init.php
+```php
+require init.php
+```
 
 #2. Configuration
 Before interacting with PromisePay API, you need to generate an API token. See [http://docs.promisepay.com/v2.2/docs/request_token](http://docs.promisepay.com/v2.2/docs/request_token) for more information.

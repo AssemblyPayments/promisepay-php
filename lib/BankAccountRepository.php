@@ -30,7 +30,7 @@ class BankAccountRepository extends ApiAbstract
             "account_number"=>$bankAccount->getBank()->getAccountNumber(),
             "account_type"=>$bankAccount->getBank()->getAccountType(),
             "holder_type"=>$bankAccount->getBank()->getHolderType(),
-            "bank_country"=>$bankAccount->getBank()->getCountry(),
+            "country"=>$bankAccount->getBank()->getCountry(),
         );
         foreach ($preparePayload as $key => $value)
         {

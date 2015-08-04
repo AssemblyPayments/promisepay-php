@@ -217,9 +217,10 @@ $repo->createUser($user)
 
 #####Get a user
 ```php
+$repo = new UserRepository();
+$user = $repo->getUserById('User id');
 ```
 #####Get a list of users
-
 ```php
 $repo = new UserRepository();
 $users = $repo->getListOfUsers();
@@ -230,7 +231,6 @@ $users = $repo->getListOfUsers();
 $repo = new UserRepository();
 $repo->deleteUser('User_id');
 ```
-
 #####Get a user's card accounts
 ```php
 $repo = new UserRepository();

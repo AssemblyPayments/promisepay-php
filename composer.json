@@ -1,6 +1,15 @@
 {
-    "name": "gjorgic/promisepay-php",
+    "name": "promisepay/promisepay-php",
     "description": "PHP SDK for the PromisePay API",
+    "keywords": [
+        "promisepay",
+        "marketplace",
+        "api",
+        "payments",
+        "escrow",
+        "marketplace payments"
+    ],
+    "homepage": "https://promisepay.com/",
     "require": {
         "php": ">=5.3.3",
         "ext-json": "*",
@@ -16,7 +25,7 @@
     "repositories":[
         {
             "type": "git",
-            "url":"https://github.com/gjorgic/promisepay-php"
+            "url":"https://github.com/PromisePay/promisepay-php"
 
         }
     ],

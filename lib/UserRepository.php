@@ -107,7 +107,7 @@ class UserRepository extends ApiAbstract
         foreach($jsonData as $part )
         {
             $Item = new Item($part);
-            array_push($listItems, $user);
+            array_push($listItems, $Item);
         }
         return $listItems;
     }
@@ -157,7 +157,7 @@ class UserRepository extends ApiAbstract
 
     public function setDisbursementAccount($id, $accountId)
     {
-        throw new \Exception('no fields for this method');
+        //throw new \Exception('no fields for this method');
 
         $this->checkIdNotNull($id);
         $this->checkIdNotNull($accountId);

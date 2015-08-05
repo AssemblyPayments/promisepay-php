@@ -90,7 +90,7 @@ class ItemRepository extends ApiAbstract
         }
     }
 
-    public function updateItem(Item $item, $user = null, $operation = null, $account = null, $releaseAmount = null)
+    public function updateItem(Item $item, $user = null, $account = null, $releaseAmount = null)
     {
         $payload = '';
         $preparePayload = array(
@@ -207,7 +207,7 @@ class ItemRepository extends ApiAbstract
         return null;
     }
 
-    public function getWireDetailsForIem($id)
+    public function getWireDetailsForItem($id)
     {
         $this->checkIdNotNull($id);
         $response = $this->RestClient('get', 'items/' . $id . '/wire_details');

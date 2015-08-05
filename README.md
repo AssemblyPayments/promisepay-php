@@ -120,16 +120,79 @@ $user = new Item($arr = array(
 $repo->createItem($user)
 ```
 #####Get an item
+
+```php
+$repo = new ItemRepository();
+$item = $repo->getItemById('item_id');
+```
 #####Get a list of items
+```php
+$repo = new ItemRepository();
+$listOfItems = $repo->getListOfItems;
+```
 #####Update an item
+```php
+$repo = new ItemRepository();
+$item = new Item($arr = array(
+           'id'            => 'External_id',
+           'name'          => 'Item Name',
+           'amount'        => '2000',
+           'payment_type'  => '1',
+           'buyer_id'      => 'External_buyer_id',
+           'seller_id'     => 'External_seller_id',
+           'fee_ids'       => 'fee_id_1,fee_id_2',
+           'description'   => 'Item Description'));
+$repo->updateItem($item, 'user', 'account', 'release_amount');
+```
+
 #####Delete an item
+```php
+$repo = new ItemRepository();
+$repo->deleteItem('item_id');
+```
+
 #####Get an item status
+```php
+$repo = new ItemRepository();
+$repo->getItemStatus('item_id');
+```
+
 #####Get an item's buyer
+```php
+$repo = new ItemRepository();
+$buyer = $repo->getBuyerOfItem('item_id');
+```
+
 #####Get an item's seller
+```php
+$repo = new ItemRepository();
+$seller = $repo->getSellerForItem('item_id');
+```
+
 #####Get an item's fees
+```php
+$repo = new ItemRepository();
+$fees = $repo->getListFeesForItems('item_id');
+```
+
 #####Get an item's transactions
+```php
+$repo = new ItemRepository();
+$transactions = $repo->getListOfTransactionsForItem('item_id');
+```
+
 #####Get an item's wire details
+```php
+$repo = new ItemRepository();
+$wireDetails = $repo->getWireDetailsForItem('item_id');
+```
+
 #####Get an item's BPAY details
+```php
+$repo = new ItemRepository();
+$bpayDetails = $repo->getBPayDetailsForItem('item_id');
+```
+
 
 ##Users
 
@@ -153,37 +216,101 @@ $repo->createUser($user)
 ```
 
 #####Get a user
-#####Get a list of users
-
 ```php
-var repo = container.Resolve<IUserRepository>();
-var users = repo.ListUsers();
+$repo = new UserRepository();
+$user = $repo->getUserById('User id');
+```
+#####Get a list of users
+```php
+$repo = new UserRepository();
+$users = $repo->getListOfUsers();
 ```
 
 #####Delete a User
+```php
+$repo = new UserRepository();
+$repo->deleteUser('User_id');
+```
 #####Get a user's card accounts
+```php
+$repo = new UserRepository();
+$usersCardAccounts = $repo->getListOfCardAccountsForUser('User_id');
+```
 #####Get a user's PayPal accounts
+```php
+$repo = new UserRepository();
+$usersPayPalAccounts = $repo->getListOfPayPalAccountsForUser('User_id');
+```
+
 #####Get a user's bank accounts
+```php
+$repo = new UserRepository();
+$usersBankAccounts = $repo->getListOfBankAccountsForUser('User_id');
+```
 #####Get a user's items
+```php
+$repo = new UserRepository();
+$items = $repo->getListOfItemsForUser('User_id');
+```
 #####Set a user's disbursement account
+```php
+$repo = new UserRepository();
+$repo->setDisbursementAccount('user_id', 'account_id');
+```
 
 ##Item Actions
+
 #####Make payment
 
 ```php
 $repo = new ItemRepository();
 $repo->makePayment('External_item_id', 'Card_account_id', 'User_id')
 ```
-
 #####Request payment
+```php
+$repo = new ItemRepository();
+$requestPayment = $repo->requestPayment('Item_id', 'Seller_id');
+```
 #####Release payment
+```php
+$repo = new ItemRepository();
+$releasePayment = $repo->releasePayment('Item_id', 'buyer_id', 'Release amount');
+```
 #####Request release
+```php
+$repo = new ItemRepository();
+$requestRelease = $repo->requestRelease('Item_id', 'Seller_id', 'Release amount');
+```
 #####Cancel
+```php
+$repo = new ItemRepository();
+$repo->cancelItem('Item_id');
+```
 #####Acknowledge wire
+```php
+$repo = new ItemRepository();
+$acknowledgeWire = $repo->acknowledgeWire('Item_id', 'Buyer_id');
+```
 #####Acknowledge PayPal
+```php
+$repo = new ItemRepository();
+$acknowledgePayPal = $repo->acknowledgePayPal('Item_id', 'Buyer_id');
+```
 #####Revert wire
+```php
+$repo = new ItemRepository();
+$repo->revertWire('Item_id', 'Buyer_id');
+```
 #####Request refund
+```php
+$repo = new ItemRepository();
+$repo->requestRefund('Item_id',  'Buyer_id',  'Refund amount',  'Refund message');
+```
 #####Refund
+```php
+$repo = new ItemRepository();
+$repo = refund( 'Item id',  'Seller id',  'Refund Amount',  'Refund message')
+```
 
 ##Card Accounts
 #####Create a card account
@@ -201,8 +328,20 @@ $repo->createCardAccount($user)
 ```
 
 #####Get a card account
+```php
+$repo = new CardAccountRepository();
+$card = $repo->getCardAccountById('Account_id')
+```
 #####Delete a card account
+```php
+$repo = new CardAccountRepository();
+$repo->deleteCardAccount('Account_id')
+```
 #####Get a card account's users
+```php
+$repo = new CardAccountRepository();
+$users = $repo->getUserForCardAccount('Card Account');
+```
 
 ##Bank Accounts
 #####Create a bank account
@@ -212,7 +351,7 @@ $repo = new BankAccountRepository();
 $bankAccount = new BankAccount($arr = array(
 			   'user_id' 			=> 'External_seller_id',
            	   'bank_name'			=> 'Test Bank',
-          		   'account_name'		=> 'Sally Seller',
+          	   'account_name'		=> 'Sally Seller',
            	   'routing_number' 	=> '123456',
            	   'account_number'		=> '12345678',
            	   'account_type'		=> 'checking',
@@ -220,27 +359,102 @@ $bankAccount = new BankAccount($arr = array(
            	   'bank_country'		=> 'AUS'))
 $repo->createBankAccount($bankAccount)
 ```
-
 #####Get a bank account
+```php
+$repo = new BankAccountRepository();
+$bankAccount = $repo->getBankAccountById('Account_id');
+```
 #####Delete a bank account
+```php
+$repo = new BankAccountRepository();
+$repo->deleteBankAccount('Account_id');
+```
 #####Get a bank account's users
+```php
+$repo = new BankAccountRepository();
+$user = $repo->getUserForBankAccount('Account_id');
+```
 
 ##PayPal Accounts
 #####Create a PayPal account
+```php
+$repo  = new PayPalAccountRepository();
+$params  = array(
+    'user_id'=> 'User id',
+    'active'=>'true',
+    'paypal'=>array(
+        'email'=>'User email'
+        )
+    );
+$ppalAccount = new PayPalAccount($params);
+$repo->createPayPalAccount($ppalAccount);
+```
 #####Get a PayPal account
+```php
+$repo = new PayPalAccountRepository();
+$paypalAccount = $repo->getPayPalAccountById('account_id');
+```
 #####Delete a PayPal account
+```php
+$repo = new PayPalAccountRepository();
+$repo->deletePayPalAccount('Account id')
+```
 #####Get a PayPal account's users
+```php
+$repo = new PayPalAccountRepository();
+$users = $repo->getUserForPayPalAccount('Account id')
+```
 
 ##Fees
 #####Get a list of fees
+```php
+$repo = new FeeRepository();
+$fees = $repo->getListOfFees();
+```
 #####Get a fee
+```php
+$repo = new FeeRepository();
+$fee = $repo->getFeeById('Fee id');
+```
 #####Create a fee
+```php
+$enum = new FeeType();
+$repo = new FeeRepository();
+$data = array(
+    'id'=>'fee id',
+    'amount'=>1000,
+    'name'=>'fee name',
+    'fee_type'=>$enum->Fixed,
+    'cap'=>'1',
+    'max'=>'3',
+    'min'=>'2',
+    'to'=>'buyer'
+    );
+$fee = new Fee($data);
+$repo->createFee($fee);
+```
 
 ##Transactions
 #####Get a list of transactions
-#####Get a transactions
+```php
+$repo = new TransactionRepository();
+$trans = $repo->getListOfTransactions();
+```
+#####Get a transaction
+```php
+$repo = new TransactionRepository();
+$transaction = $repo->getTransaction('transaction_id');
+```
 #####Get a transaction's users
+```php
+$repo = new TransactionRepository();
+$users = $repo->getUserForTransaction('transaction id');
+```
 #####Get a transaction's fees
+```php
+$repo = new TransactionRepository();
+$fees = $repo->getFeeForTransaction('transaction id');
+```
 
 #4. Contributing
 	1. Fork it ( https://github.com/PromisePay/promisepay-php/fork )

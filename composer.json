@@ -32,7 +32,7 @@
 
     "autoload": {
         "psr-4": {
-            "PromisePay\\":"lib/"
+            "PromisePay\\":"/lib"
         }
     }
 }

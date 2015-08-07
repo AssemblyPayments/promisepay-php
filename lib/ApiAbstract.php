@@ -66,7 +66,7 @@ class ApiAbstract
         $username = $this->Login();
         $password = $this->Password();
 
-        $url = $this->BaseUrl().$entity;
+        $url = $this->BaseUrl().$entity."?".$payload;
 
         switch ($method) {
             case 'get':

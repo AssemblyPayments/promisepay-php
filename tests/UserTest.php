@@ -12,7 +12,6 @@ use PromisePay\DataObjects\BankAccount;
 use PromisePay\DataObjects\User;
 use PromisePay\Exception\Validation;
 use PromisePay\Exception\Argument;
-include_once '../init.php';
 include_once 'GUID.php';
 
 

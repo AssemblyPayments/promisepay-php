@@ -9,7 +9,6 @@
 namespace PromisePay;
 use PromisePay\DataObjects\Item;
 use PromisePay\DataObjects\User;
-include_once '../init.php';
 include_once 'GUID.php';
 
 
@@ -196,7 +195,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     {
         \PHPUnit_Framework_Error_Notice::$enabled = FALSE;
         $repo = new ItemRepository();
-        $wireDetails = $repo->getWireDetailsForIem("7c269f52-2236-4aa5-899e-a2e3ecadbc3f");
+        $wireDetails = $repo->getWireDetailsForItem("7c269f52-2236-4aa5-899e-a2e3ecadbc3f");
         $this->assertNotNull($wireDetails);
     }
     public function testGetBpayDetailsForItem()

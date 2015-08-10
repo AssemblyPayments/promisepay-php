@@ -10,7 +10,6 @@ namespace PromisePay;
 
 use PromisePay\DataObjects\BankAccount;
 
-include_once '../init.php';
 include_once 'GUID.php';
 class BankAccountTest extends \PHPUnit_Framework_TestCase
 {

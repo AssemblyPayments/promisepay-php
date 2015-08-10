@@ -10,6 +10,7 @@ namespace PromisePay;
 
 
 use PromisePay\DataObjects\PayPalAccount;
+include_once __DIR__ . '/../init.php';
 
 class PayPalAccountTest extends \PHPUnit_Framework_TestCase
 {

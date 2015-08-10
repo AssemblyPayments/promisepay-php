@@ -13,7 +13,8 @@ class BankAccountRepository extends ApiAbstract
     {
         $this->checkIdNotNull($id);
         $response = $this->RestClient('get', 'bank_accounts/'.$id);
-        $jsonData = json_decode($response->raw_body, true)['bank_accounts'];
+        $jsonData = json_decode($response->raw_body, true);
+        $jsonData = $jsonData['bank_accounts'];
         $bankAccounts = new BankAccount($jsonData);
         return $bankAccounts;
     }
@@ -41,8 +42,7 @@ class BankAccountRepository extends ApiAbstract
         $payload = substr($payload, 0, -1);
         $response = $this->RestClient('post', 'bank_accounts/', $payload);
         $jsonData = json_decode($response->raw_body, true);
-
-        return new BankAccount($jsonData);
+        return new BankAccount($jsonData['bank_accounts']);
 
     }
 
@@ -63,13 +63,13 @@ class BankAccountRepository extends ApiAbstract
     public function getUserForBankAccount($id)
     {
         $this->checkIdNotNull($id);
-        $response = $this->RestClient('get','users/'.$id.'/bank_accounts');
+        $response = $this->RestClient('get','bank_accounts/'.$id.'/users');
         $jsonRaw = json_decode($response->raw_body, true);
         if (array_key_exists("users", $jsonRaw))
         {
             $jsonData = $jsonRaw["users"];
-            $bankAccount = new User($jsonData);
-            return $bankAccount;
+            $users = new User($jsonData);
+            return $users;
         }
         return null;
     }

@@ -10,6 +10,7 @@ namespace PromisePay;
 
 
 use PromisePay\DataObjects\CardAccount;
+include_once __DIR__ . '/../init.php';
 
 class CardAccountTest extends \PHPUnit_Framework_TestCase
 {

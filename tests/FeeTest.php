@@ -11,7 +11,8 @@ namespace PromisePay;
 
 use PromisePay\DataObjects\Fee;
 use PromisePay\Enum\FeeType;
-
+include_once __DIR__ . '/../init.php';
+include_once 'GUID.php';
 class FeeTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateFeeSuccessfully()

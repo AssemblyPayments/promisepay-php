@@ -30,13 +30,13 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase
                     "bank_country"=>'AUS',
                     ));
         $bankAccount = new BankAccount($info);
-        $create = new BankAccountRepository();
-        $create->createBankAccount($bankAccount);
+        $bankRepo = new BankAccountRepository();
+        $createdBankAccount = $bankRepo->createBankAccount($bankAccount);
 
-        $this->assertEquals($bankAccount->bank->getAccountName(),$create->bank->getAccountName());
+        $this->assertEquals($bankAccount->getBank()->getAccountName(), $createdBankAccount->getBank()->getAccountName());
 
-        $this->assertNotNull($create->getCreatedAt());
-        $this->assertNotNull($create->getUpdatedAt());
+        $this->assertNotNull($bankRepo->getCreatedAt());
+        $this->assertNotNull($bankRepo->getUpdatedAt());
     }
 
     public function testGetBankAccountSuccessfully()
@@ -55,9 +55,9 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase
                 "bank_country"=>'AUS',
             ));
         $bankAccount = new BankAccount($info);
-        $create = new BankAccountRepository();
-        $create->createBankAccount($bankAccount);
-        $this->assertEquals($bankAccount->getUserId(),$create->getBankAccountById($userid));
+        $bankRepo = new BankAccountRepository();
+        $createdBankAccount = $bankRepo->createBankAccount($bankAccount);
+        $this->assertEquals($bankAccount->getBank(), $bankRepo->getBankAccountById($userid));
     }
 
     public function testGetUserForBankAccountSuccessfully()
@@ -75,11 +75,13 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase
                 "holder_type"=>'personal',
                 "bank_country"=>'AUS',
             ));
+
         $bankAccount = new BankAccount($info);
-        $create = new BankAccountRepository();
+        $bankRepo = new BankAccountRepository();
+        $createdBankAccount = $bankRepo->createBankAccount($bankAccount);
 
-
-        $this->assertEquals($create->createBankAccount($bankAccount)->getUserId(), $create->getUserForBankAccount($userid)->getUserId());
+        var_dump($createdBankAccount->id);
+        // $this->assertEquals($bankRepo->getUserForBankAccount($createdBankAccount->, $userid);
     }
 
     public function testDeleteBankAccountSuccessfully()

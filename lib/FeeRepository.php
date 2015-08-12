@@ -2,6 +2,8 @@
 namespace PromisePay;
 
 use PromisePay\DataObjects\Fee;
+use PromisePay\DataObjects\Errors;
+
 use PromisePay\Exception;
 use PromisePay\Log;
 
@@ -50,7 +52,18 @@ class FeeRepository extends ApiAbstract
             $payload .= "&";
         }
         $response = $this->RestClient('post', 'fees/', $payload, '');
-        return $response;
+        $jsonData = json_decode($response->raw_body, true);
+        if(array_key_exists("errors", $jsonData))
+        {
+            $errors = new Errors($jsonData);
+            return $errors;
+        }
+        else
+        {
+            $jsonData = $jsonData['fees'];
+            $fee = new Fee($jsonData);
+            return $fee;
+        }
     }
 
     public function ValidateFee(Fee $fee)

@@ -74,11 +74,12 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase
                 "holder_type"=>'personal',
                 "country"=>'AUS',
             ));
-        $bankAccount = new BankAccount($info);
-        $create = new BankAccountRepository();
 
-        $bankAccountCreated = $create->createBankAccount($bankAccount);
-        $gotUser = $create->getUserForBankAccount($bankAccountCreated->getId());
+        $bankAccount = new BankAccount($info);
+        $bankRepo = new BankAccountRepository();
+
+        $bankAccountCreated = $bankRepo->createBankAccount($bankAccount);
+        $gotUser = $bankRepo->getUserForBankAccount($bankAccountCreated->getId());
 
 
         $this->assertEquals($userid, $gotUser->getId());

@@ -13,7 +13,15 @@ class Configuration
     /**
      * @var string
      */
-    public  $CredentialsFile = '../lib/promisepay-credentials.xml';
+    public static $CredentialsFile = '/promisepay-credentials.xml';
+
+    /**
+     *
+     */
+    public function _construct()
+    {
+
+    }
 
     /**
      * @param $data
@@ -21,13 +29,13 @@ class Configuration
      */
     private function _loadDataFromCredentials($data)
     {
-        if(file_exists($this->CredentialsFile))
+        if(file_exists(__DIR__ . self::$CredentialsFile))
         {
-            return (string)simplexml_load_file($this->CredentialsFile)->$data;
+            return (string)simplexml_load_file(__DIR__ . self::$CredentialsFile)->$data;
         }
         else
         {
-            throw new Exception\Credentials($this->CredentialsFile.' not found!');
+            throw new Exception\Credentials(__DIR__ . self::$CredentialsFile.' not found!');
         }
     }
 

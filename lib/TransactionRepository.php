@@ -2,7 +2,9 @@
 namespace PromisePay;
 
 use PromisePay\DataObjects\Errors;
+use PromisePay\DataObjects\Fee;
 use PromisePay\DataObjects\Transaction;
+use PromisePay\DataObjects\User;
 use PromisePay\Exception;
 use PromisePay\Log;
 

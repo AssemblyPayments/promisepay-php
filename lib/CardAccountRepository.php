@@ -40,7 +40,6 @@ class CardAccountRepository extends ApiAbstract
         }
         $response = $this->RestClient('post', 'card_accounts?', $payload);
         $jsonData = json_decode($response->raw_body, true);
-        var_dump($response->raw_body);
         return new CardAccount($jsonData);
     }
 

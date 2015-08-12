@@ -29,7 +29,7 @@ class FeeRepository extends ApiAbstract
         $fee = new Fee($jsonData);
         return $fee;
     }
-///fees?name&fee_type_id&amount&cap&min&max&to
+
     public function createFee(Fee $fee)
     {
         $this->ValidateFee($fee);
@@ -59,6 +59,18 @@ class FeeRepository extends ApiAbstract
         {
             throw new Exception\Argument ('fee is empty');
         }
+        if (!in_array($fee->getTo(), $this->possibleTos()))
+        {
+            throw new Exception\Validation ("To should have value of \"buyer\", \"seller\", \"cc\", \"int_wire\", \"paypal_payout\"");
+        }
 
+    }
+
+    private function possibleTos()
+    {
+        $possibilities  = array(
+            "buyer", "seller", "cc", "int_wire", "paypal_payout",
+        );
+        return $possibilities;
     }
 }

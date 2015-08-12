@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Web_den
- * Date: 11.06.2015
- * Time: 17:45
- */
 
 namespace PromisePay;
 
@@ -27,19 +21,19 @@ class CompanyTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($repo->getCompanyById($id));
     }
 
-    public function testEditCompanySuccessfully()
-    {
-        $repo = new CompanyRepository();
-        $params = array(
-            'id' => '739dcfc5-adf0-4a00-b639-b4e05922994d',
-            'legal_name'=>'Test edit company',
-            'name'=>'test company name edit',
-            'country'=>'AUS',
-        );
-        $editPayload = new Company($params);
-        $edit = $repo->editCompany($editPayload);
-        $this->assertEquals($edit->getLegalName(), $editPayload->getLegalName());
-    }
+//    public function testEditCompanySuccessfully()
+//    {
+//        $repo = new CompanyRepository();
+//        $params = array(
+//            'id' => '739dcfc5-adf0-4a00-b639-b4e05922994d',
+//            'legal_name'=>'Test edit company',
+//            'name'=>'test company name edit',
+//            'country'=>'AUS',
+//        );
+//        $editPayload = new Company($params);
+//        $edit = $repo->editCompany($editPayload);
+//        $this->assertEquals($edit->getLegalName(), $editPayload->getLegalName());
+//    }
 
 }
  

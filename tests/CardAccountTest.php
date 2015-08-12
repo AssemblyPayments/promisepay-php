@@ -29,10 +29,10 @@ class CardAccountTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $repo = new CardAccountRepository();
-        $carAcc = new CardAccount($info);
+        $cardRepo = new CardAccountRepository();
+        $cardAccount = new CardAccount($info);
 
-        $this->assertEquals($carAcc->getCard()->getFullName(), $repo->createCardAccount($carAcc)->getFullName());
+        $this->assertEquals($cardAccount->getCard()->getFullName(), $cardRepo->createCardAccount($cardAccount)->getCard()->getFullName());
     }
 
     public function testGetCardAccountById()
@@ -50,19 +50,19 @@ class CardAccountTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $repo = new CardAccountRepository();
-        $carAcc= new CardAccount($info);
-        $repo->createCardAccount($carAcc);
-        $this->assertEquals($carAcc->getUserId(), $repo->getCardAccountById($userid)->getUserId());
+        $cardRepo = new CardAccountRepository();
+        $cardAccount= new CardAccount($info);
+        $cardRepo->createCardAccount($cardAccount);
+        $this->assertEquals($cardAccount->getUserId(), $cardRepo->getCardAccountById($userid)->getUserId());
 
     }
 
 
     public function testDeleteCardAccountTest()
     {
-        $cardAcc = new CardAccountRepository();
-        $cardAcc->deleteCardAccount('ec9bf096-c505-4bef-87f6-18822b9dbf2c');
-        $cardAcc->getCardAccountById('ec9bf096-c505-4bef-87f6-18822b9dbf2c');
+        $cardAccount = new CardAccountRepository();
+        $cardAccount->deleteCardAccount('ec9bf096-c505-4bef-87f6-18822b9dbf2c');
+        $cardAccount->getCardAccountById('ec9bf096-c505-4bef-87f6-18822b9dbf2c');
     }
 
 

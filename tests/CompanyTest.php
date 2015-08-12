@@ -10,6 +10,7 @@ namespace PromisePay;
 
 
 use PromisePay\DataObjects\Company;
+include_once __DIR__ . '/../init.php';
 
 class CompanyTest extends \PHPUnit_Framework_TestCase
 {

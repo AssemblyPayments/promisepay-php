@@ -9,8 +9,11 @@
 namespace PromisePay;
 
 use PromisePay\DataObjects\BankAccount;
+use PromisePay\DataObjects\Bank;
 
+include_once __DIR__ . '/../init.php';
 include_once 'GUID.php';
+
 class BankAccountTest extends \PHPUnit_Framework_TestCase
 {
 
@@ -27,16 +30,16 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase
                     "account_number"=>'123334242134',
                     "account_type"=>'savings',
                     "holder_type"=>'personal',
-                    "bank_country"=>'AUS',
+                    "country"=>'AUS',
                     ));
         $bankAccount = new BankAccount($info);
-        $bankRepo = new BankAccountRepository();
-        $createdBankAccount = $bankRepo->createBankAccount($bankAccount);
+        $create = new BankAccountRepository();
+        $createBank = $create->createBankAccount($bankAccount);
 
-        $this->assertEquals($bankAccount->getBank()->getAccountName(), $createdBankAccount->getBank()->getAccountName());
+        $this->assertEquals($bankAccount->getBank()->getAccountName(), $createBank->getBank()->getAccountName());
 
-        $this->assertNotNull($bankRepo->getCreatedAt());
-        $this->assertNotNull($bankRepo->getUpdatedAt());
+        $this->assertNotNull($createBank->getCreatedAt());
+        $this->assertNotNull($createBank->getUpdatedAt());
     }
 
     public function testGetBankAccountSuccessfully()
@@ -52,12 +55,13 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase
                 "account_number"=>'123334242134',
                 "account_type"=>'savings',
                 "holder_type"=>'personal',
-                "bank_country"=>'AUS',
+                "country"=>'AUS',
             ));
         $bankAccount = new BankAccount($info);
-        $bankRepo = new BankAccountRepository();
-        $createdBankAccount = $bankRepo->createBankAccount($bankAccount);
-        $this->assertEquals($bankAccount->getBank(), $bankRepo->getBankAccountById($userid));
+        $create = new BankAccountRepository();
+        $bankAccountCreated = $create->createBankAccount($bankAccount);
+        $founded = $create->getBankAccountById($bankAccountCreated->getId());
+        $this->assertEquals($bankAccountCreated->getId(), $founded->getId());
     }
 
     public function testGetUserForBankAccountSuccessfully()
@@ -73,22 +77,41 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase
                 "account_number"=>'123334242134',
                 "account_type"=>'savings',
                 "holder_type"=>'personal',
-                "bank_country"=>'AUS',
+                "country"=>'AUS',
             ));
 
         $bankAccount = new BankAccount($info);
         $bankRepo = new BankAccountRepository();
         $createdBankAccount = $bankRepo->createBankAccount($bankAccount);
 
-        var_dump($createdBankAccount->id);
-        // $this->assertEquals($bankRepo->getUserForBankAccount($createdBankAccount->, $userid);
+        $bankAccountCreated = $create->createBankAccount($bankAccount);
+        $gotUser = $create->getUserForBankAccount($bankAccountCreated->getId());
+
+
+        $this->assertEquals($userid, $gotUser->getId());
     }
 
     public function testDeleteBankAccountSuccessfully()
     {
-        $bankAccount = new BankAccountRepository();
-        $bankAccount->deleteBankAccount('ec9bf096-c505-4bef-87f6-18822b9dbf2c');
-        $bankAccount->getBankAccountById('ec9bf096-c505-4bef-87f6-18822b9dbf2c');
+        $userid = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';//user id created before
+        $info = array(
+            "user_id" => $userid,
+            "active"=> 'true',
+            "bank" => array(
+                "bank_name"=>'bank for test',
+                "account_name"=>'test acc',
+                "routing_number"=>'12344455512',
+                "account_number"=>'123334242134',
+                "account_type"=>'savings',
+                "holder_type"=>'personal',
+                "country"=>'AUS',
+            ));
+        $bankAccount = new BankAccount($info);
+        $create = new BankAccountRepository();
+        $createdBA = $create->createBankAccount($bankAccount);
+        $id = $createdBA->getId();
+
+        $this->assertTrue($create->deleteBankAccount($id));
     }
 
 

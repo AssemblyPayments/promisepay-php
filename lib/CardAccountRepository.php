@@ -24,12 +24,13 @@ class CardAccountRepository extends ApiAbstract
         $payload = '';
 
         $preparePayload = array(
-                "id" =>$card->getUserId(),
+                "user_id" =>$card->getUserId(),
                 "full_name"=>$card->getCard()->getFullName(),
                 "number"=>$card->getCard()->getNumber(),
                 "expiry_month"=>$card->getCard()->getExpMonth(),
                 "expiry_year"=>$card->getCard()->getExpYear(),
                 "cvv"=>$card->getCard()->getCVV(),
+
         );
         foreach ($preparePayload as $key => $value)
         {
@@ -37,8 +38,9 @@ class CardAccountRepository extends ApiAbstract
             $payload .= urlencode($value);
             $payload .= "&";
         }
-        $response = $this->RestClient('post', 'card_accounts/', $payload);
+        $response = $this->RestClient('post', 'card_accounts?', $payload);
         $jsonData = json_decode($response->raw_body, true);
+        var_dump($response->raw_body);
         return new CardAccount($jsonData);
     }
 

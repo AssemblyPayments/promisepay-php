@@ -6,7 +6,7 @@
  * Time: 17:43
  */
 namespace PromisePay;
-
+include_once __DIR__ . '/../init.php';
 include_once 'GUID.php';
 
 class AddressTest extends \PHPUnit_Framework_TestCase {

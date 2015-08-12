@@ -9,6 +9,7 @@
 namespace PromisePay;
 use PromisePay\DataObjects\Item;
 use PromisePay\DataObjects\User;
+include_once __DIR__ . '/../init.php';
 include_once 'GUID.php';
 
 

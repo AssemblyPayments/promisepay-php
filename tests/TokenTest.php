@@ -10,6 +10,7 @@ namespace PromisePay;
 
 
 use PromisePay\DataObjects\Token;
+include_once __DIR__ . '/../init.php';
 
 class TokenTest extends \PHPUnit_Framework_TestCase
 {

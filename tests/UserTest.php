@@ -12,8 +12,9 @@ use PromisePay\DataObjects\BankAccount;
 use PromisePay\DataObjects\User;
 use PromisePay\Exception\Validation;
 use PromisePay\Exception\Argument;
-include_once 'GUID.php';
 
+include_once 'GUID.php';
+include_once __DIR__ . '/../init.php';
 
 class UserTest extends \PHPUnit_Framework_TestCase {
 

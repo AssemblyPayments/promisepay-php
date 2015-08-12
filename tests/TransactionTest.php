@@ -8,6 +8,7 @@
 
 namespace PromisePay;
 
+include_once __DIR__ . '/../init.php';
 include_once 'GUID.php';
 
 class TransactionTest extends \PHPUnit_Framework_TestCase {

@@ -32,9 +32,17 @@ class UserRepository extends ApiAbstract
     {
         $this->checkIdNotNull($id);
         $response = $this->RestClient('get', 'users/' . $id);
-        $jsonData = json_decode($response->raw_body, true)['users'];
-        $user = new User($jsonData);
-        return $user;
+        $jsonData = json_decode($response->raw_body, true);
+        if (array_key_exists('users', $jsonData))
+        {
+           $user = new User($jsonData['users']);
+            return $user;
+        }
+
+        else
+        {
+            return null;
+        }
     }
 
     public function createUser(User $user)
@@ -102,57 +110,78 @@ class UserRepository extends ApiAbstract
     {
         $this->checkIdNotNull($id);
         $response = $this->RestClient('get', 'users/'.$id.'/items');
-        $jsonData = json_decode($response->raw_body, true)['items'];
+        $jsonData = json_decode($response->raw_body, true);
         $listItems = array();
-        foreach($jsonData as $part )
-        {
-            $Item = new Item($part);
-            array_push($listItems, $Item);
+        if(array_key_exists('items',$jsonData)) {
+            foreach ($jsonData['items'] as $part) {
+                $Item = new Item($part);
+                array_push($listItems, $Item);
+            }
+            return $listItems;
         }
-        return $listItems;
+        else {
+            return null;
+        }
     }
 
     public function getListOfCardAccountsForUser($id)
     {
         $this->checkIdNotNull($id);
         $response = $this->RestClient('get', 'users/'.$id.'/card_accounts');
-        $jsonData = json_decode($response->raw_body, true)['card_accounts'];
-
-        $cardAccounts = array();
-        foreach($jsonData as $part )
+        $jsonData = json_decode($response->raw_body, true);
+        if(array_key_exists('card_accounts',$jsonData))
         {
-            $cardAccount = new CardAccount($part);
-            array_push($cardAccounts, $cardAccount);
+            $cardAccounts = array();
+            foreach ($jsonData['card_accounts'] as $part)
+            {
+                $cardAccount = new CardAccount($part);
+                array_push($cardAccounts, $cardAccount);
+            }
+            return $cardAccounts;
         }
-        return $cardAccounts;
+        else
+        {
+            return null;
+        }
     }
 
     public function getListOfPayPalAccountsForUser($id)
     {
         $this->checkIdNotNull($id);
         $response = $this->RestClient('get', 'users/'.$id.'/paypal_accounts');
-        $jsonData =  $jsonData = json_decode($response->raw_body, true)['paypal_accounts'];
-        $PpalAccounts = array();
-        foreach($jsonData as $part )
+        $jsonData =  $jsonData = json_decode($response->raw_body, true);
+        if(array_key_exists('paypal_accounts',$jsonData))
         {
-            $Account = new PayPalAccount($part);
-            array_push($PpalAccounts, $Account);
+            $PpalAccounts = array();
+            foreach($jsonData['paypal_accounts'] as $part )
+            {
+                $Account = new PayPalAccount($part);
+                array_push($PpalAccounts, $Account);
+            }
+            return $PpalAccounts;
         }
-        return $PpalAccounts;
+        else
+        {
+            return null;
+        }
     }
 
     public function getListOfBankAccountsForUser($id)
     {
         $this->checkIdNotNull($id);
         $response = $this->RestClient('get', 'users/'.$id.'/bank_accounts');
-        $jsonData =  $jsonData = json_decode($response->raw_body, true)['bank_accounts'];
-        $BankAccounts = array();
-        foreach($jsonData as $part )
-        {
-            $Account = new BankAccount($part);
-            array_push($BankAccounts, $Account);
+        $jsonData =  $jsonData = json_decode($response->raw_body, true);
+        if(array_key_exists('bank_accounts',$jsonData)) {
+            $BankAccounts = array();
+            foreach ($jsonData['bank_accounts'] as $part) {
+                $Account = new BankAccount($part);
+                array_push($BankAccounts, $Account);
+            }
+            return $BankAccounts;
         }
-        return $BankAccounts;
+        else{
+            return null;
+        }
     }
 
     public function setDisbursementAccount($id, $accountId)
@@ -212,18 +241,17 @@ class UserRepository extends ApiAbstract
         }
 
         $response = $this->RestClient('patch', 'users/'.$user->getId(), $payload);
-       // return $response;
+        $jsonData = json_decode($response->raw_body, true);
 
-        if($response->body->errors)
+        if(array_key_exists("users", $jsonData))
         {
-            $errors = new Errors(get_object_vars($response->body->errors));
-            return $errors;
+            $user = new User($jsonData['users']);
+            return $user;
         }
         else
         {
-            $jsonData = json_decode($response->raw_body, true)['users'];
-            $user = new User($jsonData);
-            return $user;
+            $errors = new Errors(get_object_vars($response->body->errors));
+            return $errors;
         }
     }
 

@@ -30,6 +30,9 @@ class FeeTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($repo->createFee($fee));
     }
 
+    /**
+     * @expectedException PromisePay\Exception\Validation
+     */
     public function testCreateFeeWrongTo()
     {
         $enum = new FeeType();
@@ -43,9 +46,11 @@ class FeeTest extends \PHPUnit_Framework_TestCase
             'cap'=>'1',
             'max'=>'3',
             'min'=>'2',
+            'to'=>'test',
         );
         $fee = new Fee($data);
-        $this->assertArrayHasKey('errors', $repo->createFee($fee));
+        $repo->createFee($fee);
+        //$this->assertArrayHasKey('errors', $repo->createFee($fee));
     }
 
     public function testGetFeeByIdSuccessfull()

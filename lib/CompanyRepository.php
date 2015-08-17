@@ -25,10 +25,10 @@ class CompanyRepository extends ApiAbstract
     {
         $this->checkIdNotNull($id);
         $response = $this->RestClient('get', 'companies/' . $id);
-        $jsonData = json_decode($response->raw_body, true)['companies'];
+        $jsonData = json_decode($response->raw_body, true);
         if (array_key_exists("companies", $jsonData))
         {
-            $company = new Company($jsonData);
+            $company = new Company($jsonData['companies']);
             return $company;
         }
         return null;
@@ -62,13 +62,12 @@ class CompanyRepository extends ApiAbstract
         return $response;
     }
 
-//id?name&legal_name&tax_number&charge_tax&address_line1&address_line2&city&state&zip&country
+
     public function editCompany(Company $company)
     {
 
         $payload='';
         $preparePayload = array(
-            "id"=>$company->getId(),
             "legal_name"=>$company->getLegalName(),
             "tax_number"=>$company->getTaxNumber(),
             "charge_tax"=>$company->getChargeTax(),
@@ -86,8 +85,9 @@ class CompanyRepository extends ApiAbstract
             $payload .= "&";
         }
         $payload = substr($payload,0,-1);
-        $response = $this->RestClient('patch', 'companies/', $payload);
+        $response = $this->RestClient('patch', 'companies/'.$company->getId().'?', $payload);
         $jsonData = json_decode($response->raw_body, true);
+
         if (array_key_exists("companies", $jsonData))
         {
             $jsonData = $jsonData["companies"];

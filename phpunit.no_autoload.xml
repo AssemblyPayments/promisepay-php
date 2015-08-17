@@ -1,0 +1,8 @@
+
+<phpunit bootstrap="tests/bootstrap.no_autoload.php" colors="true">
+    <testsuites>
+        <testsuite name="PromisePay Test Suite">
+            <directory suffix="Test.php">tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

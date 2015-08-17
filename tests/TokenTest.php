@@ -1,15 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Web_den
- * Date: 11.06.2015
- * Time: 17:47
- */
+
 
 namespace PromisePay;
 
 
 use PromisePay\DataObjects\Token;
+include_once __DIR__ . '/../init.php';
 
 class TokenTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,7 +32,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
 
         $token  = new Token($data);
         $repo = new TokenRepository();
-        $repo->RequestSessionToken($token);
+        $repo->requestSessionToken($token);
     }
 
     public function testGetWidget()

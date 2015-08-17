@@ -8,14 +8,14 @@ use PromisePay\Log;
 
 class TokenRepository extends  ApiAbstract
 {
-    public function RequestToken()
+    public function requestToken()
     {
         $response = $this->RestClient('get','request_token/');
         $jsonData = json_decode($response->raw_body, true)['request_token'];
         return $jsonData;
     }
 
-    public function RequestSessionToken(Token $token)
+    public function requestSessionToken(Token $token)
     {
 
         $payload = '';
@@ -54,11 +54,14 @@ class TokenRepository extends  ApiAbstract
     {
         $response = $this->RestClient('get', 'widget/session_token?'.$sessionToken);
         $jsonData = json_decode($response->raw_body, true);
-        if (array_key_exists("widget", $jsonData))
+        if(is_array($jsonData))
         {
-            $jsonData = $jsonData["widget"];
-            $widget = new Widget($jsonData);
-            return  $widget;
+            if (array_key_exists("widget", $jsonData))
+            {
+                $jsonData = $jsonData["widget"];
+                $widget = new Widget($jsonData);
+                return $widget;
+            }
         }
         return null;
     }

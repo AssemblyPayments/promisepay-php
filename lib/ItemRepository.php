@@ -235,16 +235,15 @@ class ItemRepository extends ApiAbstract
         return null;
     }
 
-    public function makePayment($itemId, $accountId, $userId)
+    public function makePayment($itemId, $accountId)
     {
         $this->checkIdNotNull($itemId);
         $this->checkIdNotNull($accountId);
-        $this->checkIdNotNull($userId);
+
         $payload = '';
         $preparePayload = array(
-            "account_id"          => $accountId,
-            "user_id"        => $userId
-        );
+            "account_id"          => $accountId
+         );
         foreach ($preparePayload as $key => $value)
         {
             $payload .= $key . '=';
@@ -253,7 +252,7 @@ class ItemRepository extends ApiAbstract
         }
         $payload = substr($payload,0,-1);
 
-        $response = $this->RestClient('patch', 'items/' . $itemId . '/make_payment',$payload);
+        $response = $this->RestClient('patch', 'items/' . $itemId . '/make_payment', $payload);
         $jsonRaw = json_decode($response->raw_body, true);
         if (array_key_exists("items", $jsonRaw))
         {
@@ -264,23 +263,11 @@ class ItemRepository extends ApiAbstract
         return null;
     }
 
-    public function requestPayment($itemId, $sellerId)
+    public function requestPayment($itemId)
     {
         $this->checkIdNotNull($itemId);
-        $this->checkIdNotNull($sellerId);
-        $payload = '';
-        $preparePayload = array(
-            "user_id"        => $sellerId
-        );
-        foreach ($preparePayload as $key => $value)
-        {
-            $payload .= $key . '=';
-            $payload .= urlencode($value);
-            $payload .= "&";
-        }
-        $payload = substr($payload,0,-1);
 
-        $response = $this->RestClient('patch', 'items/' . $itemId . '/request_payment', $payload);
+        $response = $this->RestClient('patch', 'items/' . $itemId . '/request_payment');
         $jsonRaw = json_decode($response->raw_body, true);
         if (array_key_exists("items", $jsonRaw))
         {
@@ -291,15 +278,13 @@ class ItemRepository extends ApiAbstract
         return null;
     }
 
-    public function releasePayment($itemId, $buyerId, $releaseAmount)
+    public function releasePayment($itemId, $releaseAmount)
     {
         $this->checkIdNotNull($itemId);
-        $this->checkIdNotNull($buyerId);
         $this->checkIdNotNull($releaseAmount);
 
         $payload = '';
         $preparePayload = array(
-            "user_id"        => $buyerId,
             "release_amount" => $releaseAmount
         );
 
@@ -322,15 +307,13 @@ class ItemRepository extends ApiAbstract
         return null;
     }
 
-    public function requestRelease($itemId, $sellerId, $releaseAmount)
+    public function requestRelease($itemId, $releaseAmount)
     {
         $this->checkIdNotNull($itemId);
-        $this->checkIdNotNull($sellerId);
         $this->checkIdNotNull($releaseAmount);
 
         $payload = '';
         $preparePayload = array(
-            "user_id"        => $sellerId,
             "release_amount" => $releaseAmount
         );
 
@@ -367,25 +350,11 @@ class ItemRepository extends ApiAbstract
         return null;
     }
 
-    public function acknowledgeWire($itemId, $buyerId)
+    public function acknowledgeWire($itemId)
     {
         $this->checkIdNotNull($itemId);
-        $this->checkIdNotNull($buyerId);
 
-        $payload = '';
-        $preparePayload = array(
-            "user_id"        => $buyerId,
-        );
-
-        foreach ($preparePayload as $key => $value)
-        {
-            $payload .= $key . '=';
-            $payload .= urlencode($value);
-            $payload .= "&";
-        }
-        $payload = substr($payload,0,-1);
-
-        $response = $this->RestClient('patch', 'items/' . $itemId . '/acknowledge_wire', $payload);
+        $response = $this->RestClient('patch', 'items/' . $itemId . '/acknowledge_wire');
         $jsonRaw = json_decode($response->raw_body, true);
         if (array_key_exists("items", $jsonRaw))
         {
@@ -396,25 +365,11 @@ class ItemRepository extends ApiAbstract
         return null;
     }
 
-    public function acknowledgePayPal($itemId, $buyerId)
+    public function acknowledgePayPal($itemId)
     {
         $this->checkIdNotNull($itemId);
-        $this->checkIdNotNull($buyerId);
 
-        $payload = '';
-        $preparePayload = array(
-            "user_id"        => $buyerId,
-        );
-
-        foreach ($preparePayload as $key => $value)
-        {
-            $payload .= $key . '=';
-            $payload .= urlencode($value);
-            $payload .= "&";
-        }
-        $payload = substr($payload,0,-1);
-
-        $response = $this->RestClient('patch', 'items/' . $itemId . '/acknowledge_paypal', $payload);
+        $response = $this->RestClient('patch', 'items/' . $itemId . '/acknowledge_paypal');
         $jsonRaw = json_decode($response->raw_body, true);
         if (array_key_exists("items", $jsonRaw))
         {
@@ -425,25 +380,9 @@ class ItemRepository extends ApiAbstract
         return null;
     }
 
-    public function revertWire($itemId, $buyerId)
+    public function revertWire($itemId)
     {
-        $this->checkIdNotNull($itemId);
-        $this->checkIdNotNull($buyerId);
-
-        $payload = '';
-        $preparePayload = array(
-            "user_id"        => $buyerId,
-        );
-
-        foreach ($preparePayload as $key => $value)
-        {
-            $payload .= $key . '=';
-            $payload .= urlencode($value);
-            $payload .= "&";
-        }
-        $payload = substr($payload,0,-1);
-
-        $response = $this->RestClient('patch', 'items/' . $itemId . '/revert_wire', $payload);
+        $response = $this->RestClient('patch', 'items/' . $itemId . '/revert_wire');
         $jsonRaw = json_decode($response->raw_body, true);
         if (array_key_exists("items", $jsonRaw))
         {
@@ -454,16 +393,14 @@ class ItemRepository extends ApiAbstract
         return null;
     }
 
-    public function requestRefund( $itemId,  $buyerId,  $refundAmount,  $refundMessage)
+    public function requestRefund( $itemId,  $refundAmount,  $refundMessage)
     {
         $this->checkIdNotNull($itemId);
-        $this->checkIdNotNull($buyerId);
         $this->checkIdNotNull($refundAmount);
         $this->checkIdNotNull($refundMessage);
 
         $payload = '';
         $preparePayload = array(
-            "user_id"        => $buyerId,
             "refund_amount"  => $refundAmount,
             "refund_message" => $refundMessage
         );
@@ -487,16 +424,14 @@ class ItemRepository extends ApiAbstract
         return null;
     }
 
-    public function refund( $itemId,  $sellerId,  $refundAmount,  $refundMessage)
+    public function refund( $itemId,  $refundAmount,  $refundMessage)
     {
         $this->checkIdNotNull($itemId);
-        $this->checkIdNotNull($sellerId);
         $this->checkIdNotNull($refundAmount);
         $this->checkIdNotNull($refundMessage);
 
         $payload = '';
         $preparePayload = array(
-            "user_id"        => $sellerId,
             "refund_amount"  => $refundAmount,
             "refund_message" => $refundMessage
         );

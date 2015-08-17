@@ -1,15 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Web_den
- * Date: 11.06.2015
- * Time: 17:47
- */
+
 
 namespace PromisePay;
 
 
 use PromisePay\DataObjects\PayPalAccount;
+include_once __DIR__ . '/../init.php';
 
 class PayPalAccountTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,7 +25,7 @@ class PayPalAccountTest extends \PHPUnit_Framework_TestCase
         $ppalAccount = new PayPalAccount($params);
         $create = $repo->createPayPalAccount($ppalAccount);
 
-        $this->assertEquals($ppalAccount->paypal->getAccountName(),$create->paypal->getAccountName());
+        $this->assertEquals($ppalAccount->getPayPal()->getPayPalAccountEmail(),$create->getPayPal()->getPayPalAccountEmail());
 
         $this->assertNotNull($create->getCreatedAt());
         $this->assertNotNull($create->getUpdatedAt());
@@ -48,8 +44,9 @@ class PayPalAccountTest extends \PHPUnit_Framework_TestCase
         );
 
         $ppalAccount = new PayPalAccount($params);
-        $repo->createPayPalAccount($ppalAccount);
-        $this->assertEquals($ppalAccount->getUserId(),$repo->getBankAccountById($userid));
+        $createPaypalAccount = $repo->createPayPalAccount($ppalAccount);
+        $getPaypalAccount = $repo->getPayPalAccountById($createPaypalAccount->getId());
+        $this->assertEquals($createPaypalAccount->getId(), $getPaypalAccount->getId());
 
     }
 
@@ -64,9 +61,13 @@ class PayPalAccountTest extends \PHPUnit_Framework_TestCase
                 'email'=>'test@paypalname.com'
             )
         );
-
         $ppalAccount = new PayPalAccount($params);
-        $this->assertEquals($repo->createPayPalAccount($ppalAccount)->getUserId(), $repo->getUserForPayPalAccount($userid)->getUserId());
+
+        $createPaypalAccount = $repo->createPayPalAccount($ppalAccount);
+        $getUsersPaypalAccount = $repo->getUserForPayPalAccount($createPaypalAccount->getId());
+
+        $gotUserId = $getUsersPaypalAccount->getId();
+        $this->assertEquals($gotUserId, $userid);
 
 
     }

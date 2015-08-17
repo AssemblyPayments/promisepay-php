@@ -1,17 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Web_den
- * Date: 11.06.2015
- * Time: 17:46
- */
+
+
 
 namespace PromisePay;
 
 
 use PromisePay\DataObjects\Fee;
 use PromisePay\Enum\FeeType;
-
+include_once __DIR__ . '/../init.php';
+include_once 'GUID.php';
 class FeeTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateFeeSuccessfully()
@@ -49,9 +46,11 @@ class FeeTest extends \PHPUnit_Framework_TestCase
             'cap'=>'1',
             'max'=>'3',
             'min'=>'2',
+            'to'=>'test',
         );
         $fee = new Fee($data);
         $repo->createFee($fee);
+        //$this->assertArrayHasKey('errors', $repo->createFee($fee));
     }
 
     public function testGetFeeByIdSuccessfull()

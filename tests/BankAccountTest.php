@@ -29,12 +29,13 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase
                     ));
         $bankAccount = new BankAccount($info);
         $create = new BankAccountRepository();
-        $createBank = $create->createBankAccount($bankAccount);
+        $createdBankAccount = $create->createBankAccount($bankAccount);
 
-        $this->assertEquals($bankAccount->getBank()->getAccountName(), $createBank->getBank()->getAccountName());
+        $this->assertEquals($bankAccount->getBank()->getAccountName(), $createdBankAccount->getBank()->getAccountName());
 
-        $this->assertNotNull($createBank->getCreatedAt());
-        $this->assertNotNull($createBank->getUpdatedAt());
+        $this->assertNotNull($createdBankAccount->getId());
+        $this->assertNotNull($createdBankAccount->getCreatedAt());
+        $this->assertNotNull($createdBankAccount->getUpdatedAt());
     }
 
     public function testGetBankAccountSuccessfully()

@@ -128,7 +128,7 @@ $item = $repo->getItemById('item_id');
 #####Get a list of items
 ```php
 $repo = new ItemRepository();
-$listOfItems = $repo->getListOfItems;
+$listOfItems = $repo->getListOfItems(20, 0); // limit, offset
 ```
 #####Update an item
 ```php
@@ -197,7 +197,6 @@ $bpayDetails = $repo->getBPayDetailsForItem('item_id');
 ##Users
 
 #####Create a user
-
 ```php
 $repo = new UserRepository();
 $user = new User($arr = array(
@@ -211,10 +210,9 @@ $user = new User($arr = array(
            'state'         => 'state',
            'city'          => 'city',
            'zip'           => '90210',
-           'country'       => 'AUS'//country code,));
+           'country'       => 'AUS'));
 $repo->createUser($user)
 ```
-
 #####Get a user
 ```php
 $repo = new UserRepository();
@@ -223,9 +221,25 @@ $user = $repo->getUserById('User id');
 #####Get a list of users
 ```php
 $repo = new UserRepository();
-$users = $repo->getListOfUsers();
+$users = $repo->getListOfUsers(20, 0); // limit, offset
 ```
-
+#####Update a user
+```php
+$repo = new UserRepository();
+$user = new User($arr = array(
+           'id'            => id,
+           'first_name'    => 'First Name',
+           'last_name'     => 'Last Name',
+           'email'         => 'email'
+           'mobile'        => 'mobile phone'
+           'address_line1' => 'a line 1',
+           'address_line2' => 'a line 2',
+           'state'         => 'state',
+           'city'          => 'city',
+           'zip'           => '90210',
+           'country'       => 'AUS'));
+$repo->updateUser($user)
+```
 #####Delete a User
 ```php
 $repo = new UserRepository();
@@ -264,22 +278,22 @@ $repo->setDisbursementAccount('user_id', 'account_id');
 
 ```php
 $repo = new ItemRepository();
-$repo->makePayment('External_item_id', 'Card_account_id', 'User_id')
+$repo->makePayment('Item_id', 'Card_account_id')
 ```
 #####Request payment
 ```php
 $repo = new ItemRepository();
-$requestPayment = $repo->requestPayment('Item_id', 'Seller_id');
+$requestPayment = $repo->requestPayment('Item_id');
 ```
 #####Release payment
 ```php
 $repo = new ItemRepository();
-$releasePayment = $repo->releasePayment('Item_id', 'buyer_id', 'Release amount');
+$releasePayment = $repo->releasePayment('Item_id', 'Release amount');
 ```
 #####Request release
 ```php
 $repo = new ItemRepository();
-$requestRelease = $repo->requestRelease('Item_id', 'Seller_id', 'Release amount');
+$requestRelease = $repo->requestRelease('Item_id', 'Release amount');
 ```
 #####Cancel
 ```php
@@ -289,27 +303,27 @@ $repo->cancelItem('Item_id');
 #####Acknowledge wire
 ```php
 $repo = new ItemRepository();
-$acknowledgeWire = $repo->acknowledgeWire('Item_id', 'Buyer_id');
+$acknowledgeWire = $repo->acknowledgeWire('Item_id');
 ```
 #####Acknowledge PayPal
 ```php
 $repo = new ItemRepository();
-$acknowledgePayPal = $repo->acknowledgePayPal('Item_id', 'Buyer_id');
+$acknowledgePayPal = $repo->acknowledgePayPal('Item_id');
 ```
 #####Revert wire
 ```php
 $repo = new ItemRepository();
-$repo->revertWire('Item_id', 'Buyer_id');
+$repo->revertWire('Item_id');
 ```
 #####Request refund
 ```php
 $repo = new ItemRepository();
-$repo->requestRefund('Item_id',  'Buyer_id',  'Refund amount',  'Refund message');
+$repo->requestRefund('Item_id', 'Refund amount', 'Refund message');
 ```
 #####Refund
 ```php
 $repo = new ItemRepository();
-$repo = refund( 'Item id',  'Seller id',  'Refund Amount',  'Refund message')
+$repo = refund('Item id', 'Refund Amount', 'Refund message')
 ```
 
 ##Card Accounts
@@ -405,11 +419,66 @@ $repo = new PayPalAccountRepository();
 $users = $repo->getUserForPayPalAccount('Account id')
 ```
 
+##Companies
+
+#####Create a company
+```php
+$repo = new CompanyRepository();
+$params = array(
+    'user_id' => "1",
+	'name' => "Acme Co",
+	'legal_name' => "Acme Co Pty Ltd",
+	'tax_number' => "1231231",
+	'charge_tax' => true,
+	'address_line1' => "123 Test St",
+	'address_line2' => "",
+	'city' => "Melbourne",
+	'state' => "VIC",
+	'zip' => "3000",
+	'country' => "AUS"
+    );
+$company = new Company($params);
+$repo->createCompany($company);
+```
+
+#####Get a company
+```php
+$repo = new CompanyRepository();
+$company = $repo->getCompanyById('company_id');
+```
+
+#####Get a list of companies
+```php
+$repo = new CompanyRepository();
+$company = $repo->getListOfCompanies(20, 0); // limit, offset
+```
+
+#####Update a company
+```php
+$repo = new CompanyRepository();
+$params = array(
+	'id' => "e466dfb4-f05c-4c7f-92a3-09a0a28c7af5",
+    'user_id' => "1",
+	'name' => "Acme Co",
+	'legal_name' => "Acme Co Pty Ltd",
+	'tax_number' => "1231231",
+	'charge_tax' => true,
+	'address_line1' => "123 Test St",
+	'address_line2' => "",
+	'city' => "Melbourne",
+	'state' => "VIC",
+	'zip' => "3000",
+	'country' => "AUS"
+    );
+$company = new Company($params);
+$repo->updateCompany($company);
+```
+
 ##Fees
 #####Get a list of fees
 ```php
 $repo = new FeeRepository();
-$fees = $repo->getListOfFees();
+$fees = $repo->getListOfFees(20, 0); // limit, offset
 ```
 #####Get a fee
 ```php
@@ -438,7 +507,7 @@ $repo->createFee($fee);
 #####Get a list of transactions
 ```php
 $repo = new TransactionRepository();
-$trans = $repo->getListOfTransactions();
+$trans = $repo->getListOfTransactions(20, 0); // limit, offset
 ```
 #####Get a transaction
 ```php

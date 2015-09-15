@@ -40,7 +40,7 @@ class CompanyRepository extends ApiAbstract
         $payload = '';
 
         $preparePayload = array(
-            "id" =>$id,
+            "user_id" =>$id,
             "name"=>$company->getName(),
             "legal_name"=>$company->getLegalName(),
             "tax_number"=>$company->getTaxNumber(),
@@ -63,7 +63,7 @@ class CompanyRepository extends ApiAbstract
     }
 
 
-    public function editCompany(Company $company)
+    public function updateCompany(Company $company)
     {
 
         $payload='';

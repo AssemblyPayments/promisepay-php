@@ -9,6 +9,10 @@ class Company extends Object
     /**
      * @var
      */
+    private $_userId;
+    /**
+     * @var
+     */
     private $_legalName;
     /**
      * @var
@@ -51,6 +55,7 @@ class Company extends Object
     {
         if (count($jsonData))
         {
+            $this->_userId       = array_key_exists('user_id',    $jsonData)?$jsonData['user_id']:'';
             $this->_legalName    = array_key_exists('legal_name',    $jsonData)?$jsonData['legal_name']:'';
             $this->_name         = array_key_exists('name',          $jsonData)?$jsonData['name']:'';
             $this->_taxNumber    = array_key_exists('tax_number',    $jsonData)?$jsonData['tax_number']:'';
@@ -63,6 +68,22 @@ class Company extends Object
             $this->_country      = array_key_exists('country',       $jsonData)?$jsonData['country']:'';
         }
         parent::__construct($jsonData);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserId()
+    {
+        return $this->_userId;
+    }
+
+    /**
+     * @param mixed $userId
+     */
+    public function setUserId($userId)
+    {
+        $this->_userId = $userId;
     }
 
     /**

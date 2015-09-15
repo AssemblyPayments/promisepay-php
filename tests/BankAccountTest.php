@@ -33,7 +33,6 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($bankAccount->getBank()->getAccountName(), $createdBankAccount->getBank()->getAccountName());
 
-        $this->assertNotNull($createdBankAccount->getId());
         $this->assertNotNull($createdBankAccount->getCreatedAt());
         $this->assertNotNull($createdBankAccount->getUpdatedAt());
     }

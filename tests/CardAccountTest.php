@@ -55,7 +55,6 @@ class CardAccountTest extends \PHPUnit_Framework_TestCase
        $cardAccount = new CardAccount($info);
        $fetchedCardAccount = $cardRepo->getCardAccountById($cardAccount->getId());
 
-       var_dump($fetchedCardAccount);
        $this->assertNotNull($fetchedCardAccount->getCreatedAt());
     }
 

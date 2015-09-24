@@ -25,7 +25,7 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase
                     "account_number"=>'123334242134',
                     "account_type"=>'savings',
                     "holder_type"=>'personal',
-                    "country"=>'AUS',
+                    "country"=>'USA',
                     ));
         $bankAccount = new BankAccount($info);
         $create = new BankAccountRepository();
@@ -50,11 +50,12 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase
                 "account_number"=>'123334242134',
                 "account_type"=>'savings',
                 "holder_type"=>'personal',
-                "country"=>'AUS',
+                "country"=>'USA',
             ));
         $bankAccount = new BankAccount($info);
         $create = new BankAccountRepository();
         $bankAccountCreated = $create->createBankAccount($bankAccount);
+        var_dump($bankAccountCreated);
         $founded = $create->getBankAccountById($bankAccountCreated->getId());
         $this->assertEquals($bankAccountCreated->getId(), $founded->getId());
     }
@@ -72,7 +73,7 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase
                 "account_number"=>'123334242134',
                 "account_type"=>'savings',
                 "holder_type"=>'personal',
-                "country"=>'AUS',
+                "country"=>'USA',
             ));
 
         $bankAccount = new BankAccount($info);
@@ -98,7 +99,7 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase
                 "account_number"=>'123334242134',
                 "account_type"=>'savings',
                 "holder_type"=>'personal',
-                "country"=>'AUS',
+                "country"=>'USA',
             ));
         $bankAccount = new BankAccount($info);
         $create = new BankAccountRepository();

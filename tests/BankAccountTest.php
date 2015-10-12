@@ -55,7 +55,6 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase
         $bankAccount = new BankAccount($info);
         $create = new BankAccountRepository();
         $bankAccountCreated = $create->createBankAccount($bankAccount);
-        var_dump($bankAccountCreated);
         $founded = $create->getBankAccountById($bankAccountCreated->getId());
         $this->assertEquals($bankAccountCreated->getId(), $founded->getId());
     }

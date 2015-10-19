@@ -29,16 +29,24 @@ class Configuration
      */
     private function _loadDataFromCredentials($data)
     {
-        if(file_exists(__DIR__ . self::$CredentialsFile))
+        $filepath = self::$CredentialsFile;
+
+        // check for relative paths
+        if (! file_exists($filepath))
         {
-            return (string)simplexml_load_file(__DIR__ . self::$CredentialsFile)->$data;
+            $filepath = __DIR__ . $filepath;
+        }
+
+        if(file_exists($filepath))
+        {
+            return (string)simplexml_load_file($filepath)->$data;
         }
         else
         {
-            throw new Exception\Credentials(__DIR__ . self::$CredentialsFile.' not found!');
+            throw new Exception\Credentials(self::$CredentialsFile.' not found!');
         }
     }
-
+    
     /**
      * @throws Exception\Credentials
      */

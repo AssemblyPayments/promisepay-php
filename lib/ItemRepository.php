@@ -3,6 +3,7 @@ namespace PromisePay;
 
 use PromisePay\DataObjects\BPayDetails;
 use PromisePay\DataObjects\Fee;
+use PromisePay\DataObjects\Errors;
 use PromisePay\DataObjects\ItemStatus;
 use PromisePay\DataObjects\Transaction;
 use PromisePay\DataObjects\WireDetails;

@@ -321,30 +321,31 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public function testListUserItemsSuccess()
     {
         $repo = new UserRepository();
-        $repo->getListOfItemsForUser('89592d8a-6cdb-4857-a90d-b41fc817d639');
+        $repo->getListOfItemsForUser('ec9bf096-c505-4bef-87f6-18822b9dbf2c');
     }
 
     public function testListUserBankAccountSuccess()
     {
         $repo = new UserRepository();
-        $repo->getListOfBankAccountsForUser('89592d8a-6cdb-4857-a90d-b41fc817d639');
+        $repo->getListOfBankAccountsForUser('ec9bf096-c505-4bef-87f6-18822b9dbf2c');
     }
 
     public function testListUserCardAccountSuccess()
     {
-        //empty while issue with creating card account not fixed
+        $repo = new UserRepository();
+        $repo->getListOfCardAccountsForUser('ec9bf096-c505-4bef-87f6-18822b9dbf2c');
     }
 
     public function testListUserPayPalAccountSuccess()
     {
         $repos = new UserRepository();
-        $repos->getListOfPayPalAccountsForUser('89592d8a-6cdb-4857-a90d-b41fc817d639');
+        $repos->getListOfPayPalAccountsForUser('ec9bf096-c505-4bef-87f6-18822b9dbf2c');
     }
 
     public function testListUserDisbursementAccountSuccess()
     {
         $repos = new UserRepository();
-        $repos->setDisbursementAccount('89592d8a-6cdb-4857-a90d-b41fc817d639', '123');
+        $repos->setDisbursementAccount('ec9bf096-c505-4bef-87f6-18822b9dbf2c', '123');
     }
 }
  

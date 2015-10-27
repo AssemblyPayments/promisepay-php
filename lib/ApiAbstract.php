@@ -15,9 +15,11 @@ class ApiAbstract
 
     const ENTITY_LIST_LIMIT = 200;
 
-    public function _construct()
+    public function __construct()
     {
-
+		$this->baseUrl = API_URL;
+		$this->login = API_LOGIN;
+		$this->password = API_PASSWORD;
     }
 
     public function BaseUrl()
@@ -63,29 +65,26 @@ class ApiAbstract
 
     public function RestClient($method, $entity, $payload = null, $mime = null)
     {
-        $username = $this->Login();
-        $password = $this->Password();
-
-        //$url = $this->BaseUrl().$entity;
-        $url = $this->BaseUrl().$entity."?".$payload;
+        $url = API_URL . $entity . '?' . $payload;
+		
         switch ($method) {
             case 'get':
-                $response = Request::get($url)->authenticateWith($username, $password)->send();
+                $response = Request::get($url)->authenticateWith(API_LOGIN, API_PASSWORD)->send();
                 return $response;
                 break;
 
             case 'post':
-                $response = Request::post($url)->body($payload, $mime)->authenticateWith($username,$password)->send();
+                $response = Request::post($url)->body($payload, $mime)->authenticateWith(API_LOGIN, API_PASSWORD)->send();
                 return $response;
                 break;
 
             case 'delete':
-                $response = Request::delete($url)->authenticateWith($username, $password)->send();
+                $response = Request::delete($url)->authenticateWith(API_LOGIN, API_PASSWORD)->send();
                 return $response;
                 break;
 
             case 'patch':
-                $response = Request::patch($url)->body($payload, $mime)->authenticateWith($username, $password)->send();
+                $response = Request::patch($url)->body($payload, $mime)->authenticateWith(API_LOGIN, API_PASSWORD)->send();
                 return $response;
                 break;
         }

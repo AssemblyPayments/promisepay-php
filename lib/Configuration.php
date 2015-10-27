@@ -55,7 +55,7 @@ class Configuration
 		else 
 		{
 			$project_path = dirname(__DIR__);
-			$configFilePath  = $project_path . $this->sdkConfigFile;
+			$configFilePath  = $project_path . DIRECTORY_SEPARATOR . $this->sdkConfigFile;
 			
 			if (!file_exists($configFilePath)) 
 			{
@@ -65,10 +65,20 @@ class Configuration
 			$this->sdkConfigFileUsed = $configFilePath;
 		}
 		
+		require_once($this->sdkConfigFileUsed);
+		
 		// Check if the config file is valid in order to avoid unexpected results
-		if (!defined('API_LOGIN') || !defined('API_PASSWORD') || !defined('API_URL')) 
-		{
-			throw new Exception\Credentials("SDK Config file {$this->sdkConfigFileUsed} is missing at least one of the following constants: USERNAME, PASSWORD, API_URL");
+		if (!defined('API_LOGIN')) {
+			//print_r(get_defined_constants(true));
+			throw new Exception\Credentials("SDK Config file {$this->sdkConfigFileUsed} is missing the following constant: API_LOGIN.");
+		}
+		
+		if (!defined('API_PASSWORD')) {
+			throw new Exception\Credentials("SDK Config file {$this->sdkConfigFileUsed} is missing the following constant: API_PASSWORD");
+		}
+		
+		if (!defined('API_URL')) {
+			throw new Exception\Credentials("SDK Config file {$this->sdkConfigFileUsed} is missing the following constants: API_URL");
 		}
 		
 		if (!in_array(API_URL, $this->permittedApiUrls)) 
@@ -79,5 +89,15 @@ class Configuration
 		// Finally, generate API_KEY, which is in format of base64encode(API_LOGIN:API_PASSWORD)
 		$api_key = base64_encode(API_LOGIN . ':' . API_PASSWORD);
 		define('API_KEY', $api_key);
+	}
+	
+	/**
+	 * Magic method
+	 *
+	 * @param $var Inaccessible variable to return
+	 * @return mixed
+	 */
+	public function __get($var) {
+		return $this->$var;
 	}
 }

@@ -17,16 +17,16 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase
         $userid = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';
         $info = array(
             "user_id" => $userid,
-            "active"=> 'true',
+            "active" => 'true',
             "bank" => array(
-                    "bank_name"=>'bank for test',
-                    "account_name"=>'test acc',
-                    "routing_number"=>'12344455512',
-                    "account_number"=>'123334242134',
-                    "account_type"=>'savings',
-                    "holder_type"=>'personal',
-                    "country"=>'USA',
-                    ));
+                "bank_name" => 'bank for test',
+                "account_name" => 'test acc',
+                "routing_number" => '12344455512',
+                "account_number" => '123334242134',
+                "account_type" => 'savings',
+                "holder_type" => 'personal',
+                "country" => 'USA',
+            ));
         $bankAccount = new BankAccount($info);
         $create = new BankAccountRepository();
         $createdBankAccount = $create->createBankAccount($bankAccount);
@@ -42,15 +42,15 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase
         $userid = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';//user id created before
         $info = array(
             "user_id" => $userid,
-            "active"=> 'true',
+            "active" => 'true',
             "bank" => array(
-                "bank_name"=>'bank for test',
-                "account_name"=>'test acc',
-                "routing_number"=>'12344455512',
-                "account_number"=>'123334242134',
-                "account_type"=>'savings',
-                "holder_type"=>'personal',
-                "country"=>'USA',
+                "bank_name" => 'bank for test',
+                "account_name" => 'test acc',
+                "routing_number" => '12344455512',
+                "account_number" => '123334242134',
+                "account_type" => 'savings',
+                "holder_type" => 'personal',
+                "country" => 'USA',
             ));
         $bankAccount = new BankAccount($info);
         $create = new BankAccountRepository();
@@ -64,15 +64,15 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase
         $userid = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';//user id created before
         $info = array(
             "user_id" => $userid,
-            "active"=> 'true',
+            "active" => 'true',
             "bank" => array(
-                "bank_name"=>'bank for test',
-                "account_name"=>'test acc',
-                "routing_number"=>'12344455512',
-                "account_number"=>'123334242134',
-                "account_type"=>'savings',
-                "holder_type"=>'personal',
-                "country"=>'USA',
+                "bank_name" => 'bank for test',
+                "account_name" => 'test acc',
+                "routing_number" => '12344455512',
+                "account_number" => '123334242134',
+                "account_type" => 'savings',
+                "holder_type" => 'personal',
+                "country" => 'USA',
             ));
 
         $bankAccount = new BankAccount($info);
@@ -90,15 +90,15 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase
         $userid = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';//user id created before
         $info = array(
             "user_id" => $userid,
-            "active"=> 'true',
+            "active" => 'true',
             "bank" => array(
-                "bank_name"=>'bank for test',
-                "account_name"=>'test acc',
-                "routing_number"=>'12344455512',
-                "account_number"=>'123334242134',
-                "account_type"=>'savings',
-                "holder_type"=>'personal',
-                "country"=>'USA',
+                "bank_name" => 'bank for test',
+                "account_name" => 'test acc',
+                "routing_number" => '12344455512',
+                "account_number" => '123334242134',
+                "account_type" => 'savings',
+                "holder_type" => 'personal',
+                "country" => 'USA',
             ));
         $bankAccount = new BankAccount($info);
         $create = new BankAccountRepository();

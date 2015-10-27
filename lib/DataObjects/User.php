@@ -10,7 +10,7 @@ class User extends Object
     /**
      * @var
      */
-    private  $_firstName;
+    private $_firstName;
 
     /**
      * @var
@@ -84,26 +84,26 @@ class User extends Object
 
     public function __construct($jsonData = array())
     {
-        if(count($jsonData)>0)
-        {
-            $this->_firstName         = array_key_exists('first_name'        ,$jsonData)?$jsonData['first_name']:'';
-            $this->_fullName          = array_key_exists('full_name'         ,$jsonData)?$jsonData['full_name']:'';
-            $this->_lastName          = array_key_exists('last_name'         ,$jsonData)?$jsonData['last_name']:'';
-            $this->_email             = array_key_exists('email'             ,$jsonData)?$jsonData['email']:'';
-            $this->_mobile            = array_key_exists('mobile'            ,$jsonData)?$jsonData['mobile']:'';
-            $this->_phone             = array_key_exists('phone'             ,$jsonData)?$jsonData['phone']:'';
-            $this->_country           = array_key_exists('country'           ,$jsonData)?$jsonData['country']:'';
-            $this->_addressLine1      = array_key_exists('address_line1'     ,$jsonData)?$jsonData['address_line1']:'';
-            $this->_addressLine2      = array_key_exists('address_line2'     ,$jsonData)?$jsonData['address_line2']:'';
-            $this->_city              = array_key_exists('city'              ,$jsonData)?$jsonData['city']:'';
-            $this->_state             = array_key_exists('state'             ,$jsonData)?$jsonData['state']:'';
-            $this->_zip               = array_key_exists('zip'               ,$jsonData)?$jsonData['zip']:'';
-            $this->_verificationState = array_key_exists('verification_state',$jsonData)?$jsonData['verification_state']:'';
-            $this->_dob               = array_key_exists('dob'               ,$jsonData)?$jsonData['dob']:'';
-            $this->_driversLicense    = array_key_exists('drivers_license'   ,$jsonData)?$jsonData['drivers_license']:'';
+        if (count($jsonData) > 0) {
+            $this->_firstName = array_key_exists('first_name', $jsonData) ? $jsonData['first_name'] : '';
+            $this->_fullName = array_key_exists('full_name', $jsonData) ? $jsonData['full_name'] : '';
+            $this->_lastName = array_key_exists('last_name', $jsonData) ? $jsonData['last_name'] : '';
+            $this->_email = array_key_exists('email', $jsonData) ? $jsonData['email'] : '';
+            $this->_mobile = array_key_exists('mobile', $jsonData) ? $jsonData['mobile'] : '';
+            $this->_phone = array_key_exists('phone', $jsonData) ? $jsonData['phone'] : '';
+            $this->_country = array_key_exists('country', $jsonData) ? $jsonData['country'] : '';
+            $this->_addressLine1 = array_key_exists('address_line1', $jsonData) ? $jsonData['address_line1'] : '';
+            $this->_addressLine2 = array_key_exists('address_line2', $jsonData) ? $jsonData['address_line2'] : '';
+            $this->_city = array_key_exists('city', $jsonData) ? $jsonData['city'] : '';
+            $this->_state = array_key_exists('state', $jsonData) ? $jsonData['state'] : '';
+            $this->_zip = array_key_exists('zip', $jsonData) ? $jsonData['zip'] : '';
+            $this->_verificationState = array_key_exists('verification_state', $jsonData) ? $jsonData['verification_state'] : '';
+            $this->_dob = array_key_exists('dob', $jsonData) ? $jsonData['dob'] : '';
+            $this->_driversLicense = array_key_exists('drivers_license', $jsonData) ? $jsonData['drivers_license'] : '';
         }
         parent::__construct($jsonData);
     }
+
     /**
      * @return mixed
      */

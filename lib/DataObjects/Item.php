@@ -91,7 +91,7 @@ class Item extends Object
             $this->_currency         = array_key_exists('currency', $jsonData) ? $jsonData['currency'] : '';
             $this->_depositReference = array_key_exists('deposit_reference', $jsonData) ? $jsonData['deposit_reference'] : '';
             $this->_description      = array_key_exists('description', $jsonData) ? $jsonData['description'] : '';
-            $this->_feeIds           = array_key_exists('fee_isd', $jsonData) ? $jsonData['fee_ids'] : '';
+            $this->_feeIds           = array_key_exists('fee_ids', $jsonData) ? $jsonData['fee_ids'] : '';
             $this->_fees             = array_key_exists('fees', $jsonData) ? $jsonData['fees'] : '';
             $this->_name             = array_key_exists('name', $jsonData) ? $jsonData['name'] : '';
             $this->_paymentType      = array_key_exists('payment_type', $jsonData) ? $jsonData['payment_type'] : '';

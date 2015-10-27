@@ -1,4 +1,5 @@
 <?php
+// TODO ADD COMMENTS
 namespace PromisePay;
 
 class ConfigurationTest extends \PHPUnit_Framework_TestCase

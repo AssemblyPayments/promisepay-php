@@ -17,7 +17,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 		/*
 		 * Suppress "Constant API_KEY already defined" notice which only happens because the test file reloads 
 		 * the PromisePay\Configuration class,  which reincludes SDK Config file, which tries to redefine constants.
-		 *
+		 * Cleaner solution than adding defined() conditionals in SDK Config file.
 		 */
 		error_reporting(E_ALL ^ E_NOTICE);
 		

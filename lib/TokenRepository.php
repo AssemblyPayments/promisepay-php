@@ -6,7 +6,7 @@ use PromisePay\DataObjects\Widget;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class TokenRepository extends  ApiAbstract
+class TokenRepository extends  BaseRepository
 {
     public function requestToken()
     {

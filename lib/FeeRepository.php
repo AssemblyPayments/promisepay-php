@@ -7,7 +7,7 @@ use PromisePay\DataObjects\Errors;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class FeeRepository extends ApiAbstract
+class FeeRepository extends BaseRepository
 {
     public function getListOfFees($limit = 20, $offset = 0)
     {

@@ -5,7 +5,7 @@ use PromisePay\DataObjects\Company;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class CompanyRepository extends ApiAbstract
+class CompanyRepository extends BaseRepository
 {
     public function getListOfCompanies($limit = 20, $offset = 0)
     {

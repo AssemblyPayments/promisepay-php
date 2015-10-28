@@ -6,7 +6,7 @@ use PromisePay\Exception;
 use PromisePay\Log;
 
 
-class AddressRepository extends ApiAbstract
+class AddressRepository extends BaseRepository
 {
     public function getAddressById($id)
     {

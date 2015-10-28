@@ -7,7 +7,7 @@ use PromisePay\DataObjects\User;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class BankAccountRepository extends ApiAbstract
+class BankAccountRepository extends BaseRepository
 {
     public function getBankAccountById($id)
     {

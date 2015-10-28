@@ -1,5 +1,8 @@
 <?php
-namespace PromisePay;
+namespace PromisePay\Test;
+
+use Promisepay;
+use Promisepay\Exception;
 
 /**
  * Class Configuration
@@ -8,30 +11,33 @@ namespace PromisePay;
  */
 class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {
-	// The following two PHPUnit directives are used because constants cannot be redefined, and that's what would happen if test wasn't run in separate process
-	protected $preserveGlobalState = false;
-    protected $runTestInSeparateProcess = true;
-	
 	protected $instance;
 	
 	public function setUp() {
+		/*
+		 * Suppress "Constant API_KEY already defined" notice which only happens because the test file reloads 
+		 * the PromisePay\Configuration class,  which reincludes SDK Config file, which tries to redefine constants.
+		 *
+		 */
+		error_reporting(E_ALL ^ E_NOTICE);
+		
 		require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
 		
-		$this->instance = new Configuration;
+		$this->instance = new PromisePay\Configuration;
 	}
 	
 	public function testInstance() {
-		$this->assertTrue($this->instance instanceof Configuration);
+		$this->assertTrue($this->instance instanceof PromisePay\Configuration);
 	}
 	
 	public function testPropertiesArentEmpty() {
-		$this->assertNotEmpty($this->instance->sdkConfigFile);
+		$this->assertNotEmpty($this->instance->sdkConfigFileName);
 		$this->assertNotEmpty($this->instance->sdkConfigFileUsed);
 		$this->assertNotEmpty($this->instance->permittedApiUrls);
 	}
 	
 	public function testPropertiesAreValidTypes() {
-		$this->assertTrue(is_string($this->instance->sdkConfigFile));
+		$this->assertTrue(is_string($this->instance->sdkConfigFileName));
 		$this->assertTrue(is_string($this->instance->sdkConfigFileUsed));
 		$this->assertTrue(is_array($this->instance->permittedApiUrls));
 	}
@@ -41,14 +47,33 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	public function testConstantsDefined() {
-		$this->assertTrue(defined('API_LOGIN'));
-		$this->assertTrue(defined('API_PASSWORD'));
-		$this->assertTrue(defined('API_URL'));
-		$this->assertTrue(defined('API_KEY'));
+		$this->assertTrue(defined('PromisePay\API_LOGIN'));
+		$this->assertTrue(defined('PromisePay\API_PASSWORD'));
+		$this->assertTrue(defined('PromisePay\API_URL'));
+		$this->assertTrue(defined('PromisePay\API_KEY'));
 	}
 	
 	public function testApiKeyValidBase64Format() {
-		$this->assertNotFalse(base64_decode(API_KEY, true));
+		$this->assertNotFalse(base64_decode(constant('PromisePay\API_KEY'), true));
+	}
+	
+	public function testCustomNonExistingConfigFile() {
+		try {
+			new PromisePay\Configuration("Non_Existing_SDK_Config_File.php");
+		} catch (\PromisePay\Exception\NotFound $e) {
+			return;
+		}
+		
+		$this->fail('An expected exception \PromisePay\Exception\NotFound has not been raised.');
+	}
+	
+	public function testCustomExistingConfigFile() {
+		try {
+			new PromisePay\Configuration(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'SDK_Config.php');
+			$this->assertTrue(true);
+		} catch (\PromisePay\Exception\NotFound $e) {
+			$this->fail("Exception \PromisePay\Exception\NotFound has been raised.");
+		}
 	}
 }
 ?>

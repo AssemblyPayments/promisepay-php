@@ -7,7 +7,7 @@ use PromisePay\DataObjects\User;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class PayPalAccountRepository extends ApiAbstract
+class PayPalAccountRepository extends BaseRepository
 {
     public function getPayPalAccountById($id)
     {

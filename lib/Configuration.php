@@ -10,15 +10,16 @@ use PromisePay\Exception;
 class Configuration
 {
 	/**
-	 * Private variable.
+	 * Private read-only variable.
 	 * SDK Config filename. Only filename, not path. File must be in package's root folder.
 	 *
-	 * @var string $sdkConfigFile
+	 * @var string $sdkConfigFileName
 	 */
-	private $sdkConfigFile = 'SDK_Config.php';
+	private $sdkConfigFileName = 'SDK_Config.php';
 	
 	/**
 	 * Private variable
+	 * Read-only when accessed outside this class.
 	 * Tracks absolute path and filename of SDK Config file being used.
 	 * 
 	 * @var string $sdkConfigFileUsed
@@ -26,7 +27,7 @@ class Configuration
 	private $sdkConfigFileUsed;
 	
 	/**
-	 * Private variable
+	 * Private read-only variable
 	 * Lists permitted API_URL values
 	 * 
 	 * @var array $permittedApiUrls
@@ -35,6 +36,7 @@ class Configuration
 	
 	/**
 	 * Construct
+	 * Loads appropriate SDK Config file.
 	 *
 	 * @param string|null $customConfigFile Optional config file PATH to use instead of default one
 	 * @throws Exception\NotFound
@@ -47,7 +49,7 @@ class Configuration
 		{
 			if (!file_exists($customConfigFile)) 
 			{
-				throw new Exception\NotFound("User supplied config file $customConfigFile not found.");
+				throw new Exception\NotFound("User supplied config file $customConfigFile not found (don't forget to supply full path, not just filename).");
 			}
 			
 			$this->sdkConfigFileUsed = $customConfigFile;
@@ -55,11 +57,11 @@ class Configuration
 		else 
 		{
 			$project_path = dirname(__DIR__);
-			$configFilePath  = $project_path . DIRECTORY_SEPARATOR . $this->sdkConfigFile;
+			$configFilePath  = $project_path . DIRECTORY_SEPARATOR . $this->sdkConfigFileName;
 			
 			if (!file_exists($configFilePath)) 
 			{
-				throw new Exception\NotFound("SDK Config file {$this->sdkConfigFile} not found in $project_path");
+				throw new Exception\NotFound("SDK Config file {$this->sdkConfigFileName} not found in $project_path");
 			}
 			
 			$this->sdkConfigFileUsed = $configFilePath;
@@ -68,36 +70,41 @@ class Configuration
 		require_once($this->sdkConfigFileUsed);
 		
 		// Check if the config file is valid in order to avoid unexpected results
-		if (!defined('API_LOGIN')) {
+		if (!defined(__NAMESPACE__ . '\API_LOGIN')) 
+		{
 			//print_r(get_defined_constants(true));
 			throw new Exception\Credentials("SDK Config file {$this->sdkConfigFileUsed} is missing the following constant: API_LOGIN.");
 		}
 		
-		if (!defined('API_PASSWORD')) {
+		if (!defined(__NAMESPACE__ . '\API_PASSWORD')) 
+		{
 			throw new Exception\Credentials("SDK Config file {$this->sdkConfigFileUsed} is missing the following constant: API_PASSWORD");
 		}
 		
-		if (!defined('API_URL')) {
+		if (!defined(__NAMESPACE__ . '\API_URL')) 
+		{
 			throw new Exception\Credentials("SDK Config file {$this->sdkConfigFileUsed} is missing the following constants: API_URL");
 		}
 		
-		if (!in_array(API_URL, $this->permittedApiUrls)) 
+		if (!in_array(constant(__NAMESPACE__ . '\API_URL'), $this->permittedApiUrls)) 
 		{
 			throw new Exception\Credentials("SDK Config file {$this->sdkConfigFileUsed} is using unsupported API_URL value " . API_URL . ". Did you forget the trailing forward slash(/) ? Supported API_URL values (API endpoints) are: " . implode(", ", $this->permittedApiUrls));
 		}
 		
 		// Finally, generate API_KEY, which is in format of base64encode(API_LOGIN:API_PASSWORD)
 		$api_key = base64_encode(API_LOGIN . ':' . API_PASSWORD);
-		define('API_KEY', $api_key);
+		define(__NAMESPACE__ . '\API_KEY', $api_key);
 	}
 	
 	/**
 	 * Magic method
+	 * Makes private properties defined in this class readable outside it.
 	 *
-	 * @param $var Inaccessible variable to return
+	 * @param $property Inaccessible property to return
 	 * @return mixed
 	 */
-	public function __get($var) {
-		return $this->$var;
+	public function __get($property) 
+	{
+		return $this->$property;
 	}
 }

@@ -13,7 +13,7 @@ use PromisePay\Log;
 use PromisePay\DataObjects\Item;
 use PromisePay\DataObjects\User;
 
-class ItemRepository extends ApiAbstract
+class ItemRepository extends BaseRepository
 {
     public function getListOfItems($limit = 20, $offset = 0)
     {

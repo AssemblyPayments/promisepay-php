@@ -1,10 +1,14 @@
 <?php
-// TODO ADD COMMENTS
 namespace PromisePay;
 
+/**
+ * Class Configuration
+ *
+ * @package PromisePay
+ */
 class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {
-	// The following two PHPUnit directives are used because constants cannot be redefined
+	// The following two PHPUnit directives are used because constants cannot be redefined, and that's what would happen if test wasn't run in separate process
 	protected $preserveGlobalState = false;
     protected $runTestInSeparateProcess = true;
 	
@@ -40,6 +44,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 		$this->assertTrue(defined('API_LOGIN'));
 		$this->assertTrue(defined('API_PASSWORD'));
 		$this->assertTrue(defined('API_URL'));
+		$this->assertTrue(defined('API_KEY'));
 	}
 	
 	public function testApiKeyValidBase64Format() {

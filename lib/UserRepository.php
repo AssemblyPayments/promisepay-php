@@ -12,7 +12,6 @@ use PromisePay\Log;
 
 class UserRepository extends ApiAbstract
 {
-    
     public function getListOfUsers($limit = 20, $offset = 0) {
         $this->paramsListCorrect($limit, $offset);
         $response = $this->RestClient('get', 'users?limit=' . $limit . '&offset=' . $offset, '', '');

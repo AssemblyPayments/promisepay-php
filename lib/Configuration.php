@@ -72,7 +72,6 @@ class Configuration
 		// Check if the config file is valid in order to avoid unexpected results
 		if (!defined(__NAMESPACE__ . '\API_LOGIN')) 
 		{
-			//print_r(get_defined_constants(true));
 			throw new Exception\Credentials("SDK Config file {$this->sdkConfigFileUsed} is missing the following constant: API_LOGIN.");
 		}
 		

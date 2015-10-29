@@ -91,8 +91,10 @@ class Configuration
 		}
 		
 		// Finally, generate API_KEY, which is in format of base64encode(API_LOGIN:API_PASSWORD)
-		$api_key = base64_encode(API_LOGIN . ':' . API_PASSWORD);
-		define(__NAMESPACE__ . '\API_KEY', $api_key);
+		if (!defined(__NAMESPACE__ . '\API_KEY')) {
+			$api_key = base64_encode(API_LOGIN . ':' . API_PASSWORD);
+			define(__NAMESPACE__ . '\API_KEY', $api_key);
+		}
 	}
 	
 	/**

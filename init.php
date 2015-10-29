@@ -49,6 +49,7 @@ require(dirname(__FILE__) . '/lib/Enum/PaymentType.php');
 // Exception
 require(dirname(__FILE__) . '/lib/Exception/Base.php');
 require(dirname(__FILE__) . '/lib/Exception/Api.php');
+require(dirname(__FILE__) . '/lib/Exception/ApiUnsupportedRequestMethod.php');
 require(dirname(__FILE__) . '/lib/Exception/Argument.php');
 require(dirname(__FILE__) . '/lib/Exception/Credentials.php');
 require(dirname(__FILE__) . '/lib/Exception/Misconfiguration.php');

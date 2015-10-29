@@ -1,8 +1,8 @@
 <?php
 namespace PromisePay;
 
-define(__NAMESPACE__ . '\API_LOGIN', 'john.smith@promisepay.com');
-define(__NAMESPACE__ . '\API_PASSWORD', '8479c2e6a1d4aeac0b3443beb7564f15');
+define(__NAMESPACE__ . '\API_LOGIN', '');
+define(__NAMESPACE__ . '\API_PASSWORD', '');
 
 /*
  * SUPPORTED ENVIRONMENT VALUES

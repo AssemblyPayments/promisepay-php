@@ -38,17 +38,17 @@ class BaseRepository
                 break;
 
             case 'post':
-                $response = Request::post($url)->body($payload, $mime)->authenticateWith(API_LOGIN, API_PASSWORD)->send();
+                $response = Request::post($url)->body($payload, $mime)->authenticateWith(constant(__NAMESPACE__ . '\API_LOGIN'), constant(__NAMESPACE__ . '\API_PASSWORD'))->send();
                 return $response;
                 break;
 
             case 'delete':
-                $response = Request::delete($url)->authenticateWith(API_LOGIN, API_PASSWORD)->send();
+                $response = Request::delete($url)->authenticateWith(constant(__NAMESPACE__ . '\API_LOGIN'), constant(__NAMESPACE__ . '\API_PASSWORD'))->send();
                 return $response;
                 break;
 
             case 'patch':
-                $response = Request::patch($url)->body($payload, $mime)->authenticateWith(API_LOGIN, API_PASSWORD)->send();
+                $response = Request::patch($url)->body($payload, $mime)->authenticateWith(constant(__NAMESPACE__ . '\API_LOGIN'), constant(__NAMESPACE__ . '\API_PASSWORD'))->send();
                 return $response;
                 break;
 				

@@ -32,7 +32,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
 
         $token  = new Token($data);
         $repo = new TokenRepository();
-        $repo->requestSessionToken($token);
+		$repo->requestSessionToken($token);
     }
 
     public function testGetWidget()

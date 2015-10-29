@@ -5,6 +5,8 @@ use PromisePay\Exception;
 
 /**
  * Class Configuration
+ *
+ * @param string|null $customConfigFile optional For custom SDK Config file path.
  * @package PromisePay
  */
 class Configuration

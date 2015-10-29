@@ -10,13 +10,6 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
 	protected $instance;
 	
 	public function setUp() {
-		/*
-		 * Suppress "Constant API_KEY already defined" notice which only happens because the test file reloads 
-		 * the PromisePay\Configuration class,  which reincludes SDK Config file, which tries to redefine constants.
-		 * Cleaner solution than adding defined() conditionals in SDK Config file.
-		 */
-		error_reporting(E_ALL ^ E_NOTICE);
-		
 		require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
 		
 		$this->instance = new Promisepay\BaseRepository;

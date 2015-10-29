@@ -54,7 +54,7 @@ require(dirname(__FILE__) . '/lib/Exception/Argument.php');
 require(dirname(__FILE__) . '/lib/Exception/Credentials.php');
 require(dirname(__FILE__) . '/lib/Exception/Misconfiguration.php');
 require(dirname(__FILE__) . '/lib/Exception/NotFound.php');
-require(dirname(__FILE__) . '/lib/Exception/Unathorized.php');
+require(dirname(__FILE__) . '/lib/Exception/Unauthorized.php');
 require(dirname(__FILE__) . '/lib/Exception/Validation.php');
 
 // Custom Logger

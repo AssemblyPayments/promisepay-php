@@ -1,13 +1,11 @@
 <?php
 namespace PromisePay\Exception;
 
-use Exception;
-
 /**
  * Class Credentials
  * @package PromisePay\Exception
  */
-class Credentials extends Exception
+class Credentials extends Base
 {
 	public function __construct($message = null, $code = 0) 
 	{

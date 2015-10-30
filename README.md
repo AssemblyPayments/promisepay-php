@@ -44,7 +44,7 @@ Before interacting with PromisePay API, you need to generate an API token. See [
 
 Once you have recorded your API token, configure the PHP package - see below.
 
-Open the file **vendor/promisepay/promisepay-php/libs/promisepay-credentials.xml** and replace the existing credentials with the following:
+Open the file **vendor/promisepay/promisepay-php/libs/promisepay-credentials.xml** and replace the existing credentials with your account information:
 
 ```xml
 	<?xml version='1.0'?>

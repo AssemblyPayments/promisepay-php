@@ -1,8 +1,8 @@
 #PHP SDK - PromisePay API
 
-[![Join the chat at https://gitter.im/PromisePay/promisepay-php](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/PromisePay/promisepay-php?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the chat at https://gitter.im/NinoSkopac/promisepay-php](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/NinoSkopac/promisepay-php?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[![Build Status](https://travis-ci.org/PromisePay/promisepay-php.svg)](https://travis-ci.org/PromisePay/promisepay-php) [![Latest Stable Version](https://poser.pugx.org/promisepay/promisepay-php/v/stable)](https://packagist.org/packages/promisepay/promisepay-php)
+[![Build Status](https://travis-ci.org/NinoSkopac/promisepay-php.svg)](https://travis-ci.org/NinoSkopac/promisepay-php) [![Latest Stable Version](https://poser.pugx.org/promisepay/promisepay-php/v/stable)](https://packagist.org/packages/promisepay/promisepay-php)
 [![Total Downloads](https://poser.pugx.org/promisepay/promisepay-php/downloads)](https://packagist.org/packages/promisepay/promisepay-php)
  [![Code Climate](https://codeclimate.com/github/PromisePay/promisepay-php/badges/gpa.svg)](https://codeclimate.com/github/PromisePay/promisepay-php)
 

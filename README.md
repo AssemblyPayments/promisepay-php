@@ -66,7 +66,7 @@ $repo = new TokenRepository();
 $sessionToken = new Token($arr = array(
 			   'current_user' 			=> 'seller',
            	   'item_name'				=> 'Test Item',
-          		'amount'					=> '2500',
+          	'amount'					=> '2500',
            	   'seller_lastname' 		=> 'Seller',
            	   'seller_firstname'		=> 'Sally',
            	   'buyer_lastname'			=> 'Buyer',

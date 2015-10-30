@@ -63,9 +63,9 @@ class BaseRepository
             case 'patch':
                 $response = Request::patch($url)->body($payload, $mime)->authenticateWith(constant(__NAMESPACE__ . '\API_LOGIN'), constant(__NAMESPACE__ . '\API_PASSWORD'))->send();
                 break;
-				
-			default:
-				throw new Exception\ApiUnsupportedRequestMethod("Unsupported request method $method.");
+            
+            default:
+                throw new Exception\ApiUnsupportedRequestMethod("Unsupported request method $method.");
         }
 		
 		if ($this->throwUnauthorizedException) {

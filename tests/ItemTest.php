@@ -1,12 +1,11 @@
 <?php
-
-
 namespace PromisePay;
+
 use PromisePay\DataObjects\Item;
 use PromisePay\DataObjects\User;
+
 include_once __DIR__ . '/../init.php';
 include_once 'GUID.php';
-
 
 class ItemTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,6 +28,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         );
         $item = new Item($itemArr);
         $createdItem = $repo->createItem($item);
+		
         $this->assertEquals($item->getId(), $createdItem->getId());
         $this->assertEquals($item->getName(), $createdItem->getName());
         $this->assertEquals($item->getAmount(), $createdItem->getAmount());
@@ -89,7 +89,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     public function testDeleteItemSuccessful()
     {
-//        //First, create a user with known id
+        //First, create a user with known id
         \PHPUnit_Framework_Error_Notice::$enabled = FALSE;
         $repo = new ItemRepository();
         $id = GUID();

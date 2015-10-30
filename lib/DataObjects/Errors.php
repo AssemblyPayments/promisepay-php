@@ -4,7 +4,7 @@ namespace PromisePay\DataObjects;
  * Class Errors
  * @package PromisePay\DataObjects
  */
-class Errors
+class Errors extends Object
 {
     /**
      * @var
@@ -30,6 +30,4 @@ class Errors
     {
         $this->_errors = $errors;
     }
-
-
 }

@@ -39,15 +39,17 @@ class Card
     private $_CVV;
     
     public function __construct($jsonData = array()) {
-        $jsonData = $jsonData['card'];
-        if (count($jsonData)) {
-            $this->_type = array_key_exists('card_type', $jsonData) ? $jsonData['card_type'] : '';
-            $this->_fullName = array_key_exists('full_name', $jsonData) ? $jsonData['full_name'] : '';
-            $this->_number = array_key_exists('number', $jsonData) ? $jsonData['number'] : '';
-            $this->_expMonth = array_key_exists('expiry_month', $jsonData) ? $jsonData['expiry_month'] : '';
-            $this->_expYear = array_key_exists('expiry_year', $jsonData) ? $jsonData['expiry_year'] : '';
-            $this->_CVV = array_key_exists('cvv', $jsonData) ? $jsonData['cvv'] : '';
-        }
+		if (array_key_exists('card', $jsonData)) {
+			$jsonDataCard = $jsonData['card'];
+			if (count($jsonDataCard)) {
+				$this->_type = array_key_exists('card_type', $jsonDataCard) ? $jsonDataCard['card_type'] : '';
+				$this->_fullName = array_key_exists('full_name', $jsonDataCard) ? $jsonDataCard['full_name'] : '';
+				$this->_number = array_key_exists('number', $jsonDataCard) ? $jsonDataCard['number'] : '';
+				$this->_expMonth = array_key_exists('expiry_month', $jsonDataCard) ? $jsonDataCard['expiry_month'] : '';
+				$this->_expYear = array_key_exists('expiry_year', $jsonDataCard) ? $jsonDataCard['expiry_year'] : '';
+				$this->_CVV = array_key_exists('cvv', $jsonDataCard) ? $jsonDataCard['cvv'] : '';
+			}
+		}
     }
     
     /**

@@ -20,15 +20,18 @@ class ItemRepository extends BaseRepository
         $this->paramsListCorrect($limit,$offset);
         $response = $this->RestClient('get', 'items?limit=' . $limit . '&offset=' . $offset, '', '');
         $jsonRaw = json_decode($response->raw_body, true);
+		
         if (array_key_exists("items", $jsonRaw))
         {
             $jsonData = $jsonRaw['items'];
             $allItems = array();
+			
             foreach($jsonData as $oneItem )
             {
                 $item = new Item($oneItem);
                 array_push($allItems, $item);
             }
+			
             return $allItems;
         }
         return null;
@@ -38,9 +41,17 @@ class ItemRepository extends BaseRepository
     {
         $this->checkIdNotNull($id);
         $response = $this->RestClient('get', 'items/' . $id);
-        $jsonData = json_decode($response->raw_body, true)['items'];
-        $item = new Item($jsonData);
-        return $item;
+		
+		$jsonData = json_decode($response->raw_body, true);
+		
+		if (array_key_exists('items', $jsonData)) {
+			$jsonDataItems = $jsonData['items'];
+        	$item = new Item($jsonDataItems);
+        	return $item;
+		} else {
+			// there was an error
+			return null;
+		}
     }
 
     public function createItem(Item $item)
@@ -65,6 +76,7 @@ class ItemRepository extends BaseRepository
 
         $response = $this->RestClient('post', 'items/', $payload, '');
         $jsonData = json_decode($response->raw_body, true);
+		
         if(array_key_exists("errors", $jsonData))
         {
             $errors = new Errors($jsonData);

@@ -99,8 +99,7 @@ class UserRepository extends BaseRepository
         $this->checkIdNotNull($id);
         $response = $this->RestClient('get', 'users/' . $id . '/card_accounts');
         $jsonData = json_decode($response->raw_body, true);
-        
-        // var_dump($jsonData);
+		
         if (array_key_exists('card_accounts', $jsonData)) {
             $accounts = new CardAccount($jsonData['card_accounts']);
             return $accounts;
@@ -114,8 +113,7 @@ class UserRepository extends BaseRepository
         $this->checkIdNotNull($id);
         $response = $this->RestClient('get', 'users/' . $id . '/paypal_accounts');
         $jsonData = $jsonData = json_decode($response->raw_body, true);
-        
-        // var_dump($jsonData);
+		
         if (array_key_exists('paypal_accounts', $jsonData)) {
             $accounts = new PayPalAccount($jsonData['paypal_accounts']);
             return $accounts;
@@ -129,11 +127,9 @@ class UserRepository extends BaseRepository
         $this->checkIdNotNull($id);
         $response = $this->RestClient('get', 'users/' . $id . '/bank_accounts');
         $jsonData = json_decode($response->raw_body, true);
-        
-        // var_dump($jsonData);
+		
         if (array_key_exists('bank_accounts', $jsonData)) {
             $jsonData = $jsonData['bank_accounts'];
-            var_dump($jsonData);
             $bankAccounts = new BankAccount($jsonData);
             return $bankAccounts;
         } 

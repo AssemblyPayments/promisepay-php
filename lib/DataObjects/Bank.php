@@ -44,8 +44,6 @@ class Bank
     private $_accountType;
     
     public function __construct($jsonData = array()) {
-        
-        // var_dump($jsonData);
         $jsonData = $jsonData['bank'];
         if (count($jsonData)) {
             $this->_bankName = array_key_exists('bank_name', $jsonData) ? $jsonData['bank_name'] : '';

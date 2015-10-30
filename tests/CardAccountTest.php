@@ -58,7 +58,7 @@ class CardAccountTest extends \PHPUnit_Framework_TestCase
        $this->assertNotNull($fetchedCardAccount->getCreatedAt());
     }
 
-    public function testDeleteCardAccountTest()
+    public function testDeleteCardAccount()
     {
        $cardAccount = new CardAccountRepository();
        $cardAccount->deleteCardAccount('ec9bf096-c505-4bef-87f6-18822b9dbf2c');

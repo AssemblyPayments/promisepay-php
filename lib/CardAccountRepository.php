@@ -9,6 +9,11 @@ use PromisePay\Log;
 
 class CardAccountRepository extends BaseRepository
 {
+	/**
+	 * getCardAccountById
+	 *
+	 * @return object|null
+	 */
     public function getCardAccountById($id)
     {
         $this->checkIdNotNull($id);
@@ -51,7 +56,7 @@ class CardAccountRepository extends BaseRepository
         $this->checkIdNotNull($id);
         $response = $this->RestClient('delete', 'card_accounts/'.$id);
         $jsonRaw = json_decode($response->raw_body, true);
-        if (array_key_exists("errors", $jsonRaw)){
+        if (array_key_exists("errors", $jsonRaw)) {
             return false;
         }
         else

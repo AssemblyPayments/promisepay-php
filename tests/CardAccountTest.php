@@ -61,10 +61,14 @@ class CardAccountTest extends \PHPUnit_Framework_TestCase
     public function testDeleteCardAccount()
     {
        $cardAccount = new CardAccountRepository();
-       $cardAccount->deleteCardAccount('ec9bf096-c505-4bef-87f6-18822b9dbf2c');
-       $cardAccount->getCardAccountById('ec9bf096-c505-4bef-87f6-18822b9dbf2c');
+       $this->assertNotNull($cardAccount->deleteCardAccount('ec9bf096-c505-4bef-87f6-18822b9dbf2c'));
+       
+	   $cardAccountResult = $cardAccount->getCardAccountById('ec9bf096-c505-4bef-87f6-18822b9dbf2c');
+	   
+	   if (!(is_null($cardAccountResult) xor $cardAccountResult instanceof CardAccounts)) {
+		   $this->fail("Returned value must be either an instance of CardAccounts, or null, but it was: " . gettype($cardAccountResult));
+	   }
     }
-
 
 }
  

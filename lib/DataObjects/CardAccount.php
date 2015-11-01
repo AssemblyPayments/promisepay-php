@@ -1,5 +1,6 @@
 <?php
 namespace PromisePay\DataObjects;
+
 /**
  * Class CardAccount
  * @package PromisePay\DataObjects

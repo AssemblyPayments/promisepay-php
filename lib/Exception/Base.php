@@ -1,15 +1,15 @@
 <?php
 namespace PromisePay\Exception;
-
 use Exception;
 
 /**
  * Class Base
  * @package PromisePay\Exception
  */
-abstract class Base extends Exception{
-
+abstract class Base extends Exception {
     /**
+     * Default Constructor
+     *
      * @param string $message
      * @param null $httpStatus
      * @param null $httpBody
@@ -28,6 +28,8 @@ abstract class Base extends Exception{
     }
 
     /**
+     * Returns HTTP status code.
+     *
      * @return null
      */
     public function getHttpStatus()
@@ -36,6 +38,8 @@ abstract class Base extends Exception{
     }
 
     /**
+     * Returns HTTP body.
+     *
      * @return null
      */
     public function getHttpBody()
@@ -44,6 +48,8 @@ abstract class Base extends Exception{
     }
 
     /**
+     * Returns JSON body.
+     *
      * @return null
      */
     public function getJsonBody()

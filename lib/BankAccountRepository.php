@@ -21,7 +21,6 @@ class BankAccountRepository extends BaseRepository
 
     public function createBankAccount(BankAccount $bankAccount)
     {
-
         $payload = '';
         $preparePayload = array(
             "user_id" =>$bankAccount->getUserId(),

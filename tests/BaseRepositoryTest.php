@@ -3,7 +3,6 @@ namespace PromisePay\Test;
 
 use Promisepay;
 use Promisepay\Exception;
-use PromisePay\DataObjects\Token;
 
 class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -67,7 +66,7 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
 			$this->instance->RestClient('commit', 'items/10');
 			$this->fail("Expected exception wasn't fired.");
 		} catch (\PromisePay\Exception\ApiUnsupportedRequestMethod $e) {
-			$this->assertTrue(true);
+			$this->assertTrue(true); // if the Exception has been fired, the test is a success
 		}
 	}
 }

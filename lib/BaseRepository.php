@@ -87,7 +87,7 @@ class BaseRepository
 
     public function checkIdNotNull($id)
     {
-        if($id == null)
+		if ($id == null) // assumes unusable data (nulls, empty arrays, empty strings)
         {
             Logger::logging('Fatal error: Id is empty');
             throw new Exception\Argument('id is empty');

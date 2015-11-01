@@ -46,6 +46,11 @@ class Configuration
 	 */
 	public function __construct($customConfigFile = null) 
 	{
+		// if default timezone hasn't been set, do it here
+		if (!ini_get('date.timezone')) {
+			date_default_timezone_set('UTC');
+		}
+		
 		// Check if file exists
 		if (!is_null($customConfigFile)) 
 		{

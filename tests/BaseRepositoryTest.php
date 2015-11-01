@@ -1,5 +1,5 @@
 <?php
-namespace PromisePay\Test;
+namespace PromisePay\Tests;
 
 use Promisepay;
 use Promisepay\Exception;

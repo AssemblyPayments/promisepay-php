@@ -1,5 +1,5 @@
 <?php
-namespace PromisePay;
+namespace PromisePay\Tests;
 
 function GUID() {
     if (function_exists('com_create_guid') === true) {

@@ -1,5 +1,7 @@
 <?php
-namespace PromisePay;
+namespace PromisePay\Tests;
+
+use PromisePay\UserRepository;
 use PromisePay\DataObjects\User;
 
 class UserTest extends \PHPUnit_Framework_TestCase {

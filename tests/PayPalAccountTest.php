@@ -1,5 +1,7 @@
 <?php
-namespace PromisePay;
+namespace PromisePay\Tests;
+
+use PromisePay\PayPalAccountRepository;
 use PromisePay\DataObjects\PayPalAccount;
 
 class PayPalAccountTest extends \PHPUnit_Framework_TestCase {

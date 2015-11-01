@@ -1,8 +1,8 @@
 <?php
-namespace PromisePay\Test;
+namespace PromisePay\Tests;
 
-use Promisepay;
-use Promisepay\Exception;
+use PromisePay\Configuration;
+use PromisePay\Exception\NotFound;
 
 /**
  * Class Configuration
@@ -16,11 +16,11 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     public function setUp() {
         require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
         
-        $this->instance = new PromisePay\Configuration;
+        $this->instance = new Configuration;
     }
     
     public function testInstance() {
-        $this->assertTrue($this->instance instanceof PromisePay\Configuration);
+        $this->assertTrue($this->instance instanceof Configuration);
     }
     
     public function testPropertiesArentEmpty() {
@@ -52,19 +52,18 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     
     public function testCustomNonExistingConfigFile() {
         try {
-            new PromisePay\Configuration("Non_Existing_SDK_Config_File.php");
-        } catch (\PromisePay\Exception\NotFound $e) {
-            return;
+            new Configuration("Non_Existing_SDK_Config_File.php");
+			$this->fail('An expected exception \PromisePay\Exception\NotFound has not been raised.');
+        } catch (NotFound $e) {
+            $this->assertTrue(true);
         }
-        
-        $this->fail('An expected exception \PromisePay\Exception\NotFound has not been raised.');
     }
     
     public function testCustomExistingConfigFile() {
         try {
-            new PromisePay\Configuration(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'SDK_Config.php');
+            new Configuration(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'SDK_Config.php');
             $this->assertTrue(true);
-        } catch (\PromisePay\Exception\NotFound $e) {
+        } catch (NotFound $e) {
             $this->fail("Exception \PromisePay\Exception\NotFound has been raised.");
         }
     }

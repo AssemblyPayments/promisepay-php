@@ -3,7 +3,6 @@ namespace PromisePay;
 
 use PromisePay\DataObjects\Fee;
 use PromisePay\DataObjects\Errors;
-
 use PromisePay\Exception;
 use PromisePay\Log;
 

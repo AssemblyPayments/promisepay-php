@@ -1,6 +1,7 @@
 <?php
-namespace PromisePay;
+namespace PromisePay\Tests;
 
+use Promisepay\CardAccountRepository;
 use PromisePay\DataObjects\CardAccount;
 
 class CardAccountTest extends \PHPUnit_Framework_TestCase {

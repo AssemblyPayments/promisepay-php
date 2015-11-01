@@ -1,5 +1,6 @@
 <?php
-namespace PromisePay;
+namespace PromisePay\Tests;
+use PromisePay\AddressRepository;
 
 class AddressTest extends \PHPUnit_Framework_TestCase {
     

@@ -1,5 +1,6 @@
 <?php
-namespace PromisePay;
+namespace PromisePay\Tests;
+use PromisePay\TransactionRepository;
 
 class TransactionTest extends \PHPUnit_Framework_TestCase {
     
@@ -18,8 +19,8 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
      * @expectedException PromisePay\Exception\Argument
      */
     public function testListTransactionsNegativeParams() {
-            $repo = new TransactionRepository();
-            $repo->getListOfTransactions(-10, -20);
+        $repo = new TransactionRepository();
+        $repo->getListOfTransactions(-10, -20);
     }
 
     /**

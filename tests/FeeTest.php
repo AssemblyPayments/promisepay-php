@@ -1,5 +1,7 @@
 <?php
-namespace PromisePay;
+namespace PromisePay\Tests;
+
+use PromisePay\FeeRepository;
 use PromisePay\DataObjects\Fee;
 use PromisePay\Enum\FeeType;
 

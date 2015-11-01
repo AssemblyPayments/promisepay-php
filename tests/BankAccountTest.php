@@ -1,6 +1,7 @@
 <?php
-namespace PromisePay;
+namespace PromisePay\Tests;
 
+use PromisePay\BankAccountRepository;
 use PromisePay\DataObjects\BankAccount;
 use PromisePay\DataObjects\Bank;
 

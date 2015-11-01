@@ -11,4 +11,3 @@ define(__NAMESPACE__ . '\API_PASSWORD', 'd897f812e8485728e1de7d8ae092b75a');
  * Production environment:  https://secure.api.promisepay.com/
 */
 define(__NAMESPACE__ . '\API_URL', 'https://test.api.promisepay.com/');
-?>

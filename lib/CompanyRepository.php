@@ -64,12 +64,12 @@ class CompanyRepository extends BaseRepository
 
 
     public function updateCompany(Company $company, $id) {
-		$this->checkIdNotNull($id);
+        $this->checkIdNotNull($id);
         $payload='';
-		
+        
         $preparePayload = array(
-		    "user_id" => $id,
-			"name" => $company->getName(),
+            "user_id" => $id,
+            "name" => $company->getName(),
             "legal_name"=>$company->getLegalName(),
             "tax_number"=>$company->getTaxNumber(),
             "charge_tax"=>$company->getChargeTax(),
@@ -87,7 +87,7 @@ class CompanyRepository extends BaseRepository
             $payload .= "&";
         }
         $payload = substr($payload,0,-1);
-		
+        
         $response = $this->RestClient('patch', 'companies/'. $id, $payload);
         $jsonData = json_decode($response->raw_body, true);
 

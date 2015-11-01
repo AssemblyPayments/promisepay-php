@@ -9,23 +9,23 @@ use PromisePay\Log;
 
 class CardAccountRepository extends BaseRepository
 {
-	/**
-	 * getCardAccountById
-	 *
-	 * @return object|null
-	 */
+    /**
+     * getCardAccountById
+     *
+     * @return object|null
+     */
     public function getCardAccountById($id)
     {
         $this->checkIdNotNull($id);
         $response = $this->RestClient('get', 'card_accounts/'.$id);
         $jsonData = json_decode($response->raw_body, true);
-		
-		if (array_key_exists('card_accounts', $jsonData)) {
-	        $accounts = new CardAccount($jsonData['card_accounts']);
-	        return $accounts;
-		} else {
-			return null;
-		}
+        
+        if (array_key_exists('card_accounts', $jsonData)) {
+            $accounts = new CardAccount($jsonData['card_accounts']);
+            return $accounts;
+        } else {
+            return null;
+        }
     }
 
     public function createCardAccount(CardAccount $card)

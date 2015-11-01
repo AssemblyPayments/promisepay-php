@@ -7,8 +7,8 @@ namespace PromisePay\Exception;
  */
 class Credentials extends Base
 {
-	public function __construct($message = null, $code = 0) 
-	{
-		parent::__construct($message, $code);
-	}
+    public function __construct($message = null, $code = 0) 
+    {
+        parent::__construct($message, $code);
+    }
 }

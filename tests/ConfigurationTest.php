@@ -53,7 +53,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     public function testCustomNonExistingConfigFile() {
         try {
             new Configuration("Non_Existing_SDK_Config_File.php");
-			$this->fail('An expected exception \PromisePay\Exception\NotFound has not been raised.');
+            $this->fail('An expected exception \PromisePay\Exception\NotFound has not been raised.');
         } catch (NotFound $e) {
             $this->assertTrue(true);
         }

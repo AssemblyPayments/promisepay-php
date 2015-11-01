@@ -413,9 +413,9 @@ class Request
                 $this->payload[$key] = curl_file_create($file, $mimeType);
             } else {
                 $this->payload[$key] = '@' . $file;
-	            if ($mimeType) {
-		            $this->payload[$key] .= ';type=' . $mimeType;
-	            }
+                if ($mimeType) {
+                    $this->payload[$key] .= ';type=' . $mimeType;
+                }
             }
         }
         $this->sendsType(Mime::UPLOAD);

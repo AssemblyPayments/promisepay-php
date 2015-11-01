@@ -5,22 +5,41 @@ use PromisePay\DataObjects\Company;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class CompanyRepository extends BaseRepository
-{
-    public function getListOfCompanies($limit = 20, $offset = 0)
-    {
-        $this->paramsListCorrect($limit,$offset);
+/**
+ * Class CompanyRepository
+ *
+ * @package PromisePay
+ */
+class CompanyRepository extends BaseRepository {
+    /**
+     * Accepts two params - amount of entities to list,
+     * and listing starting point (offset).
+     * Returns Company object.
+     *
+     * @param int $limit
+     * @param int $offset
+     * @return Company
+     */
+    public function getListOfCompanies($limit = 20, $offset = 0) {
+        $this->paramsListCorrect($limit, $offset);
         $response = $this->RestClient('get', 'companies?limit=' . $limit . '&offset=' . $offset, '', '');
         $companiesList = array();
         $jsonData = json_decode($response->raw_body, true)['companies'];
-        foreach($jsonData as $company )
+        foreach($jsonData as $company)
         {
-           $company = new Company($company);
+            $company = new Company($company);
             array_push($companiesList, $company);
         }
         return $companiesList;
     }
-
+    
+    /**
+     * List a single company for a legal entity.
+     * Expects company ID parameter (in form of "ec9bf096-c505-4bef-87f6-18822b9dbf2c").
+     *
+     * @param string $id
+     * @return Company|null
+     */
     public function getCompanyById($id)
     {
         $this->checkIdNotNull($id);
@@ -33,7 +52,15 @@ class CompanyRepository extends BaseRepository
         }
         return null;
     }
-
+    
+    /**
+     * Creates a new company.
+     * Expects Company object and company id (in form of "ec9bf096-c505-4bef-87f6-18822b9dbf2c").
+     *
+     * @param Company $company
+     * @param string $id
+     * @return object
+     */
     public function createCompany(Company $company, $id)
     {
         $this->checkIdNotNull($id);
@@ -61,8 +88,15 @@ class CompanyRepository extends BaseRepository
         $response = $this->RestClient('post', 'companies/'.$id , $payload);
         return $response;
     }
-
-
+    
+    /**
+     * Update existing company.
+     * Expects Company object and company id (in form of "ec9bf096-c505-4bef-87f6-18822b9dbf2c").
+     *
+     * @param Company $company
+     * @param string $id
+     * @return Company|null
+     */
     public function updateCompany(Company $company, $id) {
         $this->checkIdNotNull($id);
         $payload='';

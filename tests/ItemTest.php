@@ -4,21 +4,21 @@ use PromisePay\DataObjects\Item;
 use PromisePay\DataObjects\User;
 
 class ItemTest extends \PHPUnit_Framework_TestCase {
-	
-	public function setUp() {
-		require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
-		require_once 'GUID.php';
-	}
+    
+    public function setUp() {
+        require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
+        require_once 'GUID.php';
+    }
 
     public function testCreateItemSuccessfully() {
         \PHPUnit_Framework_Error_Notice::$enabled = FALSE;
-		
+        
         $repo = new ItemRepository();
         $id = GUID();
-		
+        
         $buyerId = "ec9bf096-c505-4bef-87f6-18822b9dbf2c"; //some user created before
         $sellerId = "fdf58725-96bd-4bf8-b5e6-9b61be20662e"; //some user created before
-		
+        
         $itemArr = array(
             "id"              => $id,
             "name"            => 'Test Item #1',
@@ -28,10 +28,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
             "seller_id"       => $sellerId,
             "description"     => 'Description'
         );
-		
+        
         $item = new Item($itemArr);
         $createdItem = $repo->createItem($item);
-		
+        
         $this->assertEquals($item->getId(), $createdItem->getId());
         $this->assertEquals($item->getName(), $createdItem->getName());
         $this->assertEquals($item->getAmount(), $createdItem->getAmount());
@@ -42,7 +42,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
     public function testListAllItemsSuccessfully() {
         $repo = new ItemRepository();
         $items = $repo->getListOfItems(200);
-		
+        
         $this->assertNotNull($items);
         $this->assertTrue(count($items) > 0);
     }
@@ -65,13 +65,13 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
 
     public function testGetItemSuccessful() {
         \PHPUnit_Framework_Error_Notice::$enabled = FALSE;
-		
+        
         $repo = new ItemRepository();
         $id = GUID();
-		
+        
         $buyerId = "ec9bf096-c505-4bef-87f6-18822b9dbf2c"; // some user created before
         $sellerId = "fdf58725-96bd-4bf8-b5e6-9b61be20662e"; // some user created before
-		
+        
         $itemArr = array(
             "id"              => $id,
             "name"            => 'Test Item #1',
@@ -81,7 +81,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
             "seller_id"       => $sellerId,
             "description"     => 'Description'
         );
-		
+        
         $item = new Item($itemArr);
         $createdItem = $repo->createItem($item);
 
@@ -94,13 +94,13 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
 
     public function testDeleteItemSuccessful() {
         \PHPUnit_Framework_Error_Notice::$enabled = FALSE;
-		
+        
         $repo = new ItemRepository();
         $id = GUID();
-		
+        
         $buyerId = "ec9bf096-c505-4bef-87f6-18822b9dbf2c"; // some user created before
         $sellerId = "fdf58725-96bd-4bf8-b5e6-9b61be20662e"; // some user created before
-		
+        
         $itemArr = array(
             "id"              => $id,
             "name"            => 'Test Item #1',
@@ -110,7 +110,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
             "seller_id"       => $sellerId,
             "description"     => 'Description'
         );
-		
+        
         $item = new Item($itemArr);
         $createdItem = $repo->createItem($item);
         $gotItem = $repo->getItemById($id);
@@ -120,20 +120,20 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
 
         $repo->deleteItem($id);
         $deletedItem = $repo->getItemById($id);
-		
+        
         $this->assertNotNull($deletedItem);
         $this->assertEquals('cancelled',$deletedItem->getState());
     }
-	
+    
     public function testEditItemSuccessful() {
         \PHPUnit_Framework_Error_Notice::$enabled = FALSE;
-		
+        
         $repo = new ItemRepository();
         $id = GUID();
-		
+        
         $buyerId = "ec9bf096-c505-4bef-87f6-18822b9dbf2c"; // some user created before
         $sellerId = "fdf58725-96bd-4bf8-b5e6-9b61be20662e"; // some user created before
-		
+        
         $itemArr = array(
             "id"              => $id,
             "name"            => 'Test Item #1',
@@ -143,73 +143,73 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
             "seller_id"       => $sellerId,
             "description"     => 'Description'
         );
-		
+        
         $item = new Item($itemArr);
         $createdItem = $repo->createItem($item);
-		
+        
         $item->setName('Test123update');
         $item->setDescription('Test123description');
-		
+        
         $updatedItem = $repo->updateItem($item);
-		
+        
         $this->assertEquals("Test123update", $updatedItem->getName());
         $this->assertEquals("Test123description", $updatedItem->getDescription());
     }
-	
+    
     public function testListTransactionsForItem() {
         $repo = new ItemRepository();
         $transactions = $repo->getListOfTransactionsForItem("7c269f52-2236-4aa5-899e-a2e3ecadbc3f");
-		
+        
         $this->assertNotNull($transactions);
     }
-	
+    
     public function testGetStatusForItem() {
         $repo = new ItemRepository();
         $status = $repo->getItemStatus("7c269f52-2236-4aa5-899e-a2e3ecadbc3f");
-		
+        
         $this->assertNotNull($status);
     }
-	
+    
     public function testListFeesForItem() {
         $repo = new ItemRepository();
         $fees = $repo->getListFeesForItems("7c269f52-2236-4aa5-899e-a2e3ecadbc3f");
-		
+        
         $this->assertNotNull($fees);
     }
-	
+    
     public function testGetBuyerForItem() {
         \PHPUnit_Framework_Error_Notice::$enabled = FALSE;
-		
+        
         $repo = new ItemRepository();
         $user = $repo->getBuyerOfItem("7c269f52-2236-4aa5-899e-a2e3ecadbc3f");
-		
+        
         $this->assertNotNull($user);
     }
-	
+    
     public function testGetSellerForItem() {
         \PHPUnit_Framework_Error_Notice::$enabled = FALSE;
-		
+        
         $repo = new ItemRepository();
         $user = $repo->getSellerForItem("7c269f52-2236-4aa5-899e-a2e3ecadbc3f");
-		
+        
         $this->assertNotNull($user);
     }
-	
+    
     public function testGetWireDetailsForItem() {
         \PHPUnit_Framework_Error_Notice::$enabled = FALSE;
-		
+        
         $repo = new ItemRepository();
         $wireDetails = $repo->getWireDetailsForItem("7c269f52-2236-4aa5-899e-a2e3ecadbc3f");
-		
+        
         $this->assertNotNull($wireDetails);
     }
-	
+    
     public function testGetBpayDetailsForItem() {
         \PHPUnit_Framework_Error_Notice::$enabled = FALSE;
-		
+        
         $repo = new ItemRepository();
         $bpayDetails = $repo->getBPayDetailsForItem("7c269f52-2236-4aa5-899e-a2e3ecadbc3f");
-		
+        
         $this->assertNotNull($bpayDetails);
     }
 }

@@ -3,16 +3,16 @@ namespace PromisePay;
 use PromisePay\DataObjects\User;
 
 class UserTest extends \PHPUnit_Framework_TestCase {
-	
-	public function setUp() {
-		require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
-		require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'tests/GUID.php');
-	}
-	
+    
+    public function setUp() {
+        require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
+        require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'tests/GUID.php');
+    }
+    
     public function testUserCreateSuccess() {
         $id = GUID();
         $userRepo = new UserRepository();
-		
+        
         $payload = array(
             'id'            => $id,
             'first_name'    => 'UserCreateTest',
@@ -30,7 +30,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
         $user = new User($payload);
         $createdUser = $userRepo->createUser($user);
         $findUser = $userRepo->getUserById($id);
-		
+        
         $this->assertEquals($createdUser->getId(), $findUser->getId());
         $this->assertNotNull($createdUser->getCreatedAt());
         $this->assertNotNull($createdUser->getUpdatedAt());
@@ -42,7 +42,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
     public function testUserCreateMissedId() {
         $id = GUID();
         $userRepo = new UserRepository();
-		
+        
         $payload = array(
             'id'            => '',
             'first_name'    => 'UserCreateTest',
@@ -56,7 +56,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
             'zip'           => '90210',
             'country'       => 'AUS'
         );
-		
+        
         $user = new User($payload);
         $userRepo->createUser($user);
     }
@@ -67,7 +67,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
     public function testUserCreateMissedFirstName() {
         $id = GUID();
         $userRepo = new UserRepository();
-		
+        
         $payload = array(
             'id'            => $id,
             'first_name'    => '',
@@ -92,7 +92,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
     public function testUserCreateWrongCountryCode() {
         $id = GUID();
         $userRepo = new UserRepository();
-		
+        
         $payload = array(
             'id'            => '',
             'first_name'    => 'UserCreateTest',
@@ -117,7 +117,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
     public function testUserCreateInvalidEmail() {
         $id = GUID();
         $userRepo = new UserRepository();
-		
+        
         $payload = array(
             'id'            => '',
             'first_name'    => 'UserCreateTest',
@@ -161,7 +161,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
     public function testGetUserSuccess() {
         $id = GUID();
         $userRepo = new UserRepository();
-		
+        
         $payload = array(
             'id'            => $id,
             'first_name'    => 'UserCreateTest',
@@ -188,7 +188,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
     public function testGetUserMissedId() {
         $id = GUID();
         $userRepo = new UserRepository();
-		
+        
         $payload = array(
             'id' => $id,
             'first_name'    => 'UserCreateTest',
@@ -202,7 +202,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
             'zip'           => '90210',
             'country'       => 'AUS'
         );
-		
+        
         $missedId = '';
         $user = new User($payload);
         $createdUser = $userRepo->createUser($user);
@@ -212,7 +212,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
     public function testDeleteUserSuccess() {
         $id = GUID();
         $userRepo = new UserRepository();
-		
+        
         $payload = array(
             'id' => $id,
             'first_name'    => 'UserCreateTest',
@@ -229,7 +229,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
 
         $user = new User($payload);
         $createdUser = $userRepo->createUser($user);
-		
+        
         //delete action not working ina API, Uncomment asserting below after fix.
         //$this->assertTrue($userRepo->deleteUser($createdUser->getId()));
     }
@@ -261,7 +261,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
             "zip"           => '90210',
             "country"       => 'AUS'
         );
-		
+        
         $user = new User($arr);
         $createdUser = $repo->createUser($user);
 
@@ -278,7 +278,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
             "zip"           => '90210',
             "country"       => 'AUS'
         );
-		
+        
         $edituser = new User($edit);
         $repo->updateUser($edituser);
         $findUser = $repo->getUserById($id);

@@ -2,10 +2,10 @@
 namespace PromisePay;
 
 class TransactionTest extends \PHPUnit_Framework_TestCase {
-	
-	public function setUp() {
-		require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
-	}
+    
+    public function setUp() {
+        require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
+    }
 
     public function testListTransactionsSuccessful() {
         $repo = new TransactionRepository();
@@ -29,5 +29,5 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
         $repo = new TransactionRepository();
         $repo->getListOfTransactions(201);
     }
-	
+    
 }

@@ -2,10 +2,10 @@
 namespace PromisePay;
 
 class AddressTest extends \PHPUnit_Framework_TestCase {
-	
-	public function setUp() {
-		require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
-	}
+    
+    public function setUp() {
+        require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
+    }
 
     public function testGetAddressByIdSuccessfully() {
         $address = new AddressRepository();
@@ -20,5 +20,5 @@ class AddressTest extends \PHPUnit_Framework_TestCase {
         $address = new AddressRepository();
         $address->getAddressById('');
     }
-	
+    
 }

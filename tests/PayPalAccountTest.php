@@ -3,15 +3,15 @@ namespace PromisePay;
 use PromisePay\DataObjects\PayPalAccount;
 
 class PayPalAccountTest extends \PHPUnit_Framework_TestCase {
-	
-	public function setUp() {
-		require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
-	}
+    
+    public function setUp() {
+        require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
+    }
 
     public function testCreatePaypalAccount() {
         $repo  = new PayPalAccountRepository();
         $userid = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';
-		
+        
         $params = array(
             'user_id' => $userid,
             'active'  => 'true',
@@ -32,7 +32,7 @@ class PayPalAccountTest extends \PHPUnit_Framework_TestCase {
     public function testGetAccountSuccessfully() {
         $repo  = new PayPalAccountRepository();
         $userid = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';
-		
+        
         $params = array(
             'user_id' => $userid,
             'active'  => 'true',
@@ -40,18 +40,18 @@ class PayPalAccountTest extends \PHPUnit_Framework_TestCase {
                 'email' => 'test@paypalname.com'
             )
         );
-		
+        
         $ppalAccount = new PayPalAccount($params);
         $createPaypalAccount = $repo->createPayPalAccount($ppalAccount);
         $getPaypalAccount = $repo->getPayPalAccountById($createPaypalAccount->getId());
-		
+        
         $this->assertEquals($createPaypalAccount->getId(), $getPaypalAccount->getId());
     }
 
     public function testGetUserForAccountSuccessfully() {
         $repo  = new PayPalAccountRepository();
         $userid = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';
-		
+        
         $params = array(
             'user_id' => $userid,
             'active'  => 'true',
@@ -59,7 +59,7 @@ class PayPalAccountTest extends \PHPUnit_Framework_TestCase {
                 'email' => 'test@paypalname.com'
             )
         );
-		
+        
         $ppalAccount = new PayPalAccount($params);
 
         $createPaypalAccount = $repo->createPayPalAccount($ppalAccount);
@@ -72,7 +72,7 @@ class PayPalAccountTest extends \PHPUnit_Framework_TestCase {
     public function testDeletePayPalAccount() {
         $repo  = new PayPalAccountRepository();
         $userid = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';
-		
+        
         $params = array(
             'user_id' => $userid,
             'active'  => 'true',
@@ -80,11 +80,11 @@ class PayPalAccountTest extends \PHPUnit_Framework_TestCase {
                 'email' => 'test@paypalname.com'
             )
         );
-		
+        
         $ppalAccount = new PayPalAccount($params);
-		$repo->createPayPalAccount($ppalAccount);
-		
-		$deleteRequest = $repo->deletePayPalAccount($userid);
+        $repo->createPayPalAccount($ppalAccount);
+        
+        $deleteRequest = $repo->deletePayPalAccount($userid);
         $this->assertNotNull(json_decode($deleteRequest));
-	}
+    }
 }

@@ -4,14 +4,14 @@ namespace PromisePay;
 use PromisePay\DataObjects\CardAccount;
 
 class CardAccountTest extends \PHPUnit_Framework_TestCase {
-	
-	public function setUp() {
-		require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
-	}
-	
+    
+    public function setUp() {
+        require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
+    }
+    
     public function testCreateCardAccountTest() {
        $userid = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';
-	   
+       
        $info = array(
            'user_id' => $userid,
            'card'    => array(
@@ -22,7 +22,7 @@ class CardAccountTest extends \PHPUnit_Framework_TestCase {
                "cvv"          => '123'
                )
            );
-	   
+       
        $cardRepo = new CardAccountRepository();
        $cardAccount = new CardAccount($info);
        $createdAccount = $cardRepo->createCardAccount($cardAccount);
@@ -33,7 +33,7 @@ class CardAccountTest extends \PHPUnit_Framework_TestCase {
 
     public function testGetCardAccountById() {
        $userid = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';
-	   
+       
        $info = array(
            'user_id' => $userid,
            'card'    => array(
@@ -66,11 +66,11 @@ class CardAccountTest extends \PHPUnit_Framework_TestCase {
        $cardAccount = new CardAccountRepository();
        $this->assertNotNull($cardAccount->deleteCardAccount('ec9bf096-c505-4bef-87f6-18822b9dbf2c'));
        
-	   $cardAccountResult = $cardAccount->getCardAccountById('ec9bf096-c505-4bef-87f6-18822b9dbf2c');
-	   
-	   if (!(is_null($cardAccountResult) xor $cardAccountResult instanceof CardAccounts)) {
-		   $this->fail("Returned value must either be an instance of CardAccounts, or null, but it was: " . gettype($cardAccountResult));
-	   }
+       $cardAccountResult = $cardAccount->getCardAccountById('ec9bf096-c505-4bef-87f6-18822b9dbf2c');
+       
+       if (!(is_null($cardAccountResult) xor $cardAccountResult instanceof CardAccounts)) {
+           $this->fail("Returned value must either be an instance of CardAccounts, or null, but it was: " . gettype($cardAccountResult));
+       }
     }
 
 }

@@ -3,11 +3,11 @@ namespace PromisePay;
 use PromisePay\DataObjects\Token;
 
 class TokenTest extends \PHPUnit_Framework_TestCase {
-	
-	public function setUp() {
-		require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
-	}
-	
+    
+    public function setUp() {
+        require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
+    }
+    
     public function testRequestSessionToken() {
         $data = array(
             'current_user_id'    => 'ec9bf096-c505-4bef-87f6-18822b9dbf2c',
@@ -31,14 +31,14 @@ class TokenTest extends \PHPUnit_Framework_TestCase {
         $token = new Token($data);
         $repo = new TokenRepository();
         
-		$this->assertTrue(is_array($repo->requestSessionToken($token)));
+        $this->assertTrue(is_array($repo->requestSessionToken($token)));
     }
 
     public function testGetWidget() {
         $repo = new TokenRepository();
-		$getWidget = $repo->getWidget('aaa-bbb-cc');
-		
+        $getWidget = $repo->getWidget('aaa-bbb-cc');
+        
         $this->assertTrue($getWidget instanceof Widget || $getWidget === null);
     }
-	
+    
 }

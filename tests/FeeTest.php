@@ -4,17 +4,17 @@ use PromisePay\DataObjects\Fee;
 use PromisePay\Enum\FeeType;
 
 class FeeTest extends \PHPUnit_Framework_TestCase {
-	
-	public function setUp() {
-		require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
-		require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'tests/GUID.php');
-	}
-	
+    
+    public function setUp() {
+        require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
+        require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'tests/GUID.php');
+    }
+    
     public function testCreateFeeSuccessfully() {
         $enum = new FeeType();
         $id = GUID();
         $repo = new FeeRepository();
-		
+        
         $data = array(
             'id'       => $id,
             'amount'   => 1000,
@@ -25,11 +25,11 @@ class FeeTest extends \PHPUnit_Framework_TestCase {
             'min'      => '2',
             'to'       => 'buyer'
         );
-		
+        
         $fee = new Fee($data);
         $this->assertNotNull($repo->createFee($fee));
     }
-	
+    
     /**
      * @expectedException PromisePay\Exception\Validation
      */
@@ -37,7 +37,7 @@ class FeeTest extends \PHPUnit_Framework_TestCase {
         $enum = new FeeType();
         $id = GUID();
         $repo = new FeeRepository();
-		
+        
         $data = array(
             'id'       => $id,
             'amount'   => 1000,
@@ -48,7 +48,7 @@ class FeeTest extends \PHPUnit_Framework_TestCase {
             'min'      => '2',
             'to'       => 'test'
         );
-		
+        
         $fee = new Fee($data);
         $this->assertNotNull($repo->createFee($fee));
     }

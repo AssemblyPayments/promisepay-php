@@ -1,86 +1,33 @@
 <?php
 namespace PromisePay;
 
-use PromisePay\DataObjects\Errors;
-use PromisePay\DataObjects\Fee;
-use PromisePay\DataObjects\Transaction;
-use PromisePay\DataObjects\User;
 use PromisePay\Exception;
 use PromisePay\Log;
 
 class TransactionRepository extends BaseRepository
 {
-    public function getListOfTransactions($limit = 20, $offset = 0)
+    public function getListOfTransactions($params)
     {
-        $this->paramsListCorrect($limit,$offset);
-        $response = $this->RestClient('get', 'transactions?limit=' . $limit . '&offset=' . $offset, '', '');
-
-        $jsonRaw = json_decode($response->raw_body, true);
-        if (array_key_exists("transactions", $jsonRaw))
-        {
-            $jsonData = $jsonRaw["transactions"];
-            $allTransactions = array();
-            foreach ($jsonData as $oneTransaction) {
-                $transaction = new Transaction($oneTransaction);
-                array_push($allTransactions, $transaction);
-            }
-            return $allTransactions;
-        }
-        else
-        {
-            return array();
-        }
-
+        $response = $this->RestClient('get', 'transactions/', $this->generate_payload($params));
+        return $this->generate_response($response);
     }
 
     public function getTransaction($id)
     {
-        $this->checkIdNotNull($id);
+
         $response = $this->RestClient('get', 'transactions/' . $id);
-        $jsonRaw = json_decode($response->raw_body, true);
-        if (array_key_exists("transactions", $jsonRaw))
-        {
-            $jsonData = $jsonRaw['transactions'];
-            $transaction = new Transaction($jsonData);
-            return $transaction;
-        }
-        else
-        {
-            return null;
-        }
+        return $this->generate_response($response);
     }
 
     public function getUserForTransaction($id)
     {
-        $this->checkIdNotNull($id);
         $response = $this->RestClient('get', 'transactions/' . $id . '/users');
-        $jsonRaw = json_decode($response->raw_body, true);
-        if (array_key_exists("users", $jsonRaw))
-        {
-            $jsonData = $jsonRaw['users'];
-            $user = new User($jsonData);
-            return $user;
-        }
-        else
-        {
-            return null;
-        }
+        return $this->generate_response($response);
     }
 
     public function getFeeForTransaction($id)
     {
-        $this->checkIdNotNull($id);
         $response = $this->RestClient('get', 'transactions/' . $id . '/fees');
-        $jsonRaw = json_decode($response->raw_body, true);
-        if (array_key_exists("fees", $jsonRaw))
-        {
-            $jsonData = $jsonRaw['fees'];
-            $fee = new Fee($jsonData);
-            return $fee;
-        }
-        else
-        {
-            return null;
-        }
+        return $this->generate_response($response);
     }
 }

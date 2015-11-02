@@ -34,7 +34,30 @@ class BaseRepository {
         
         $this->throwUnauthorizedException = $throwUnauthorizedException;
     }
-    
+
+    /**
+     * Parses parameters for safe URL transport.
+     */
+    public function generate_payload($data) {
+        $payload = '';
+        foreach ($data as $key => $value)
+        {
+            $payload .= $key . '=';
+            $payload .= urlencode($value);
+            $payload .= "&";
+        }
+        $payload = substr($payload, 0, -1);
+        return $payload;
+    }
+
+    /**
+     * Parses response for a decoded response.
+     */
+    public function generate_response($response) {
+        $jsonData = json_decode($response->raw_body, true);
+        return $jsonData;
+    }
+
     /**
      * Interface for performing requests to PromisePay endpoints
      *

@@ -1,9 +1,6 @@
 <?php
 namespace PromisePay;
 
-use PromisePay\DataObjects\PayPal;
-use PromisePay\DataObjects\PayPalAccount;
-use PromisePay\DataObjects\User;
 use PromisePay\Exception;
 use PromisePay\Log;
 
@@ -24,11 +21,8 @@ class PayPalAccountRepository extends BaseRepository {
      * @return PayPalAccount object
      */
     public function getPayPalAccountById($id) {
-        $this->checkIdNotNull($id);
         $response = $this->RestClient('get', 'paypal_accounts/'.$id);
-        $jsonData = json_decode($response->raw_body, true)['paypal_accounts'];
-        $accounts = new PayPalAccount($jsonData);
-        return $accounts;
+        return $this->generate_response($response);
     }
     
     /**
@@ -40,24 +34,9 @@ class PayPalAccountRepository extends BaseRepository {
      * @param PayPalAccount $paypal
      * @return PayPalAccount 
      */
-    public function createPayPalAccount(PayPalAccount $paypal) {
-        $payload = '';
-
-        $preparePayload = array(
-            "user_id"      => $paypal->getUserId(),
-            "paypal_email" => $paypal->getPayPal()->getPayPalAccountEmail()
-        );
-        
-        foreach ($preparePayload as $key => $value)
-        {
-            $payload .= $key . '=';
-            $payload .= urlencode($value);
-            $payload .= "&";
-        }
-        $response = $this->RestClient('post', 'paypal_accounts/', $payload);
-
-        $jsonData = json_decode($response->raw_body, true)['paypal_accounts'];
-        return new PayPalAccount($jsonData);
+    public function createPayPalAccount($params) {
+        $response = $this->RestClient('post', 'paypal_accounts/', $this->generate_payload($params));
+        return $this->generate_response($response);
     }
     
     /**
@@ -71,9 +50,8 @@ class PayPalAccountRepository extends BaseRepository {
      * @return object
      */
     public function deletePayPalAccount($id) {
-        $this->checkIdNotNull($id);
         $response = $this->RestClient('delete', 'paypal_accounts/'.$id);
-        return $response;
+        return $this->generate_response($response);
     }
     
     /**
@@ -85,17 +63,10 @@ class PayPalAccountRepository extends BaseRepository {
      * @param string $id
      * @return User|null
      */
-    public function getUserForPayPalAccount($id) {
-        $this->checkIdNotNull($id);
+    public function getUserForPayPalAccount($id)
+    {
         $response = $this->RestClient('get','/paypal_accounts/'.$id.'/users');
-        $jsonRaw = json_decode($response->raw_body, true);
-        if (array_key_exists("users", $jsonRaw))
-        {
-            $jsonData = $jsonRaw["users"];
-            $users = new User($jsonData);
-            return $users;
-        }
-        return null;
+        return $this->generate_response($response);
     }
 
 }

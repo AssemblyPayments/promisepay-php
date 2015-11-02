@@ -1,81 +1,32 @@
 <?php
 namespace PromisePay;
 
-use PromisePay\DataObjects\Card;
-use PromisePay\DataObjects\CardAccount;
-use PromisePay\DataObjects\User;
 use PromisePay\Exception;
 use PromisePay\Log;
 
 class CardAccountRepository extends BaseRepository
 {
-    /**
-     * getCardAccountById
-     *
-     * @return object|null
-     */
     public function getCardAccountById($id)
     {
-        $this->checkIdNotNull($id);
-        $response = $this->RestClient('get', 'card_accounts/'.$id);
-        $jsonData = json_decode($response->raw_body, true);
-        
-        if (array_key_exists('card_accounts', $jsonData)) {
-            $accounts = new CardAccount($jsonData['card_accounts']);
-            return $accounts;
-        } else {
-            return null;
-        }
+        $response = $this->RestClient('get', 'card_accounts/' . $id);
+        return $this->generate_response($response);
     }
 
-    public function createCardAccount(CardAccount $card)
+    public function createCardAccount($params)
     {
-        $payload = '';
-        $preparePayload = array(
-                "user_id" =>$card->getUserId(),
-                "full_name"=>$card->getCard()->getFullName(),
-                "number"=>$card->getCard()->getNumber(),
-                "expiry_month"=>$card->getCard()->getExpMonth(),
-                "expiry_year"=>$card->getCard()->getExpYear(),
-                "cvv"=>$card->getCard()->getCVV()
-        );
-        foreach ($preparePayload as $key => $value)
-        {
-            $payload .= $key . '=';
-            $payload .= urlencode($value);
-            $payload .= "&";
-        }
-
-        $response = $this->RestClient('post', 'card_accounts?', $payload);
-        $jsonData = json_decode($response->raw_body, true);
-        return new CardAccount($jsonData['card_accounts']);
+        $response = $this->RestClient('post', 'card_accounts?', $this->generate_payload($params));
+        return $this->generate_response($response);
     }
 
     public function deleteCardAccount($id)
     {
-        $this->checkIdNotNull($id);
-        $response = $this->RestClient('delete', 'card_accounts/'.$id);
-        $jsonRaw = json_decode($response->raw_body, true);
-        if (array_key_exists("errors", $jsonRaw)) {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        $response = $this->RestClient('delete', 'card_accounts/' . $id);
+        return $this->generate_response($response);
     }
 
     public function getUserForCardAccount($id)
     {
-        $this->checkIdNotNull($id);
-        $response = $this->RestClient('get','users/'.$id.'/bank_accounts');
-        $jsonRaw = json_decode($response->raw_body, true);
-        if (array_key_exists("users", $jsonRaw))
-        {
-            $jsonData = $jsonRaw["users"];
-            $bankAccount = new User($jsonData);
-            return $bankAccount;
-        }
-        return null;
+        $response = $this->RestClient('get', 'users/' . $id . '/bank_accounts');
+        return $this->generate_response($response);
     }
 }

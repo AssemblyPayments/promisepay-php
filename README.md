@@ -370,7 +370,7 @@ $bankAccount = new BankAccount($arr = array(
            	   'account_number'		=> '12345678',
            	   'account_type'		=> 'checking',
            	   'holder_type'		=> 'personal',
-           	   'country'		=> 'AUS'))
+           	   'country'		=> 'AUS'));
 $repo->createBankAccount($bankAccount)
 ```
 #####Get a bank account

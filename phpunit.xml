@@ -1,4 +1,3 @@
-
 <phpunit bootstrap="tests/bootstrap.php" colors="true">
     <testsuites>
         <testsuite name="PromisePay Test Suite">

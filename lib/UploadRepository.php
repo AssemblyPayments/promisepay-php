@@ -6,7 +6,7 @@ use PromisePay\Exception;
 use PromisePay\Log;
 use Prophecy\Argument;
 
-class UploadRepository extends ApiAbstract
+class UploadRepository extends BaseRepository
 {
     public function getListOfUploads($limit = 20, $offset = 0)
     {

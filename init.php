@@ -1,9 +1,10 @@
 <?php
-//error_reporting(0);
-//configuration
+
+// Configuration
 require(dirname(__FILE__) . '/lib/Configuration.php');
-//repos
-require(dirname(__FILE__) . '/lib/ApiAbstract.php');
+
+// Repos
+require(dirname(__FILE__) . '/lib/BaseRepository.php');
 require(dirname(__FILE__) . '/lib/AddressRepository.php');
 require(dirname(__FILE__) . '/lib/BankAccountRepository.php');
 require(dirname(__FILE__) . '/lib/CardAccountRepository.php');
@@ -16,7 +17,7 @@ require(dirname(__FILE__) . '/lib/TransactionRepository.php');
 require(dirname(__FILE__) . '/lib/UploadRepository.php');
 require(dirname(__FILE__) . '/lib/UserRepository.php');
 
-//data_objectslist
+// Data_objectslist
 require(dirname(__FILE__) . '/lib/DataObjects/Object.php');
 require(dirname(__FILE__) . '/lib/DataObjects/AccountAbstract.php');
 require(dirname(__FILE__) . '/lib/DataObjects/Address.php');
@@ -41,26 +42,25 @@ require(dirname(__FILE__) . '/lib/DataObjects/User.php');
 require(dirname(__FILE__) . '/lib/DataObjects/Widget.php');
 require(dirname(__FILE__) . '/lib/DataObjects/WireDetails.php');
 
-//Enums
+// Enums
 require(dirname(__FILE__) . '/lib/Enum/FeeType.php');
 require(dirname(__FILE__) . '/lib/Enum/PaymentType.php');
 
-//Exception
+// Exception
 require(dirname(__FILE__) . '/lib/Exception/Base.php');
 require(dirname(__FILE__) . '/lib/Exception/Api.php');
+require(dirname(__FILE__) . '/lib/Exception/ApiUnsupportedRequestMethod.php');
 require(dirname(__FILE__) . '/lib/Exception/Argument.php');
 require(dirname(__FILE__) . '/lib/Exception/Credentials.php');
 require(dirname(__FILE__) . '/lib/Exception/Misconfiguration.php');
 require(dirname(__FILE__) . '/lib/Exception/NotFound.php');
-require(dirname(__FILE__) . '/lib/Exception/Unathorized.php');
+require(dirname(__FILE__) . '/lib/Exception/Unauthorized.php');
 require(dirname(__FILE__) . '/lib/Exception/Validation.php');
 
-//custom Logger
+// Custom Logger
 require(dirname(__FILE__) . '/lib/Log/Logger.php');
 
-//Rest
+// Rest
 require(dirname(__FILE__) . '/lib/Vendors/Httpful/Bootstrap.php');
 require(dirname(__FILE__) . '/lib/Vendors/Httpful/Http.php');
 require(dirname(__FILE__) . '/lib/Vendors/Httpful/Request.php');
-
-//require(dirname(__FILE__) . '/lib/Constructor.php');

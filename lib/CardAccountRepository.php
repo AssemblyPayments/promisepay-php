@@ -7,15 +7,25 @@ use PromisePay\DataObjects\User;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class CardAccountRepository extends ApiAbstract
+class CardAccountRepository extends BaseRepository
 {
+    /**
+     * getCardAccountById
+     *
+     * @return object|null
+     */
     public function getCardAccountById($id)
     {
         $this->checkIdNotNull($id);
         $response = $this->RestClient('get', 'card_accounts/'.$id);
         $jsonData = json_decode($response->raw_body, true);
-        $accounts = new CardAccount($jsonData['card_accounts']);
-        return $accounts;
+        
+        if (array_key_exists('card_accounts', $jsonData)) {
+            $accounts = new CardAccount($jsonData['card_accounts']);
+            return $accounts;
+        } else {
+            return null;
+        }
     }
 
     public function createCardAccount(CardAccount $card)
@@ -46,7 +56,7 @@ class CardAccountRepository extends ApiAbstract
         $this->checkIdNotNull($id);
         $response = $this->RestClient('delete', 'card_accounts/'.$id);
         $jsonRaw = json_decode($response->raw_body, true);
-        if (array_key_exists("errors", $jsonRaw)){
+        if (array_key_exists("errors", $jsonRaw)) {
             return false;
         }
         else

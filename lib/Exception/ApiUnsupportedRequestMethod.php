@@ -2,16 +2,11 @@
 namespace PromisePay\Exception;
 
 /**
- * Class NotFound
+ * Class Api
  * @package PromisePay\Exception
  */
-class NotFound extends Base {
-    /**
-     * Default Constructor
-     *
-     * @param string|null $message
-     * @param int $code
-     */
+class ApiUnsupportedRequestMethod extends Base
+{
     public function __construct($message = null, $code = 0) 
     {
         parent::__construct($message, $code);

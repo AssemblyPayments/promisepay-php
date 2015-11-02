@@ -10,7 +10,7 @@ use PromisePay\DataObjects\User;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class UserRepository extends ApiAbstract
+class UserRepository extends BaseRepository
 {
     public function getListOfUsers($limit = 20, $offset = 0) {
         $this->paramsListCorrect($limit, $offset);

@@ -1,5 +1,6 @@
 <?php
 namespace PromisePay\DataObjects;
+
 /**
  * Class CardAccount
  * @package PromisePay\DataObjects
@@ -11,7 +12,7 @@ class CardAccount extends AccountAbstract
      */
     private $_card;
 
-    public function __construct($jsonData= array())
+    public function __construct($jsonData = array())
     {
         $this->_card = new Card($jsonData);
         parent::__construct($jsonData);

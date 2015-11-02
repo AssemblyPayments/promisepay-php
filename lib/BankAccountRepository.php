@@ -7,7 +7,7 @@ use PromisePay\DataObjects\User;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class BankAccountRepository extends ApiAbstract
+class BankAccountRepository extends BaseRepository
 {
     public function getBankAccountById($id)
     {
@@ -21,7 +21,6 @@ class BankAccountRepository extends ApiAbstract
 
     public function createBankAccount(BankAccount $bankAccount)
     {
-
         $payload = '';
         $preparePayload = array(
             "user_id" =>$bankAccount->getUserId(),

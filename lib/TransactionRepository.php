@@ -8,7 +8,7 @@ use PromisePay\DataObjects\User;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class TransactionRepository extends ApiAbstract
+class TransactionRepository extends BaseRepository
 {
     public function getListOfTransactions($limit = 20, $offset = 0)
     {

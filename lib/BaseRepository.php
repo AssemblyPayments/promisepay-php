@@ -36,29 +36,6 @@ class BaseRepository {
     }
 
     /**
-     * Parses parameters for safe URL transport.
-     */
-    public function generate_payload($data) {
-        $payload = '';
-        foreach ($data as $key => $value)
-        {
-            $payload .= $key . '=';
-            $payload .= urlencode($value);
-            $payload .= "&";
-        }
-        $payload = substr($payload, 0, -1);
-        return $payload;
-    }
-
-    /**
-     * Parses response for a decoded response.
-     */
-    public function generate_response($response) {
-        $jsonData = json_decode($response->raw_body, true);
-        return $jsonData;
-    }
-
-    /**
      * Interface for performing requests to PromisePay endpoints
      *
      * @param string $method required One of the four supported requests methods (get, post, delete, patch)
@@ -67,6 +44,10 @@ class BaseRepository {
      * @param string $mime optional Set specific MIME type. Supported list can be seen here: http://phphttpclient.com/docs/class-Httpful.Mime.html
      */
     public function RestClient($method, $entity, $payload = null, $mime = null) {
+        if (!is_null($payload)) {
+            $payload = http_build_query($payload);
+        }
+        
         $url = constant(__NAMESPACE__ . '\API_URL') . $entity . '?' . $payload;
         
         switch ($method) {

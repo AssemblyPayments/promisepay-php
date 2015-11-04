@@ -9,24 +9,24 @@ class BankAccountRepository extends BaseRepository
     public function getBankAccountById($id)
     {
         $response = $this->RestClient('get', 'bank_accounts/'.$id);
-        return $this->generate_response($response);
+        return json_decode($response->raw_body, true);
     }
 
     public function createBankAccount($params)
     {
-        $response = $this->RestClient('post', 'bank_accounts/', $this->generate_payload($params));
-        return $this->generate_response($response);
+        $response = $this->RestClient('post', 'bank_accounts/', $params);
+        return json_decode($response->raw_body, true);
     }
 
     public function deleteBankAccount($id)
     {
         $response = $this->RestClient('delete', 'bank_accounts/'.$id);
-        return $this->generate_response($response);
+        return json_decode($response->raw_body, true);
     }
 
     public function getUserForBankAccount($id)
     {
         $response = $this->RestClient('get','bank_accounts/'.$id.'/users');
-        return $this->generate_response($response);
+        return json_decode($response->raw_body, true);
     }
 }

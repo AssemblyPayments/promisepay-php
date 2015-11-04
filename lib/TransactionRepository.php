@@ -8,26 +8,26 @@ class TransactionRepository extends BaseRepository
 {
     public function getListOfTransactions($params)
     {
-        $response = $this->RestClient('get', 'transactions/', $this->generate_payload($params));
-        return $this->generate_response($response);
+        $response = $this->RestClient('get', 'transactions/', $params);
+        return json_decode($response->raw_body, true);
     }
 
     public function getTransaction($id)
     {
 
         $response = $this->RestClient('get', 'transactions/' . $id);
-        return $this->generate_response($response);
+        return json_decode($response->raw_body, true);
     }
 
     public function getUserForTransaction($id)
     {
         $response = $this->RestClient('get', 'transactions/' . $id . '/users');
-        return $this->generate_response($response);
+        return json_decode($response->raw_body, true);
     }
 
     public function getFeeForTransaction($id)
     {
         $response = $this->RestClient('get', 'transactions/' . $id . '/fees');
-        return $this->generate_response($response);
+        return json_decode($response->raw_body, true);
     }
 }

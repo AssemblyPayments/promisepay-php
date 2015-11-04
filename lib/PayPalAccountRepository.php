@@ -22,7 +22,7 @@ class PayPalAccountRepository extends BaseRepository {
      */
     public function getPayPalAccountById($id) {
         $response = $this->RestClient('get', 'paypal_accounts/'.$id);
-        return $this->generate_response($response);
+        return json_decode($response->raw_body, true);
     }
     
     /**
@@ -35,8 +35,8 @@ class PayPalAccountRepository extends BaseRepository {
      * @return PayPalAccount 
      */
     public function createPayPalAccount($params) {
-        $response = $this->RestClient('post', 'paypal_accounts/', $this->generate_payload($params));
-        return $this->generate_response($response);
+        $response = $this->RestClient('post', 'paypal_accounts/', $params);
+        return json_decode($response->raw_body, true);
     }
     
     /**
@@ -51,7 +51,7 @@ class PayPalAccountRepository extends BaseRepository {
      */
     public function deletePayPalAccount($id) {
         $response = $this->RestClient('delete', 'paypal_accounts/'.$id);
-        return $this->generate_response($response);
+        return json_decode($response->raw_body, true);
     }
     
     /**
@@ -66,7 +66,7 @@ class PayPalAccountRepository extends BaseRepository {
     public function getUserForPayPalAccount($id)
     {
         $response = $this->RestClient('get','/paypal_accounts/'.$id.'/users');
-        return $this->generate_response($response);
+        return json_decode($response->raw_body, true);
     }
 
 }

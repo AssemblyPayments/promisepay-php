@@ -15,7 +15,7 @@ class TokenRepository extends BaseRepository
 
     public function requestSessionToken($params)
     {
-        $response = $this->RestClient('get', 'request_session_token/', $this->generate_payload($params));
-        return $this->generate_response($response);
+        $response = $this->RestClient('get', 'request_session_token/', $params);
+        return json_decode($response->raw_body, true);
     }
 }

@@ -69,5 +69,6 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->assertTrue(true); // if the Exception has been fired, the test is a success
         }
     }
+    
 }
 ?>

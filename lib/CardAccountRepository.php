@@ -9,24 +9,24 @@ class CardAccountRepository extends BaseRepository
     public function getCardAccountById($id)
     {
         $response = $this->RestClient('get', 'card_accounts/' . $id);
-        return $this->generate_response($response);
+        return json_decode($response->raw_body, true);
     }
 
     public function createCardAccount($params)
     {
-        $response = $this->RestClient('post', 'card_accounts?', $this->generate_payload($params));
-        return $this->generate_response($response);
+        $response = $this->RestClient('post', 'card_accounts?', $params);
+        return json_decode($response->raw_body, true);
     }
 
     public function deleteCardAccount($id)
     {
         $response = $this->RestClient('delete', 'card_accounts/' . $id);
-        return $this->generate_response($response);
+        return json_decode($response->raw_body, true);
     }
 
     public function getUserForCardAccount($id)
     {
         $response = $this->RestClient('get', 'users/' . $id . '/bank_accounts');
-        return $this->generate_response($response);
+        return json_decode($response->raw_body, true);
     }
 }

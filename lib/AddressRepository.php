@@ -10,6 +10,6 @@ class AddressRepository extends BaseRepository
     public function getAddressById($id)
     {
         $response = $this->RestClient('get', 'addresses/' . $id);
-        return $this->generate_response($response);
+        return json_decode($response->raw_body, true);
     }
 }

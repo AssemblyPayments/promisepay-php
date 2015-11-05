@@ -6,17 +6,52 @@ use PromisePay\Exception;
 use PromisePay\Log\Logger;
 
 /**
- * Class BaseRepository
+ * Class PromisePay
  *
  * @package PromisePay
  */
-class BaseRepository {
+class PromisePay {
     
     /**
      * Constant 
      * @const int ENTITY_LIST_LIMIT
      */
     const ENTITY_LIST_LIMIT = 200;
+    
+    /**
+     * Constructor
+     * Makes sure Configuration class has been invoked by
+     * testing for presence of API_LOGIN constant.
+     */
+    public function __construct() {
+        if (!defined(__NAMESPACE__ . '\API_LOGIN')) {
+            new Configuration;
+        }
+    }
+    
+    /**
+     * Static method invoker
+     *
+     * @param string $neededStaticMethodName
+     * @param mixed $passableArgs
+     * @return mixed
+     */
+    public static function __callStatic($neededStaticMethodName, $passableArgs) {
+        /* 
+            Get all classes that are directly under PromisePay namespace 
+            (in other words, exclude classes that fall under, for example, PromisePay\Exceptions namespace).
+            
+            Afterwards, find the appropriate class, forward the call and return the result.
+        */
+        
+        foreach (get_declared_classes() as $declaredClass) {
+            if (substr_count($declaredClass, '\\') === 1 && substr($declaredClass, 0, strlen(__NAMESPACE__)) === __NAMESPACE__) {
+                if (in_array($neededStaticMethodName, get_class_methods($declaredClass))) {
+                    return forward_static_call_array(array($declaredClass, $neededStaticMethodName), $passableArgs);
+                }
+            }
+        }
+    }
 
     /**
      * Interface for performing requests to PromisePay endpoints

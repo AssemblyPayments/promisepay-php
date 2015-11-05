@@ -51,7 +51,7 @@ class Configuration
             date_default_timezone_set('UTC');
         }
         
-        // Check if file exists
+        // Check if custom file should be used
         if (!is_null($customConfigFile)) 
         {
             if (!file_exists($customConfigFile)) 

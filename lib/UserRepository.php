@@ -4,7 +4,7 @@ namespace PromisePay;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class UserRepository extends BaseRepository
+class UserRepository extends PromisePay
 {
     public function getListOfUsers($params)
     {

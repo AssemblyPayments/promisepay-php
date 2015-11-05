@@ -9,7 +9,7 @@ use PromisePay\Log;
  *
  * @package PromisePay
  */
-class PayPalAccountRepository extends BaseRepository {
+class PayPalAccountRepository extends PromisePay {
     /**
      * List a PayPal account on a marketplace.
      *

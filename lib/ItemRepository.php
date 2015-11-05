@@ -4,7 +4,7 @@ namespace PromisePay;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class ItemRepository extends BaseRepository
+class ItemRepository extends PromisePay
 {
     public function getListOfItems($params)
     {

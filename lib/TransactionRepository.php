@@ -4,7 +4,7 @@ namespace PromisePay;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class TransactionRepository extends BaseRepository
+class TransactionRepository extends PromisePay
 {
     public function getListOfTransactions($params)
     {

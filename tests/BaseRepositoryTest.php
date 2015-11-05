@@ -1,10 +1,10 @@
 <?php
 namespace PromisePay\Tests;
 
-use Promisepay\BaseRepository;
+use Promisepay\PromisePay;
 use Promisepay\Exception;
 
-class BaseRepositoryTest extends \PHPUnit_Framework_TestCase {
+class PromisePayTest extends \PHPUnit_Framework_TestCase {
     
     public function testConstantsDefined() {
         $this->assertTrue(defined('PromisePay\API_LOGIN'));
@@ -14,7 +14,7 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testGetRequestMethod() {
-        $request = BaseRepository::RestClient('get', 'items/');
+        $request = PromisePay::RestClient('get', 'items/');
         
         $this->assertEquals($request->content_type, 'application/json');
         $this->assertNotNull(json_decode($request->raw_body)); // json_decode() returns null on invalid JSON, not false
@@ -26,7 +26,7 @@ class BaseRepositoryTest extends \PHPUnit_Framework_TestCase {
      * @expectedException PromisePay\Exception\ApiUnsupportedRequestMethod
      */
     public function testInvalidRequestMethod() {
-        BaseRepository::RestClient('commit', 'items/10');
+        PromisePay::RestClient('commit', 'items/10');
     }
     
 }

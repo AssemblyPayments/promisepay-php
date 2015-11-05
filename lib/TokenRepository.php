@@ -4,7 +4,7 @@ namespace PromisePay;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class TokenRepository extends BaseRepository
+class TokenRepository extends PromisePay
 {
     public function requestToken()
     {

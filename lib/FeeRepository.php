@@ -4,7 +4,7 @@ namespace PromisePay;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class FeeRepository extends BaseRepository {
+class FeeRepository extends PromisePay {
     
     public static function getListOfFees() {
         $response = parent::RestClient('get', 'fees/');

@@ -1,6 +1,6 @@
 <?php
 namespace PromisePay\Tests;
-use PromisePay\CompanyRepository;
+use PromisePay\PromisePay;
 
 class CompanyTest extends \PHPUnit_Framework_TestCase {
     
@@ -18,7 +18,7 @@ class CompanyTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testListOfCompanies() {
-        $companiesList = CompanyRepository::getListOfCompanies();
+        $companiesList = PromisePay::getListOfCompanies();
         
         $this->assertNotEmpty($companiesList);
         $this->assertTrue(is_array($companiesList));
@@ -27,13 +27,13 @@ class CompanyTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testGetCompanyByIdSuccessfully() {
-        $companyData = CompanyRepository::getCompanyById($this->companyId);
+        $companyData = PromisePay::getCompanyById($this->companyId);
         
         $this->assertEquals($this->companyId, $companyData['id']);
     }
     
     public function testCreateCompanySuccessfully() {
-        $companyCreate = CompanyRepository::createCompany($this->companyInfo);
+        $companyCreate = PromisePay::createCompany($this->companyInfo);
         
         $this->assertNotNull($companyCreate['id']);
     }
@@ -41,7 +41,7 @@ class CompanyTest extends \PHPUnit_Framework_TestCase {
     public function testEditCompanySuccessfully() {
         $this->companyInfo['name'] = 'Modified company name';
         
-        $companyUpdate = CompanyRepository::updateCompany($this->companyId, $this->companyInfo);
+        $companyUpdate = PromisePay::updateCompany($this->companyId, $this->companyInfo);
         
         $this->assertEquals($this->companyInfo['legal_name'], $companyUpdate['legal_name']);
         $this->assertEquals($this->companyInfo['name'], $companyUpdate['name']);

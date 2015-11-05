@@ -1,6 +1,6 @@
 <?php
 namespace PromisePay\Tests;
-use PromisePay\BankAccountRepository;
+use PromisePay\PromisePay;
 
 class BankAccountTest extends \PHPUnit_Framework_TestCase {
     
@@ -22,7 +22,7 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testCreateBankAccount() {
-        $createdBankAccount = BankAccountRepository::createBankAccount($this->bankAccountInfo);
+        $createdBankAccount = PromisePay::createBankAccount($this->bankAccountInfo);
         
         $this->assertEquals($this->bankAccountInfo['account_name'], $createdBankAccount['bank']['account_name']);
         $this->assertNotNull($createdBankAccount['created_at']);
@@ -30,26 +30,26 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testGetBankAccount() {
-        $createdBankAccount = BankAccountRepository::createBankAccount($this->bankAccountInfo);
+        $createdBankAccount = PromisePay::createBankAccount($this->bankAccountInfo);
         $createdBankAccountId = $createdBankAccount['id'];
         
-        $bankAccountLookup = BankAccountRepository::getBankAccountById($createdBankAccountId);
+        $bankAccountLookup = PromisePay::getBankAccountById($createdBankAccountId);
         
         $this->assertEquals($createdBankAccountId, $bankAccountLookup['id']);
     }
 
     public function testGetUserForBankAccount() {
-        $bankAccountCreated = BankAccountRepository::createBankAccount($this->bankAccountInfo);
-        $gotUser = BankAccountRepository::getUserForBankAccount($bankAccountCreated['id']);
+        $bankAccountCreated = PromisePay::createBankAccount($this->bankAccountInfo);
+        $gotUser = PromisePay::getUserForBankAccount($bankAccountCreated['id']);
         
         $this->assertEquals($this->userId, $gotUser['id']);
     }
 
     public function testDeleteBankAccount() {
-        $createBankAccount = BankAccountRepository::createBankAccount($this->bankAccountInfo);
+        $createBankAccount = PromisePay::createBankAccount($this->bankAccountInfo);
         $bankAccountId = $createBankAccount['id'];
         
-        $deleteBankAccount = BankAccountRepository::deleteBankAccount($bankAccountId);
+        $deleteBankAccount = PromisePay::deleteBankAccount($bankAccountId);
         
         $this->assertEquals($deleteBankAccount, 'Successfully redacted');
     }

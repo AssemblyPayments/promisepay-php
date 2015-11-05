@@ -1,7 +1,7 @@
 <?php
 namespace PromisePay\Tests;
 
-use PromisePay\FeeRepository;
+use PromisePay\PromisePay;
 use PromisePay\Enum\FeeType;
 
 class FeeTest extends \PHPUnit_Framework_TestCase {
@@ -25,7 +25,7 @@ class FeeTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testCreateFee() {
-        $createFee = FeeRepository::createFee($this->feeData);
+        $createFee = PromisePay::createFee($this->feeData);
         
         $this->assertNotNull($createFee['id']);
         $this->assertEquals($createFee['name'], $this->feeData['name']);
@@ -38,21 +38,21 @@ class FeeTest extends \PHPUnit_Framework_TestCase {
         $data = $this->feeData;
         $data['to'] = 'test';
         
-        $createFee = FeeRepository::createFee($data);
+        $createFee = PromisePay::createFee($data);
         
         $this->assertNotNull($createFee);
     }
 
     public function testGetFeeById() {
         $id  = '79116c9f-d750-4faa-85c7-b7da36f23b38';
-        $getFeeById = FeeRepository::getFeeById($id);
+        $getFeeById = PromisePay::getFeeById($id);
         
         $this->assertNotNull($getFeeById['id']);
         $this->assertEquals($id, $getFeeById['id']);
     }
 
     public function testListSuccessfull() {
-        $this->assertTrue(is_array(FeeRepository::getListOfFees()));
+        $this->assertTrue(is_array(PromisePay::getListOfFees()));
     }
 
 }

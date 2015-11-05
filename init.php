@@ -5,7 +5,7 @@ namespace PromisePay;
 require(dirname(__FILE__) . '/lib/Configuration.php');
 
 // Repos
-require(dirname(__FILE__) . '/lib/BaseRepository.php');
+require(dirname(__FILE__) . '/lib/PromisePay.php');
 require(dirname(__FILE__) . '/lib/AddressRepository.php');
 require(dirname(__FILE__) . '/lib/BankAccountRepository.php');
 require(dirname(__FILE__) . '/lib/CardAccountRepository.php');
@@ -15,7 +15,6 @@ require(dirname(__FILE__) . '/lib/ItemRepository.php');
 require(dirname(__FILE__) . '/lib/PayPalAccountRepository.php');
 require(dirname(__FILE__) . '/lib/TokenRepository.php');
 require(dirname(__FILE__) . '/lib/TransactionRepository.php');
-require(dirname(__FILE__) . '/lib/UploadRepository.php');
 require(dirname(__FILE__) . '/lib/UserRepository.php');
 
 // Enums

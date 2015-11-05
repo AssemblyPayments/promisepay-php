@@ -4,7 +4,7 @@ namespace PromisePay;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class AddressRepository extends BaseRepository
+class AddressRepository extends PromisePay
 {
     public static function getAddressById($id)
     {

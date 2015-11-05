@@ -9,7 +9,7 @@ use PromisePay\Log;
  *
  * @package PromisePay
  */
-class CompanyRepository extends BaseRepository {
+class CompanyRepository extends PromisePay {
     /**
      * Accepts two params - amount of entities to list,
      * and listing starting point (offset).

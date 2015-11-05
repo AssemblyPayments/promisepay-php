@@ -1,77 +1,51 @@
 <?php
 namespace PromisePay\Tests;
-
 use Promisepay\CardAccountRepository;
-use PromisePay\DataObjects\CardAccount;
 
 class CardAccountTest extends \PHPUnit_Framework_TestCase {
     
+    protected $userId, $bankAccountInfo;
+    
     public function setUp() {
-        require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
+        $this->userId = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';
+        
+        $this->cardAccountInfo = array(
+           'user_id' => $this->userId,
+           'full_name'    => 'Bobby Buyer',
+           'number'       => '4111111111111111',
+           "expiry_month" => '06',
+           "expiry_year"  => '2020',
+           "cvv"          => '123'
+        );
     }
     
     public function testCreateCardAccountTest() {
-       $userid = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';
+       $createAccount = CardAccountRepository::createCardAccount($this->cardAccountInfo);
        
-       $info = array(
-           'user_id' => $userid,
-           'card'    => array(
-               'full_name'    => 'Bobby Buyer',
-               'number'       => '4111111111111111',
-               "expiry_month" => '06',
-               "expiry_year"  => '2020',
-               "cvv"          => '123'
-               )
-           );
-       
-       $cardRepo = new CardAccountRepository();
-       $cardAccount = new CardAccount($info);
-       $createdAccount = $cardRepo->createCardAccount($cardAccount);
-       
-       $this->assertNotNull($createdAccount->getCreatedAt());
-       $this->assertNotNull($createdAccount->getId());
+       $this->assertNotNull($createAccount['created_at']);
+       $this->assertNotNull($createAccount['id']);
     }
 
     public function testGetCardAccountById() {
-       $userid = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';
+       $createAccount = CardAccountRepository::createCardAccount($this->cardAccountInfo);
        
-       $info = array(
-           'user_id' => $userid,
-           'card'    => array(
-               'full_name'    => 'Bobby Buyer',
-               'number'       => '4111111111111111',
-               "expiry_month" => '06',
-               "expiry_year"  => '2020',
-               "cvv"          => '123'
-               )
-           );
+       $this->assertNotNull($createAccount['created_at']);
+       $this->assertNotNull($createAccount['id']);
        
-       $cardRepo = new CardAccountRepository();
-       $cardAccount = new CardAccount($info);
-       $createdAccount = $cardRepo->createCardAccount($cardAccount);
-       
-       $this->assertNotNull($createdAccount->getCreatedAt());
-       $this->assertNotNull($createdAccount->getId());
+       $fetchCardAccount = CardAccountRepository::getCardAccountById($createAccount['id']);
 
-       $info = array(
-           'id' => $createdAccount->getId()
-       );
-
-       $cardAccount = new CardAccount($info);
-       $fetchedCardAccount = $cardRepo->getCardAccountById($cardAccount->getId());
-
-       $this->assertNotNull($fetchedCardAccount->getCreatedAt());
+       $this->assertNotNull($fetchCardAccount['created_at']);
     }
 
     public function testDeleteCardAccount() {
-       $cardAccount = new CardAccountRepository();
-       $this->assertNotNull($cardAccount->deleteCardAccount('ec9bf096-c505-4bef-87f6-18822b9dbf2c'));
+       $createAccount = CardAccountRepository::createCardAccount($this->cardAccountInfo);
        
-       $cardAccountResult = $cardAccount->getCardAccountById('ec9bf096-c505-4bef-87f6-18822b9dbf2c');
+       $this->assertNotNull($createAccount['id']);
        
-       if (!(is_null($cardAccountResult) xor $cardAccountResult instanceof CardAccounts)) {
-           $this->fail("Returned value must either be an instance of CardAccounts, or null, but it was: " . gettype($cardAccountResult));
-       }
+       $cardAccountId = $createAccount['id'];
+       $deleteCardAccount = CardAccountRepository::deleteCardAccount($cardAccountId);
+       
+       $this->assertEquals($deleteCardAccount, 'Successfully redacted');
     }
 
 }

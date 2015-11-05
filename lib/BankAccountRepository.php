@@ -4,29 +4,32 @@ namespace PromisePay;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class BankAccountRepository extends BaseRepository
-{
-    public function getBankAccountById($id)
-    {
-        $response = $this->RestClient('get', 'bank_accounts/'.$id);
-        return json_decode($response->raw_body, true);
+class BankAccountRepository extends BaseRepository {
+    public static function getBankAccountById($id) {
+        $response = parent::RestClient('get', 'bank_accounts/' . $id);
+        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        
+        return $jsonDecodedResponse['bank_accounts'];
     }
 
-    public function createBankAccount($params)
-    {
-        $response = $this->RestClient('post', 'bank_accounts/', $params);
-        return json_decode($response->raw_body, true);
+    public static function createBankAccount($params) {
+        $response = parent::RestClient('post', 'bank_accounts/', $params);
+        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        
+        return $jsonDecodedResponse['bank_accounts'];
     }
 
-    public function deleteBankAccount($id)
-    {
-        $response = $this->RestClient('delete', 'bank_accounts/'.$id);
-        return json_decode($response->raw_body, true);
+    public static function deleteBankAccount($id) {
+        $response = parent::RestClient('delete', 'bank_accounts/' . $id);
+        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        
+        return $jsonDecodedResponse['bank_account'];
     }
 
-    public function getUserForBankAccount($id)
-    {
-        $response = $this->RestClient('get','bank_accounts/'.$id.'/users');
-        return json_decode($response->raw_body, true);
+    public static function getUserForBankAccount($id) {
+        $response = parent::RestClient('get','bank_accounts/' . $id . '/users');
+        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        
+        return $jsonDecodedResponse['users'];
     }
 }

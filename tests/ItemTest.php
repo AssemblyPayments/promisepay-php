@@ -8,8 +8,7 @@ use PromisePay\DataObjects\User;
 class ItemTest extends \PHPUnit_Framework_TestCase {
     
     public function setUp() {
-        require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
-        require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'tests/GUID.php');
+        
     }
 
     public function testCreateItemSuccessfully() {

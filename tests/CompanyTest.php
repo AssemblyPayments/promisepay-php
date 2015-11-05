@@ -1,40 +1,50 @@
 <?php
 namespace PromisePay\Tests;
-
 use PromisePay\CompanyRepository;
-use PromisePay\DataObjects\Company;
 
 class CompanyTest extends \PHPUnit_Framework_TestCase {
     
-    public function setUp() {
-        require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
-    }
+    protected $instance, $userId, $companyId, $companyInfo;
     
-    public function testListOfCompanies() {
-        $repo = new CompanyRepository();
-        $this->assertNotEmpty($repo->getListOfCompanies());
-    }
-
-    public function testGetCompanyByIdSuccessfully() {
-        $id = 'e466dfb4-f05c-4c7f-92a3-09a0a28c7af5';
-        $repo = new CompanyRepository();
-        $this->assertNotEmpty($repo->getCompanyById($id));
-    }
-
-    public function testEditCompanySuccessfully() {
-        $repo = new CompanyRepository();
-        
-        $params = array(
-            'id'         => '739dcfc5-adf0-4a00-b639-b4e05922994d',
+    public function setUp() {
+        $this->userId = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';
+        $this->companyId = 'e466dfb4-f05c-4c7f-92a3-09a0a28c7af5';
+        $this->companyInfo = array(
+            'user_id'    => $this->userId,
             'legal_name' => 'Test edit company',
             'name'       => 'test company name edit',
             'country'    => 'AUS'
         );
+    }
+    
+    public function testListOfCompanies() {
+        $companiesList = CompanyRepository::getListOfCompanies();
         
-        $editPayload = new Company($params);
+        $this->assertNotEmpty($companiesList);
+        $this->assertTrue(is_array($companiesList));
+        $this->assertTrue(count($companiesList) > 0);
+        $this->assertNotNull($companiesList[0]['id']);
+    }
+
+    public function testGetCompanyByIdSuccessfully() {
+        $companyData = CompanyRepository::getCompanyById($this->companyId);
         
-        $edit = $repo->updateCompany($editPayload, $params['id']);
-        $this->assertEquals($edit->getLegalName(), $editPayload->getLegalName());
+        $this->assertEquals($this->companyId, $companyData['id']);
+    }
+    
+    public function testCreateCompanySuccessfully() {
+        $companyCreate = CompanyRepository::createCompany($this->companyInfo);
+        
+        $this->assertNotNull($companyCreate['id']);
+    }
+
+    public function testEditCompanySuccessfully() {
+        $this->companyInfo['name'] = 'Modified company name';
+        
+        $companyUpdate = CompanyRepository::updateCompany($this->companyId, $this->companyInfo);
+        
+        $this->assertEquals($this->companyInfo['legal_name'], $companyUpdate['legal_name']);
+        $this->assertEquals($this->companyInfo['name'], $companyUpdate['name']);
     }
 
 }

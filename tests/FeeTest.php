@@ -2,67 +2,57 @@
 namespace PromisePay\Tests;
 
 use PromisePay\FeeRepository;
-use PromisePay\DataObjects\Fee;
 use PromisePay\Enum\FeeType;
 
 class FeeTest extends \PHPUnit_Framework_TestCase {
     
+    protected $enum, $GUID, $feeData;
+    
     public function setUp() {
-        require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
-        require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'tests/GUID.php');
+        $this->enum = new FeeType;
+        $this->GUID = GUID();
+        
+        $this->feeData = array(
+            'id'          => $this->GUID,
+            'amount'      => 1000,
+            'name'        => 'fee test',
+            'fee_type_id' => (string) $this->enum->Fixed,
+            'cap'         => '1',
+            'max'         => '3',
+            'min'         => '2',
+            'to'          => 'buyer'
+        );
     }
     
-    public function testCreateFeeSuccessfully() {
-        $enum = new FeeType();
-        $id = GUID();
-        $repo = new FeeRepository();
+    public function testCreateFee() {
+        $createFee = FeeRepository::createFee($this->feeData);
         
-        $data = array(
-            'id'       => $id,
-            'amount'   => 1000,
-            'name'     => 'fee test',
-            'fee_type' => $enum->Fixed,
-            'cap'      => '1',
-            'max'      => '3',
-            'min'      => '2',
-            'to'       => 'buyer'
-        );
-        
-        $fee = new Fee($data);
-        $this->assertNotNull($repo->createFee($fee));
+        $this->assertNotNull($createFee['id']);
+        $this->assertEquals($createFee['name'], $this->feeData['name']);
     }
     
     /**
-     * @expectedException PromisePay\Exception\Validation
+     * @expectedException PromisePay\Exception\Unauthorized
      */
     public function testCreateFeeWrongTo() {
-        $enum = new FeeType();
-        $id = GUID();
-        $repo = new FeeRepository();
+        $data = $this->feeData;
+        $data['to'] = 'test';
         
-        $data = array(
-            'id'       => $id,
-            'amount'   => 1000,
-            'name'     => 'fee test2',
-            'fee_type' => $enum->Fixed,
-            'cap'      => '1',
-            'max'      => '3',
-            'min'      => '2',
-            'to'       => 'test'
-        );
+        $createFee = FeeRepository::createFee($data);
         
-        $fee = new Fee($data);
-        $this->assertNotNull($repo->createFee($fee));
+        $this->assertNotNull($createFee);
     }
 
-    public function testGetFeeByIdSuccessfull() {
-        $repo = new FeeRepository();
+    public function testGetFeeById() {
         $id  = '79116c9f-d750-4faa-85c7-b7da36f23b38';
-        $this->assertNotNull($repo->getFeeById($id));
+        $getFeeById = FeeRepository::getFeeById($id);
+        
+        $this->assertNotNull($getFeeById['id']);
+        $this->assertEquals($id, $getFeeById['id']);
     }
 
     public function testListSuccessfull() {
-        $repo = new FeeRepository();
-        $this->assertNotNull($repo->getListOfFees());
+        $this->assertTrue(is_array(FeeRepository::getListOfFees()));
     }
+
 }

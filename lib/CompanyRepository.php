@@ -1,7 +1,6 @@
 <?php
 namespace PromisePay;
 
-use PromisePay\DataObjects\Company;
 use PromisePay\Exception;
 use PromisePay\Log;
 
@@ -10,8 +9,7 @@ use PromisePay\Log;
  *
  * @package PromisePay
  */
-class CompanyRepository extends BaseRepository
-{
+class CompanyRepository extends BaseRepository {
     /**
      * Accepts two params - amount of entities to list,
      * and listing starting point (offset).
@@ -19,19 +17,30 @@ class CompanyRepository extends BaseRepository
      *
      * @param int $limit
      * @param int $offset
-     * @return Company
+     * @return array
      */
-    public function getListOfCompanies($limit = 20, $offset = 0)
-    {
-        $this->paramsListCorrect($limit, $offset);
-        $response = $this->RestClient('get', 'companies?limit=' . $limit . '&offset=' . $offset, '', '');
-        $companiesList = array();
-        $jsonData = json_decode($response->raw_body, true)['companies'];
-        foreach ($jsonData as $company) {
-            $company = new Company($company);
-            array_push($companiesList, $company);
+    public static function getListOfCompanies($limit = 20, $offset = 0) {
+        parent::paramsListCorrect($limit, $offset);
+        
+        $requestParams = array(
+            'limit' => $limit,
+            'offset' => $offset
+        );
+        
+        $response = parent::RestClient('get', 'companies/', $requestParams);
+        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        
+        /*
+            Even though $companyList[] creates the array automatically, in case there's no 
+            companies returned, returning non-existent $companyList would trigger a PHP notice
+        */
+        $companyList = array(); 
+        
+        foreach ($jsonDecodedResponse['companies'] as $company) {
+            $companyList[] = $company;
         }
-        return $companiesList;
+        
+        return $companyList;
     }
 
     /**
@@ -39,18 +48,15 @@ class CompanyRepository extends BaseRepository
      * Expects company ID parameter (in form of "ec9bf096-c505-4bef-87f6-18822b9dbf2c").
      *
      * @param string $id
-     * @return Company|null
+     * @return array
      */
-    public function getCompanyById($id)
-    {
-        $this->checkIdNotNull($id);
-        $response = $this->RestClient('get', 'companies/' . $id);
-        $jsonData = json_decode($response->raw_body, true);
-        if (array_key_exists("companies", $jsonData)) {
-            $company = new Company($jsonData['companies']);
-            return $company;
-        }
-        return null;
+    public static function getCompanyById($id) {
+        parent::checkIdNotNull($id);
+        
+        $response = parent::RestClient('get', 'companies/' . $id);
+        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        
+        return $jsonDecodedResponse['companies'];
     }
 
     /**
@@ -59,33 +65,13 @@ class CompanyRepository extends BaseRepository
      *
      * @param Company $company
      * @param string $id
-     * @return object
+     * @return array
      */
-    public function createCompany(Company $company, $id)
-    {
-        $this->checkIdNotNull($id);
-        $payload = '';
-
-        $preparePayload = array(
-            "user_id" => $id,
-            "name" => $company->getName(),
-            "legal_name" => $company->getLegalName(),
-            "tax_number" => $company->getTaxNumber(),
-            "charge_tax" => $company->getChargeTax(),
-            "address_line1" => $company->getAddressLine1(),
-            "address_line2" => $company->getAddressLine2(),
-            "city" => $company->getCity(),
-            "state" => $company->getState(),
-            "zip" => $company->getZip(),
-            "country" => $company->getCountry(),
-        );
-        foreach ($preparePayload as $key => $value) {
-            $payload .= $key . '=';
-            $payload .= urlencode($value);
-            $payload .= "&";
-        }
-        $response = $this->RestClient('post', 'companies/' . $id, $payload);
-        return $response;
+    public static function createCompany($companyData) {
+        $response = parent::RestClient('post', 'companies/', $companyData);
+        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        
+        return $jsonDecodedResponse['companies'];
     }
 
     /**
@@ -94,41 +80,14 @@ class CompanyRepository extends BaseRepository
      *
      * @param Company $company
      * @param string $id
-     * @return Company|null
+     * @return array
      */
-    public function updateCompany(Company $company, $id)
-    {
-        $this->checkIdNotNull($id);
-        $payload = '';
+    public static function updateCompany($id, $companyData) {
+        parent::checkIdNotNull($id);
 
-        $preparePayload = array(
-            "user_id" => $id,
-            "name" => $company->getName(),
-            "legal_name" => $company->getLegalName(),
-            "tax_number" => $company->getTaxNumber(),
-            "charge_tax" => $company->getChargeTax(),
-            "address_line1" => $company->getAddressLine1(),
-            "address_line2" => $company->getAddressLine2(),
-            "city" => $company->getCity(),
-            "state" => $company->getState(),
-            "zip" => $company->getZip(),
-            "country" => $company->getCountry(),
-        );
-        foreach ($preparePayload as $key => $value) {
-            $payload .= $key . '=';
-            $payload .= urlencode($value);
-            $payload .= "&";
-        }
-        $payload = substr($payload, 0, -1);
-
-        $response = $this->RestClient('patch', 'companies/' . $id, $payload);
-        $jsonData = json_decode($response->raw_body, true);
-
-        if (array_key_exists("companies", $jsonData)) {
-            $jsonData = $jsonData["companies"];
-            $company = new Company($jsonData);
-            return $company;
-        }
-        return null;
+        $response = parent::RestClient('patch', 'companies/' . $id, $companyData);
+        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        
+        return $jsonDecodedResponse['companies'];
     }
 }

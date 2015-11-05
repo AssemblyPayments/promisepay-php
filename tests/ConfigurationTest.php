@@ -2,7 +2,7 @@
 namespace PromisePay\Tests;
 
 use PromisePay\Configuration;
-use PromisePay\Exception\NotFound;
+use PromisePay\Exception;
 
 /**
  * Class Configuration
@@ -14,8 +14,6 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     protected $instance;
     
     public function setUp() {
-        require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
-        
         $this->instance = new Configuration;
     }
     
@@ -47,16 +45,8 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     }
     
     public function testApiKeyValidBase64Format() {
+        // base64_decode returns false on invalid data 
         $this->assertNotFalse(base64_decode(constant('PromisePay\API_KEY'), true));
-    }
-    
-    public function testCustomNonExistingConfigFile() {
-        try {
-            new Configuration("Non_Existing_SDK_Config_File.php");
-            $this->fail('An expected exception \PromisePay\Exception\NotFound has not been raised.');
-        } catch (NotFound $e) {
-            $this->assertTrue(true);
-        }
     }
     
     public function testCustomExistingConfigFile() {
@@ -67,5 +57,13 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             $this->fail("Exception \PromisePay\Exception\NotFound has been raised.");
         }
     }
+    
+    /**
+     * @expectedException PromisePay\Exception\NotFound
+     */
+    public function testCustomNonExistingConfigFile() {
+        new Configuration("Non_Existing_SDK_Config_File.php");
+    }
+    
 }
 ?>

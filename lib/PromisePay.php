@@ -41,14 +41,12 @@ class PromisePay {
             Get all classes that are directly under PromisePay namespace 
             (in other words, exclude classes that fall under, for example, PromisePay\Exceptions namespace).
             
-            Afterwards, find the appropriate class, forward the call and return the result.
+            Find the appropriate class, forward the call and return the result.
         */
         
         foreach (get_declared_classes() as $declaredClass) {
-            if (substr_count($declaredClass, '\\') === 1 && substr($declaredClass, 0, strlen(__NAMESPACE__)) === __NAMESPACE__) {
-                if (in_array($neededStaticMethodName, get_class_methods($declaredClass))) {
-                    return forward_static_call_array(array($declaredClass, $neededStaticMethodName), $passableArgs);
-                }
+            if (substr_count($declaredClass, '\\') === 1 && substr($declaredClass, 0, strlen(__NAMESPACE__)) === __NAMESPACE__ && in_array($neededStaticMethodName, get_class_methods($declaredClass))) {
+                return forward_static_call_array(array($declaredClass, $neededStaticMethodName), $passableArgs);
             }
         }
     }

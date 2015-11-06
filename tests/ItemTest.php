@@ -121,15 +121,16 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $itemData = $this->itemData;
         $itemData['buyer_id'] = $user_guid;
         
-        
         $createUser = PromisePay::createUser($userData);
         
         // Create the item
         $createItem = PromisePay::createItem($itemData);
         
-        $makePayment = PromisePay::makePayment($createItem['id'], array('account_id' => $createUser['id']));
+        //var_dump($createItem, $createUser);
         
-        var_dump($makePayment);
+        //$makePayment = PromisePay::makePayment($createItem['id'], array('account_id' => $createUser['id']));
+        
+        //var_dump($makePayment);
     }
     
     

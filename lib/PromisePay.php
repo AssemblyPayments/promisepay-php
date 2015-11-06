@@ -36,6 +36,7 @@ class PromisePay {
      * @param mixed $passableArgs
      * @return mixed
      */
+     
     public static function __callStatic($neededStaticMethodName, $passableArgs) {
         /* 
             Get all classes that are directly under PromisePay namespace 
@@ -50,6 +51,13 @@ class PromisePay {
             }
         }
     }
+    
+    
+    /*
+    public static function __callStatic($neededRepository, $passableArgs) {
+        var_dump($neededRepository, $passableArgs);
+    }
+    */
 
     /**
      * Interface for performing requests to PromisePay endpoints

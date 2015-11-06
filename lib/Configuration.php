@@ -46,6 +46,9 @@ class Configuration
      */
     public function __construct($customConfigFile = null) 
     {
+        // TODO: check PHP version (req: >= 5.3.0)
+        //-----------------------------------------
+        
         // if default timezone hasn't been set, do it here
         if (!ini_get('date.timezone')) {
             date_default_timezone_set('UTC');

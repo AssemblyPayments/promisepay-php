@@ -1,26 +1,19 @@
 <?php
 namespace PromisePay\Tests;
-
-use PromisePay\UserRepository;
-use PromisePay\DataObjects\User;
+use PromisePay\PromisePay;
 
 class UserTest extends \PHPUnit_Framework_TestCase {
     
-    public function setUp() {
-        require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
-        require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'tests/GUID.php');
-    }
+    protected $GUID, $userData;
     
-    public function testUserCreateSuccess() {
-        $id = GUID();
-        $userRepo = new UserRepository();
-        
-        $payload = array(
-            'id'            => $id,
+    public function setUp() {
+        $this->GUID = GUID();
+        $this->userData = array(
+            'id'            => $this->GUID,
             'first_name'    => 'UserCreateTest',
             'last_name'     => 'UserLastname',
-            'email'         => $id . '@google.com',
-            'mobile'        => $id . '00012',
+            'email'         => $this->GUID . '@google.com',
+            'mobile'        => $this->GUID . '00012',
             'address_line1' => 'a_line1',
             'address_line2' => 'a_line2',
             'state'         => 'state',
@@ -28,209 +21,110 @@ class UserTest extends \PHPUnit_Framework_TestCase {
             'zip'           => '90210',
             'country'       => 'AUS'
         );
-
-        $user = new User($payload);
-        $createdUser = $userRepo->createUser($user);
-        $findUser = $userRepo->getUserById($id);
+    }
+    
+    public function testUserCreate() {
+        // First, create the user
+        $createUser = PromisePay::createUser($this->userData);
         
-        $this->assertEquals($createdUser->getId(), $findUser->getId());
-        $this->assertNotNull($createdUser->getCreatedAt());
-        $this->assertNotNull($createdUser->getUpdatedAt());
+        // Second, fetch its data
+        $fetchUser = PromisePay::getUserById($this->GUID);
+        
+        $this->assertEquals($createUser['id'], $fetchUser['id']);
+        $this->assertNotNull($createUser['created_at']);
+        $this->assertNotNull($createUser['updated_at']);
     }
 
     /**
      * @expectedException PromisePay\Exception\Validation
      */
     public function testUserCreateMissedId() {
-        $id = GUID();
-        $userRepo = new UserRepository();
+        // Isolate the user data
+        $data = $this->userData;
         
-        $payload = array(
-            'id'            => '',
-            'first_name'    => 'UserCreateTest',
-            'last_name'     => 'UserLastname',
-            'email'         => $id.'@google.com',
-            'mobile'        => $id . '00012',
-            'address_line1' => 'a_line1',
-            'address_line2' => 'a_line2',
-            'state'         => 'state',
-            'city'          => 'city',
-            'zip'           => '90210',
-            'country'       => 'AUS'
-        );
+        // Change some params
+        $data['id'] = '';
         
-        $user = new User($payload);
-        $userRepo->createUser($user);
+        // Fire (and expect an exception)
+        PromisePay::createUser($data);
     }
 
     /**
      * @expectedException PromisePay\Exception\Validation
      */
     public function testUserCreateMissedFirstName() {
-        $id = GUID();
-        $userRepo = new UserRepository();
+        // Isolate the user data
+        $data = $this->userData;
         
-        $payload = array(
-            'id'            => $id,
-            'first_name'    => '',
-            'last_name'     => 'UserLastname',
-            'email'         => $id.'@google.com',
-            'mobile'        => $id . '00012',
-            'address_line1' => 'a_line1',
-            'address_line2' => 'a_line2',
-            'state'         => 'state',
-            'city'          => 'city',
-            'zip'           => '90210',
-            'country'       => 'AUS'
-        );
-
-        $user = new User($payload);
-        $userRepo->createUser($user);
+        // Change some params
+        $data['first_name'] = '';
+        
+        // Fire (and expect an exception)
+        PromisePay::createUser($data);
     }
 
     /**
      * @expectedException PromisePay\Exception\Validation
      */
     public function testUserCreateWrongCountryCode() {
-        $id = GUID();
-        $userRepo = new UserRepository();
+        // Isolate the user data
+        $data = $this->userData;
         
-        $payload = array(
-            'id'            => '',
-            'first_name'    => 'UserCreateTest',
-            'last_name'     => 'UserLastname',
-            'email'         => $id.'@google.com',
-            'mobile'        => $id . '00012',
-            'address_line1' => 'a_line1',
-            'address_line2' => 'a_line2',
-            'state'         => 'state',
-            'city'          => 'city',
-            'zip'           => '90210',
-            'country'       => 'TESTWRONGCODE'
-        );
-
-        $user = new User($payload);
-        $userRepo->createUser($user);
+        // Change some params
+        $data['country'] = 'WRONGCODE';
+        
+        // Fire (and expect an exception)
+        PromisePay::createUser($data);
     }
 
     /**
      * @expectedException PromisePay\Exception\Validation
      */
     public function testUserCreateInvalidEmail() {
-        $id = GUID();
-        $userRepo = new UserRepository();
+        // Isolate the user data
+        $data = $this->userData;
         
-        $payload = array(
-            'id'            => '',
-            'first_name'    => 'UserCreateTest',
-            'last_name'     => 'UserLastname',
-            'email'         => '___@google.com',
-            'mobile'        => $id . '00012',
-            'address_line1' => 'a_line1',
-            'address_line2' => 'a_line2',
-            'state'         => 'state',
-            'city'          => 'city',
-            'zip'           => '90210',
-            'country'       => 'AUS'
-        );
-
-        $user = new User($payload);
-        $userRepo->createUser($user);
+        // Change some params
+        $data['email'] = '@promisepay.com';
+        
+        // Fire (and expect an exception)
+        PromisePay::createUser($data);
     }
 
     public function testGetListOfUsersSuccess() {
-        $userRepo = new UserRepository();
-        $list = $userRepo->getListOfUsers();
-        $this->assertTrue(count($list) > 0);
+        $usersList = PromisePay::getListOfUsers();
+        
+        $this->assertNotNull($usersList);
+        $this->assertTrue(count($usersList) > 0);
     }
 
     /**
      * @expectedException PromisePay\Exception\Argument
      */
     public function testGetListOfUsersNegativeParams() {
-        $userRepo = new UserRepository();
-        $userRepo->getListOfUsers(-10, -20);
+        PromisePay::getListOfUsers(-10, -20);
     }
 
     /**
      * @expectedException PromisePay\Exception\Argument
      */
     public function testGetListOfUsersOverLimit() {
-        $userRepo = new UserRepository();
-        $userRepo->getListOfUsers(-201);
-    }
-
-    public function testGetUserSuccess() {
-        $id = GUID();
-        $userRepo = new UserRepository();
-        
-        $payload = array(
-            'id'            => $id,
-            'first_name'    => 'UserCreateTest',
-            'last_name'     => 'UserLastname',
-            'email'         => $id.'@google.com',
-            'mobile'        => $id.'00012',
-            'address_line1' => 'a_line1',
-            'address_line2' => 'a_line2',
-            'state'         => 'state',
-            'city'          => 'city',
-            'zip'           => '90210',
-            'country'       => 'AUS'
-        );
-
-        $user = new User($payload);
-        $createdUser = $userRepo->createUser($user);
-        $findUser = $userRepo->getUserById($id);
-        $this->assertEquals($createdUser->getId(), $findUser->getId());
+        PromisePay::getListOfUsers(-201);
     }
 
     /**
      * @expectedException PromisePay\Exception\Argument
      */
     public function testGetUserMissedId() {
-        $id = GUID();
-        $userRepo = new UserRepository();
-        
-        $payload = array(
-            'id' => $id,
-            'first_name'    => 'UserCreateTest',
-            'last_name'     => 'UserLastname',
-            'email'         => $id.'@google.com',
-            'mobile'        => $id.'00012',
-            'address_line1' => 'a_line1',
-            'address_line2' => 'a_line2',
-            'state'         => 'state',
-            'city'          => 'city',
-            'zip'           => '90210',
-            'country'       => 'AUS'
-        );
-        
-        $missedId = '';
-        $user = new User($payload);
-        $createdUser = $userRepo->createUser($user);
-        $findUser = $userRepo->getUserById($missedId);
+        PromisePay::getUserById("");
     }
 
     public function testDeleteUserSuccess() {
-        $id = GUID();
-        $userRepo = new UserRepository();
+        $createUser = PromisePay::createUser($this->userData);
         
-        $payload = array(
-            'id' => $id,
-            'first_name'    => 'UserCreateTest',
-            'last_name'     => 'UserLastname',
-            'email'         => $id.'@google.com',
-            'mobile'        => $id.'00012',
-            'address_line1' => 'a_line1',
-            'address_line2' => 'a_line2',
-            'state'         => 'state',
-            'city'          => 'city',
-            'zip'           => '90210',
-            'country'       => 'AUS'
-        );
-
-        $user = new User($payload);
-        $createdUser = $userRepo->createUser($user);
+        $deleteUser = PromisePay::deleteUser($createUser['id']);
+        
+        //var_dump($deleteUser);
         
         //delete action not working ina API, Uncomment asserting below after fix.
         //$this->assertTrue($userRepo->deleteUser($createdUser->getId()));
@@ -241,76 +135,36 @@ class UserTest extends \PHPUnit_Framework_TestCase {
      */
     public function testDeleteUserMissedId()
     {
-        $repo = new UserRepository();
-        $repo->deleteUser('');
+        PromisePay::deleteUser("");
     }
 
     public function testEditUserSuccess()
     {
-        $repo = new UserRepository();
-        $id = GUID();
-
-        $arr = array(
-            "id"            => $id,
-            "first_name"    => 'test',
-            "last_name"     => 'Test',
-            "email"         => $id . '@google.com',
-            "mobile"        => $id.'3213125551223',
-            "address_line1" => 'a line 1',
-            "address_line2" => 'a line 2',
-            "state"         => 'state',
-            "city"          => 'city',
-            "zip"           => '90210',
-            "country"       => 'AUS'
-        );
+        $userData = $this->userData;
         
-        $user = new User($arr);
-        $createdUser = $repo->createUser($user);
-
-        $edit = array(
-            "id"            => $id,
-            "first_name"    => 'test edited',
-            "last_name"     => 'Test',
-            "email"         => $id . '@google.com',
-            "mobile"        => $id.'3213125551223',
-            "address_line1" => 'a line 1',
-            "address_line2" => 'a line 2',
-            "state"         => 'state',
-            "city"          => 'city',
-            "zip"           => '90210',
-            "country"       => 'AUS'
-        );
+        $createUser = PromisePay::createUser($this->userData);
         
-        $edituser = new User($edit);
-        $repo->updateUser($edituser);
-        $findUser = $repo->getUserById($id);
-        $this->assertEquals($edituser->getFirstName(), $findUser->getFirstName());
+        $userData['first_name'] = 'Edited First name';
+        
+        $updateUser = PromisePay::updateUser($createUser['id'], $userData);
+        
+        $this->assertEquals($userData['first_name'], $updateUser['first_name']);
     }
 
     /**
      * @expectedException PromisePay\Exception\Validation
      */
     public function testEditUserMissedId() {
-        $id = GUID();
-        $userRepo = new UserRepository();
-        $payload = array(
-            'id'            => '',
-            'first_name'    => 'UserCreateTest',
-            'last_name'     => 'UserLastname',
-            'email'         => $id.'@google.com',
-            'mobile'        => $id.'00012',
-            'address_line1' => 'a_line1',
-            'address_line2' =>'a_line2',
-            'state'         => 'state',
-            'city'          => 'city',
-            'zip'           => '90210',
-            'country'       => 'AUS'
-        );
-
-        $user = new User($payload);
-        $userRepo->updateUser($user);
+        // First, create the user
+        $createUser = PromisePay::createUser($this->userData);
+        
+        $userData = $this->userData;
+        $userData['id'] = "";
+        
+        PromisePay::updateUser($createUser['id'], $userData);
     }
-
+    
+    /*
     public function testListUserItemsSuccess() {
         $repo = new UserRepository();
         $this->assertNotNull($repo->getListOfItemsForUser('ec9bf096-c505-4bef-87f6-18822b9dbf2c'));
@@ -335,4 +189,5 @@ class UserTest extends \PHPUnit_Framework_TestCase {
         $repos = new UserRepository();
         $this->assertNotNull($repos->setDisbursementAccount('ec9bf096-c505-4bef-87f6-18822b9dbf2c', '123'));
     }
+    */
 }

@@ -63,9 +63,7 @@ class PromisePay {
         if (!is_null($payload)) {
             if (is_array($payload) || is_object($payload)) {
                 $payload = http_build_query($payload);
-            } else {
-                throw new Exception\Api("Invalid payload type detected: when supplying payload to RestClient, make sure it is either array or object.");
-            }
+            } // if the payload isn't array or object, leave it intact
         }
         
         $url = constant(__NAMESPACE__ . '\API_URL') . $entity . '?' . $payload;
@@ -114,13 +112,18 @@ class PromisePay {
     }
 
     public static function paramsListCorrect($limit, $offset) {
+        if (!is_int($limit) || !is_int($offset)) {
+            Logger:logging('Fatal error: Limit and offset value should be integers!');
+            throw new Exception\Argument('Limit and offset value should be integers!');
+        }
+        
         if ($limit < 0 || $offset < 0 ) {
-            Logger::logging('Fatal error:limit and offset values should be nonnegative!');
-            throw new Exception\Argument('limit and offset values should be nonnegative!');
+            Logger::logging('Fatal error: limit and offset values should be nonnegative!');
+            throw new Exception\Argument('Limit and offset values should be nonnegative!');
         }
 
         if ($limit > self::ENTITY_LIST_LIMIT) {
-            Logger::logging('Fatal error:Max value for limit parameter!');
+            Logger::logging('Fatal error: Max value for limit parameter!');
             throw new Exception\Argument('Max value for limit parameter');
         }
     }

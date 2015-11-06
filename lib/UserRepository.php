@@ -1,76 +1,150 @@
 <?php
 namespace PromisePay;
 
+use PromisePay\PromisePay;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class UserRepository extends PromisePay
-{
-    public function getListOfUsers($params)
+class UserRepository extends PromisePay {
+    
+    public static function createUser($params)
     {
-        $response = $this->RestClient('get', 'users/', $params);
+        self::validateUser($params);
+        
+        $response = parent::RestClient('post', 'users/', $params);
+        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        
+        return $jsonDecodedResponse['users'];
+    }
+    
+    public static function getUserById($id)
+    {
+        parent::checkIdNotNull($id);
+        
+        $response = parent::RestClient('get', 'users/' . $id);
+        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        
+        return $jsonDecodedResponse['users'];
+    }
+    
+    public static function getListOfUsers($limit = 20, $offset = 0)
+    {
+        parent::paramsListCorrect($limit, $offset);
+        
+        $params = array(
+            'limit' => $limit,
+            'offset' => $offset
+        );
+        
+        $response = parent::RestClient('get', 'users/', $params);
+        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        
+        return $jsonDecodedResponse['users'];
+    }
+    
+    public static function updateUser($id, $params)
+    {
+        parent::checkIdNotNull($id);
+        self::validateUser($params);
+        
+        $response = parent::RestClient('patch', 'users/' . $id . "/", $params);
+        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        
+        return $jsonDecodedResponse['users'];
+    }
+
+    public static function deleteUser($id)
+    {
+        parent::checkIdNotNull($id);
+        
+        $response = parent::RestClient('delete', 'users/' . $id);
+        
         return json_decode($response->raw_body, true);
     }
 
-    public function getUserById($id)
+    public static function sendMobilePin($id)
     {
-        $this->checkIdNotNull($id);
-        $response = $this->RestClient('get', 'users/' . $id);
+        parent::checkIdNotNull($id);
+        
+        $response = parent::RestClient('post', '/users/' . $id . '/mobile_pin');
         return json_decode($response->raw_body, true);
     }
 
-    public function createUser($params)
+    public static function getListOfItemsForUser($id)
     {
-        $response = $this->RestClient('post', 'users/', $params);
+        parent::checkIdNotNull($id);
+        
+        $response = parent::RestClient('get', 'users/' . $id . '/items');
         return json_decode($response->raw_body, true);
     }
 
-    public function deleteUser($id)
+    public static function getListOfCardAccountsForUser($id)
     {
-        $response = $this->RestClient('delete', 'users/' . $id);
+        parent::checkIdNotNull($id);
+        
+        $response = parent::RestClient('get', 'users/' . $id . '/card_accounts');
         return json_decode($response->raw_body, true);
     }
 
-    public function sendMobilePin($id)
+    public static function getListOfPayPalAccountsForUser($id)
     {
-        $response = $this->RestClient('post', '/users/' . $id . '/mobile_pin');
+        parent::checkIdNotNull($id);
+        
+        $response = parent::RestClient('get', 'users/' . $id . '/paypal_accounts');
         return json_decode($response->raw_body, true);
     }
 
-    public function getListOfItemsForUser($id)
+    public static function getListOfBankAccountsForUser($id)
     {
-        $response = $this->RestClient('get', 'users/' . $id . '/items');
+        parent::checkIdNotNull($id);
+        
+        $response = parent::RestClient('get', 'users/' . $id . '/bank_accounts');
         return json_decode($response->raw_body, true);
     }
 
-    public function getListOfCardAccountsForUser($id)
+    public static function setDisbursementAccount($id, $params)
     {
-        $response = $this->RestClient('get', 'users/' . $id . '/card_accounts');
+        parent::checkIdNotNull($id);
+        self::validateUser($params);
+        
+        $response = parent::RestClient('post', 'users/' . $id . '/disbursement_account', $params);
         return json_decode($response->raw_body, true);
     }
-
-    public function getListOfPayPalAccountsForUser($id)
-    {
-        $this->checkIdNotNull($id);
-        $response = $this->RestClient('get', 'users/' . $id . '/paypal_accounts');
-        return json_decode($response->raw_body, true);
+    
+    private static function validateUser($userData) {
+        if (empty($userData['id'])) {
+            throw new Exception\Validation('Field User.ID should not be empty.');
+        }
+        if (empty($userData['first_name'])) {
+            throw new Exception\Validation('Field User.FirstName should not be empty.');
+        }
+        if (!self::isCorrectCountryCode($userData['country'])) {
+            throw new Exception\Validation('Field User.Country should contain a 3-letter ISO country code.');
+        }
+        if (!self::isCorrectEmail($userData['email'])) {
+            throw new Exception\Validation('Field User.Email is invalid.');
+        }
     }
-
-    public function getListOfBankAccountsForUser($id)
-    {
-        $response = $this->RestClient('get', 'users/' . $id . '/bank_accounts');
-        return json_decode($response->raw_body, true);
+    
+    private static function isCorrectEmail($email) {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        } 
+        else {
+            return true;
+        }
     }
-
-    public function setDisbursementAccount($id, $params)
-    {
-        $response = $this->RestClient('post', 'users/' . $id . '/disbursement_account', $params);
-        return json_decode($response->raw_body, true);
+    
+    private static function isCorrectCountryCode($country) {
+        $allowedCountryCodes = array("AFG", "ALA", "ALB", "DZA", "ASM", "AND", "AGO", "AIA", "ATA", "ATG", "ARG", "ARM", "ABW", "AUS", "AUT", "AZE", "BHS", "BHR", "BGD", "BRB", "BLR", "BEL", "BLZ", "BEN", "BMU", "BTN", "BOL", "BIH", "BWA", "BVT", "BRA", "VGB", "IOT", "BRN", "BGR", "BFA", "BDI", "KHM", "CMR", "CAN", "CPV", "CYM", "CAF", "TCD", "CHL", "CHN", "HKG", "MAC", "CXR", "CCK", "COL", "COM", "COG", "COD", "COK", "CRI", "CIV", "HRV", "CUB", "CYP", "CZE", "DNK", "DJI", "DMA", "DOM", "ECU", "EGY", "SLV", "GNQ", "ERI", "EST", "ETH", "FLK", "FRO", "FJI", "FIN", "FRA", "GUF", "PYF", "ATF", "GAB", "GMB", "GEO", "DEU", "GHA", "GIB", "GRC", "GRL", "GRD", "GLP", "GUM", "GTM", "GGY", "GIN", "GNB", "GUY", "HTI", "HMD", "VAT", "HND", "HUN", "ISL", "IND", "IDN", "IRN", "IRQ", "IRL", "IMN", "ISR", "ITA", "JAM", "JPN", "JEY", "JOR", "KAZ", "KEN", "KIR", "PRK", "KOR", "KWT", "KGZ", "LAO", "LVA", "LBN", "LSO", "LBR", "LBY", "LIE", "LTU", "LUX", "MKD", "MDG", "MWI", "MYS", "MDV", "MLI", "MLT", "MHL", "MTQ", "MRT", "MUS", "MYT", "MEX", "FSM", "MDA", "MCO", "MNG", "MNE", "MSR", "MAR", "MOZ", "MMR", "NAM", "NRU", "NPL", "NLD", "ANT", "NCL", "NZL", "NIC", "NER", "NGA", "NIU", "NFK", "MNP", "NOR", "OMN", "PAK", "PLW", "PSE", "PAN", "PNG", "PRY", "PER", "PHL", "PCN", "POL", "PRT", "PRI", "QAT", "REU", "ROU", "RUS", "RWA", "BLM", "SHN", "KNA", "LCA", "MAF", "SPM", "VCT", "WSM", "SMR", "STP", "SAU", "SEN", "SRB", "SYC", "SLE", "SGP", "SVK", "SVN", "SLB", "SOM", "ZAF", "SGS", "SSD", "ESP", "LKA", "SDN", "SUR", "SJM", "SWZ", "SWE", "CHE", "SYR", "TWN", "TJK", "TZA", "THA", "TLS", "TGO", "TKL", "TON", "TTO", "TUN", "TUR", "TKM", "TCA", "TUV", "UGA", "UKR", "ARE", "GBR", "USA", "UMI", "URY", "UZB", "VUT", "VEN", "VNM", "VIR", "WLF", "ESH", "YEM", "ZMB", "ZWE");
+        
+        if (!in_array($country, $allowedCountryCodes)) {
+            return false;
+        } 
+        else {
+            return true;
+        }
+        
     }
-
-    public function updateUser($id, $params)
-    {
-        $response = $this->RestClient('patch', 'users/' . $id . "/", $params);
-        return json_decode($response->raw_body, true);
-    }
+    
 }

@@ -4,138 +4,155 @@ namespace PromisePay;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class ItemRepository extends PromisePay
-{
-    public function getListOfItems($params)
+class ItemRepository extends PromisePay {
+    
+    public static function getListOfItems($limit = 10, $offset = 0)
     {
-        $response = $this->RestClient('get', 'items/', $params);
+        PromisePay::paramsListCorrect($limit, $offset);
+        
+        $requestQuery = array(
+            'limit'  => $limit,
+            'offset' => $offset
+        );
+        
+        $response = parent::RestClient('get', 'items/', $requestQuery);
+        $jsonDecodedResponse = json_decode($response, true);
+        
+        return $jsonDecodedResponse['items'];
+    }
+
+    public static function getItemById($id)
+    {
+        $response = parent::RestClient('get', 'items/' . $id);
+        $jsonDecodedResponse = json_decode($response, true);
+        
+        return $jsonDecodedResponse['items'];
+    }
+
+    public static function createItem($params)
+    {
+        $response = parent::RestClient('post', 'items/', $params);
+        $jsonDecodedResponse = json_decode($response, true);
+        
+        return $jsonDecodedResponse['items'];
+    }
+
+    public static function deleteItem($id)
+    {
+        $response = parent::RestClient('delete', 'items/' . $id);
+        $jsonDecodedResponse = json_decode($response, true);
+        
+        return $jsonDecodedResponse['items'];
+    }
+
+    public static function updateItem($id, $params)
+    {
+        $response = parent::RestClient('patch', 'items/' . $id . '/', $params);
+        $jsonDecodedResponse = json_decode($response, true);
+        
+        return $jsonDecodedResponse['items'];
+    }
+    
+    public static function makePayment($id, $params)
+    {
+        $response = parent::RestClient('patch', 'items/' . $id . '/make_payment', $params);
         return json_decode($response->raw_body, true);
     }
 
-    public function getItemById($id)
+    public static function getListOfTransactionsForItem($id)
     {
-        $response = $this->RestClient('get', 'items/' . $id);
+        $response = parent::RestClient('get', 'items/' . $id . '/transactions');
         return json_decode($response->raw_body, true);
     }
 
-    public function createItem($params)
+    public static function getItemStatus($id)
     {
-        $response = $this->RestClient('post', 'items/', $params);
+        $response = parent::RestClient('get', 'items/' . $id . '/status');
         return json_decode($response->raw_body, true);
     }
 
-    public function deleteItem($id)
+    public static function getListFeesForItems($id)
     {
-        $response = $this->RestClient('delete', 'items/' . $id);
+        $response = parent::RestClient('get', 'items/' . $id . '/fees');
         return json_decode($response->raw_body, true);
     }
 
-    public function updateItem($id, $params)
+    public static function getBuyerOfItem($id)
     {
-        $response = $this->RestClient('patch', 'items/' . $id . '/', $params);
+        $response = parent::RestClient('get', 'items/' . $id . '/buyers');
         return json_decode($response->raw_body, true);
     }
 
-    public function getListOfTransactionsForItem($id)
+    public static function getSellerForItem($id)
     {
-        $response = $this->RestClient('get', 'items/' . $id . '/transactions');
+        $response = parent::RestClient('get', 'items/' . $id . '/sellers');
         return json_decode($response->raw_body, true);
     }
 
-    public function getItemStatus($id)
+    public static function getWireDetailsForItem($id)
     {
-        $response = $this->RestClient('get', 'items/' . $id . '/status');
+        $response = parent::RestClient('get', 'items/' . $id . '/wire_details');
         return json_decode($response->raw_body, true);
     }
 
-    public function getListFeesForItems($id)
+    public static function getBPayDetailsForItem($id)
     {
-        $response = $this->RestClient('get', 'items/' . $id . '/fees');
+        $response = parent::RestClient('get', 'items/' . $id . '/bpay_details');
         return json_decode($response->raw_body, true);
     }
 
-    public function getBuyerOfItem($id)
+    public static function requestPayment($id)
     {
-        $response = $this->RestClient('get', 'items/' . $id . '/buyers');
+        $response = parent::RestClient('patch', 'items/' . $id . '/request_payment');
         return json_decode($response->raw_body, true);
     }
 
-    public function getSellerForItem($id)
+    public static function releasePayment($id, $params)
     {
-        $response = $this->RestClient('get', 'items/' . $id . '/sellers');
-        return json_decode($response->raw_body, true);
-    }
-
-    public function getWireDetailsForItem($id)
-    {
-        $response = $this->RestClient('get', 'items/' . $id . '/wire_details');
-        return json_decode($response->raw_body, true);
-    }
-
-    public function getBPayDetailsForItem($id)
-    {
-        $response = $this->RestClient('get', 'items/' . $id . '/bpay_details');
-        return json_decode($response->raw_body, true);
-    }
-
-    public function makePayment($id, $params)
-    {
-        $response = $this->RestClient('patch', 'items/' . $id . '/make_payment', $params);
-        return json_decode($response->raw_body, true);
-    }
-
-    public function requestPayment($id)
-    {
-        $response = $this->RestClient('patch', 'items/' . $id . '/request_payment');
-        return json_decode($response->raw_body, true);
-    }
-
-    public function releasePayment($id, $params)
-    {
-        $response = $this->RestClient('patch', 'items/' . $id . '/release_payment', $params);
+        $response = parent::RestClient('patch', 'items/' . $id . '/release_payment', $params);
         return json_decode($response->raw_body, true);
     }
 
 
-    public function requestRelease($id, $params)
+    public static function requestRelease($id, $params)
     {
-        $response = $this->RestClient('patch', 'items/' . $id . '/request_release', $params);
+        $response = parent::RestClient('patch', 'items/' . $id . '/request_release', $params);
         return json_decode($response->raw_body, true);
     }
 
-    public function cancelItem($id)
+    public static function cancelItem($id)
     {
-        $response = $this->RestClient('patch', 'items/' . $id . '/cancel');
+        $response = parent::RestClient('patch', 'items/' . $id . '/cancel');
         return json_decode($response->raw_body, true);
     }
 
-    public function acknowledgeWire($id)
+    public static function acknowledgeWire($id)
     {
-        $response = $this->RestClient('patch', 'items/' . $id . '/acknowledge_wire');
+        $response = parent::RestClient('patch', 'items/' . $id . '/acknowledge_wire');
         return json_decode($response->raw_body, true);
     }
 
-    public function acknowledgePayPal($id)
+    public static function acknowledgePayPal($id)
     {
-        $response = $this->RestClient('patch', 'items/' . $id . '/acknowledge_paypal');
+        $response = parent::RestClient('patch', 'items/' . $id . '/acknowledge_paypal');
         return json_decode($response->raw_body, true);
     }
 
-    public function revertWire($id)
+    public static function revertWire($id)
     {
-        $response = $this->RestClient('patch', 'items/' . $id . '/revert_wire');
+        $response = parent::RestClient('patch', 'items/' . $id . '/revert_wire');
         return json_decode($response->raw_body, true);
     }
 
-    public function requestRefund($id, $params)
+    public static function requestRefund($id, $params)
     {
-        $response = $this->RestClient('patch', 'items/' . $id . '/request_refund', $params);
+        $response = parent::RestClient('patch', 'items/' . $id . '/request_refund', $params);
         return json_decode($response->raw_body, true);
     }
 
-    public function refund($id, $params)
+    public static function refund($id, $params)
     {
-        $response = $this->RestClient('patch', 'items/' . $id . '/refund', $params);
+        $response = parent::RestClient('patch', 'items/' . $id . '/refund', $params);
         return json_decode($response->raw_body, true);
     }
 }

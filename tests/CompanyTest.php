@@ -18,7 +18,7 @@ class CompanyTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testListOfCompanies() {
-        $companiesList = PromisePay::getListOfCompanies();
+        $companiesList = PromisePay::Company()->getList();
         
         $this->assertNotEmpty($companiesList);
         $this->assertTrue(is_array($companiesList));
@@ -26,22 +26,22 @@ class CompanyTest extends \PHPUnit_Framework_TestCase {
         $this->assertNotNull($companiesList[0]['id']);
     }
 
-    public function testGetCompanyByIdSuccessfully() {
-        $companyData = PromisePay::getCompanyById($this->companyId);
+    public function testGetCompanyById() {
+        $companyData = PromisePay::Company()->get($this->companyId);
         
         $this->assertEquals($this->companyId, $companyData['id']);
     }
     
-    public function testCreateCompanySuccessfully() {
-        $companyCreate = PromisePay::createCompany($this->companyInfo);
+    public function testCreateCompany() {
+        $companyCreate = PromisePay::Company()->create($this->companyInfo);
         
         $this->assertNotNull($companyCreate['id']);
     }
 
-    public function testEditCompanySuccessfully() {
+    public function testEditCompany() {
         $this->companyInfo['name'] = 'Modified company name';
         
-        $companyUpdate = PromisePay::updateCompany($this->companyId, $this->companyInfo);
+        $companyUpdate = PromisePay::Company()->update($this->companyId, $this->companyInfo);
         
         $this->assertEquals($this->companyInfo['legal_name'], $companyUpdate['legal_name']);
         $this->assertEquals($this->companyInfo['name'], $companyUpdate['name']);

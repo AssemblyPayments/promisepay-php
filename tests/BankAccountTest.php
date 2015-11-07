@@ -22,34 +22,36 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testCreateBankAccount() {
-        $createdBankAccount = PromisePay::createBankAccount($this->bankAccountInfo);
+        $createBankAccount = PromisePay::BankAccount()->create($this->bankAccountInfo);
         
-        $this->assertEquals($this->bankAccountInfo['account_name'], $createdBankAccount['bank']['account_name']);
-        $this->assertNotNull($createdBankAccount['created_at']);
-        $this->assertNotNull($createdBankAccount['updated_at']);
+        $this->assertEquals($this->bankAccountInfo['account_name'], $createBankAccount['bank']['account_name']);
+        $this->assertNotNull($createBankAccount['created_at']);
+        $this->assertNotNull($createBankAccount['updated_at']);
     }
 
     public function testGetBankAccount() {
-        $createdBankAccount = PromisePay::createBankAccount($this->bankAccountInfo);
-        $createdBankAccountId = $createdBankAccount['id'];
+        $createBankAccount = PromisePay::BankAccount()->create($this->bankAccountInfo);
+        $createBankAccountId = $createBankAccount['id'];
         
-        $bankAccountLookup = PromisePay::getBankAccountById($createdBankAccountId);
+        $this->assertNotNull($createBankAccountId);
         
-        $this->assertEquals($createdBankAccountId, $bankAccountLookup['id']);
+        $bankAccountLookup = PromisePay::BankAccount()->get($createBankAccountId);
+        
+        $this->assertEquals($createBankAccountId, $bankAccountLookup['id']);
     }
 
     public function testGetUserForBankAccount() {
-        $bankAccountCreated = PromisePay::createBankAccount($this->bankAccountInfo);
-        $gotUser = PromisePay::getUserForBankAccount($bankAccountCreated['id']);
+        $createBankAccount = PromisePay::BankAccount()->create($this->bankAccountInfo);
+        $getUser = PromisePay::BankAccount()->getUser($createBankAccount['id']);
         
-        $this->assertEquals($this->userId, $gotUser['id']);
+        $this->assertEquals($this->userId, $getUser['id']);
     }
 
     public function testDeleteBankAccount() {
-        $createBankAccount = PromisePay::createBankAccount($this->bankAccountInfo);
+        $createBankAccount = PromisePay::BankAccount()->create($this->bankAccountInfo);
         $bankAccountId = $createBankAccount['id'];
         
-        $deleteBankAccount = PromisePay::deleteBankAccount($bankAccountId);
+        $deleteBankAccount = PromisePay::BankAccount()->delete($bankAccountId);
         
         $this->assertEquals($deleteBankAccount, 'Successfully redacted');
     }

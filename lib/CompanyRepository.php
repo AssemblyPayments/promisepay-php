@@ -9,7 +9,8 @@ use PromisePay\Log;
  *
  * @package PromisePay
  */
-class CompanyRepository extends PromisePay {
+class CompanyRepository {
+    
     /**
      * Accepts two params - amount of entities to list,
      * and listing starting point (offset).
@@ -19,28 +20,18 @@ class CompanyRepository extends PromisePay {
      * @param int $offset
      * @return array
      */
-    public static function getListOfCompanies($limit = 20, $offset = 0) {
-        parent::paramsListCorrect($limit, $offset);
+    public static function getList($limit = 20, $offset = 0) {
+        PromisePay::paramsListCorrect($limit, $offset);
         
         $requestParams = array(
             'limit' => $limit,
             'offset' => $offset
         );
         
-        $response = parent::RestClient('get', 'companies/', $requestParams);
+        $response = PromisePay::RestClient('get', 'companies/', $requestParams);
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
-        /*
-            Even though $companyList[] creates the array automatically, in case there's no 
-            companies returned, returning non-existent $companyList would trigger a PHP notice
-        */
-        $companyList = array(); 
-        
-        foreach ($jsonDecodedResponse['companies'] as $company) {
-            $companyList[] = $company;
-        }
-        
-        return $companyList;
+        return $jsonDecodedResponse['companies'];
     }
 
     /**
@@ -50,10 +41,10 @@ class CompanyRepository extends PromisePay {
      * @param string $id
      * @return array
      */
-    public static function getCompanyById($id) {
-        parent::checkIdNotNull($id);
+    public static function get($id) {
+        PromisePay::checkIdNotNull($id);
         
-        $response = parent::RestClient('get', 'companies/' . $id);
+        $response = PromisePay::RestClient('get', 'companies/' . $id);
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
         return $jsonDecodedResponse['companies'];
@@ -67,8 +58,8 @@ class CompanyRepository extends PromisePay {
      * @param string $id
      * @return array
      */
-    public static function createCompany($companyData) {
-        $response = parent::RestClient('post', 'companies/', $companyData);
+    public static function create($companyData) {
+        $response = PromisePay::RestClient('post', 'companies/', $companyData);
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
         return $jsonDecodedResponse['companies'];
@@ -82,10 +73,10 @@ class CompanyRepository extends PromisePay {
      * @param string $id
      * @return array
      */
-    public static function updateCompany($id, $companyData) {
-        parent::checkIdNotNull($id);
+    public static function update($id, $companyData) {
+        PromisePay::checkIdNotNull($id);
 
-        $response = parent::RestClient('patch', 'companies/' . $id, $companyData);
+        $response = PromisePay::RestClient('patch', 'companies/' . $id, $companyData);
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
         return $jsonDecodedResponse['companies'];

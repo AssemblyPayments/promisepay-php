@@ -4,24 +4,26 @@ namespace PromisePay;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class FeeRepository extends PromisePay {
+class FeeRepository {
     
-    public static function getListOfFees() {
-        $response = parent::RestClient('get', 'fees/');
+    public static function getList() {
+        $response = PromisePay::RestClient('get', 'fees/');
         $jsonDecodedResponse = json_decode($response, true);
         
         return $jsonDecodedResponse['fees'];
     }
     
-    public static function getFeeById($id) {
-        $response = parent::RestClient('get', 'fees/' . $id);
+    public static function get($id) {
+        PromisePay::checkIdNotNull($id);
+        
+        $response = PromisePay::RestClient('get', 'fees/' . $id);
         $jsonDecodedResponse = json_decode($response, true);
         
         return $jsonDecodedResponse['fees'];
     }
     
-    public static function createFee($params) {
-        $response = parent::RestClient('post', 'fees/', $params);
+    public static function create($params) {
+        $response = PromisePay::RestClient('post', 'fees/', $params);
         $jsonDecodedResponse = json_decode($response, true);
         
         return $jsonDecodedResponse['fees'];

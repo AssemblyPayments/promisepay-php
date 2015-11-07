@@ -4,32 +4,39 @@ namespace PromisePay;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class CardAccountRepository extends PromisePay {
-    public static function getCardAccountById($id) {
-        $response = parent::RestClient('get', 'card_accounts/' . $id);
+class CardAccountRepository {
+    
+    public static function get($id) {
+        PromisePay::checkIdNotNull($id);
+        
+        $response = PromisePay::RestClient('get', 'card_accounts/' . $id);
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
         return $jsonDecodedResponse['card_accounts'];
     }
 
-    public static function createCardAccount($params) {
-        $response = parent::RestClient('post', 'card_accounts?', $params);
+    public static function create($params) {
+        $response = PromisePay::RestClient('post', 'card_accounts?', $params);
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
         return $jsonDecodedResponse['card_accounts'];
     }
 
-    public static function deleteCardAccount($id) {
-        $response = parent::RestClient('delete', 'card_accounts/' . $id);
+    public static function delete($id) {
+        PromisePay::checkIdNotNull($id);
+        
+        $response = PromisePay::RestClient('delete', 'card_accounts/' . $id);
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
         return $jsonDecodedResponse['card_account'];
     }
 
-    public static function getUserForCardAccount($id) {
-        $response = parent::RestClient('get', 'users/' . $id . '/bank_accounts');
+    public static function getUser($id) {
+        PromisePay::checkIdNotNull($id);
+        
+        $response = PromisePay::RestClient('get', 'card_accounts/' . $id . '/users');
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
-        return $jsonDecodedResponse['card_accounts'];
+        return $jsonDecodedResponse['card_account'];
     }
 }

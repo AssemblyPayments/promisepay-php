@@ -4,9 +4,9 @@ namespace PromisePay;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class ItemRepository extends PromisePay {
+class ItemRepository {
     
-    public static function getListOfItems($limit = 10, $offset = 0)
+    public static function getList($limit = 10, $offset = 0)
     {
         PromisePay::paramsListCorrect($limit, $offset);
         
@@ -15,39 +15,39 @@ class ItemRepository extends PromisePay {
             'offset' => $offset
         );
         
-        $response = parent::RestClient('get', 'items/', $requestQuery);
+        $response = PromisePay::RestClient('get', 'items/', $requestQuery);
         $jsonDecodedResponse = json_decode($response, true);
         
         return $jsonDecodedResponse['items'];
     }
 
-    public static function getItemById($id)
+    public static function get($id)
     {
-        $response = parent::RestClient('get', 'items/' . $id);
+        $response = PromisePay::RestClient('get', 'items/' . $id);
         $jsonDecodedResponse = json_decode($response, true);
         
         return $jsonDecodedResponse['items'];
     }
 
-    public static function createItem($params)
+    public static function create($params)
     {
-        $response = parent::RestClient('post', 'items/', $params);
+        $response = PromisePay::RestClient('post', 'items/', $params);
         $jsonDecodedResponse = json_decode($response, true);
         
         return $jsonDecodedResponse['items'];
     }
 
-    public static function deleteItem($id)
+    public static function delete($id)
     {
-        $response = parent::RestClient('delete', 'items/' . $id);
+        $response = PromisePay::RestClient('delete', 'items/' . $id);
         $jsonDecodedResponse = json_decode($response, true);
         
         return $jsonDecodedResponse['items'];
     }
 
-    public static function updateItem($id, $params)
+    public static function update($id, $params)
     {
-        $response = parent::RestClient('patch', 'items/' . $id . '/', $params);
+        $response = PromisePay::RestClient('patch', 'items/' . $id . '/', $params);
         $jsonDecodedResponse = json_decode($response, true);
         
         return $jsonDecodedResponse['items'];
@@ -55,104 +55,108 @@ class ItemRepository extends PromisePay {
     
     public static function makePayment($id, $params)
     {
-        $response = parent::RestClient('patch', 'items/' . $id . '/make_payment', $params);
+        $response = PromisePay::RestClient('patch', 'items/' . $id . '/make_payment', $params);
         return json_decode($response->raw_body, true);
     }
 
-    public static function getListOfTransactionsForItem($id)
+    public static function getListOfTransactions($id)
     {
-        $response = parent::RestClient('get', 'items/' . $id . '/transactions');
+        $response = PromisePay::RestClient('get', 'items/' . $id . '/transactions');
         return json_decode($response->raw_body, true);
     }
 
-    public static function getItemStatus($id)
+    public static function getStatus($id)
     {
-        $response = parent::RestClient('get', 'items/' . $id . '/status');
+        $response = PromisePay::RestClient('get', 'items/' . $id . '/status');
+        $jsonDecodedResponse = json_decode($response, true);
+        
+        return $jsonDecodedResponse['items'];
+    }
+
+    public static function getListOfFees($id)
+    {
+        $response = PromisePay::RestClient('get', 'items/' . $id . '/fees');
+        $jsonDecodedResponse = json_decode($response, true);
+        
+        return $jsonDecodedResponse['fees'];
+    }
+
+    public static function getBuyer($id)
+    {
+        $response = PromisePay::RestClient('get', 'items/' . $id . '/buyers');
         return json_decode($response->raw_body, true);
     }
 
-    public static function getListFeesForItems($id)
+    public static function getSeller($id)
     {
-        $response = parent::RestClient('get', 'items/' . $id . '/fees');
+        $response = PromisePay::RestClient('get', 'items/' . $id . '/sellers');
         return json_decode($response->raw_body, true);
     }
 
-    public static function getBuyerOfItem($id)
+    public static function getWireDetails($id)
     {
-        $response = parent::RestClient('get', 'items/' . $id . '/buyers');
+        $response = PromisePay::RestClient('get', 'items/' . $id . '/wire_details');
         return json_decode($response->raw_body, true);
     }
 
-    public static function getSellerForItem($id)
+    public static function getBPayDetails($id)
     {
-        $response = parent::RestClient('get', 'items/' . $id . '/sellers');
-        return json_decode($response->raw_body, true);
-    }
-
-    public static function getWireDetailsForItem($id)
-    {
-        $response = parent::RestClient('get', 'items/' . $id . '/wire_details');
-        return json_decode($response->raw_body, true);
-    }
-
-    public static function getBPayDetailsForItem($id)
-    {
-        $response = parent::RestClient('get', 'items/' . $id . '/bpay_details');
+        $response = PromisePay::RestClient('get', 'items/' . $id . '/bpay_details');
         return json_decode($response->raw_body, true);
     }
 
     public static function requestPayment($id)
     {
-        $response = parent::RestClient('patch', 'items/' . $id . '/request_payment');
+        $response = PromisePay::RestClient('patch', 'items/' . $id . '/request_payment');
         return json_decode($response->raw_body, true);
     }
 
     public static function releasePayment($id, $params)
     {
-        $response = parent::RestClient('patch', 'items/' . $id . '/release_payment', $params);
+        $response = PromisePay::RestClient('patch', 'items/' . $id . '/release_payment', $params);
         return json_decode($response->raw_body, true);
     }
 
 
     public static function requestRelease($id, $params)
     {
-        $response = parent::RestClient('patch', 'items/' . $id . '/request_release', $params);
+        $response = PromisePay::RestClient('patch', 'items/' . $id . '/request_release', $params);
         return json_decode($response->raw_body, true);
     }
 
     public static function cancelItem($id)
     {
-        $response = parent::RestClient('patch', 'items/' . $id . '/cancel');
+        $response = PromisePay::RestClient('patch', 'items/' . $id . '/cancel');
         return json_decode($response->raw_body, true);
     }
 
     public static function acknowledgeWire($id)
     {
-        $response = parent::RestClient('patch', 'items/' . $id . '/acknowledge_wire');
+        $response = PromisePay::RestClient('patch', 'items/' . $id . '/acknowledge_wire');
         return json_decode($response->raw_body, true);
     }
 
     public static function acknowledgePayPal($id)
     {
-        $response = parent::RestClient('patch', 'items/' . $id . '/acknowledge_paypal');
+        $response = PromisePay::RestClient('patch', 'items/' . $id . '/acknowledge_paypal');
         return json_decode($response->raw_body, true);
     }
 
     public static function revertWire($id)
     {
-        $response = parent::RestClient('patch', 'items/' . $id . '/revert_wire');
+        $response = PromisePay::RestClient('patch', 'items/' . $id . '/revert_wire');
         return json_decode($response->raw_body, true);
     }
 
     public static function requestRefund($id, $params)
     {
-        $response = parent::RestClient('patch', 'items/' . $id . '/request_refund', $params);
+        $response = PromisePay::RestClient('patch', 'items/' . $id . '/request_refund', $params);
         return json_decode($response->raw_body, true);
     }
 
     public static function refund($id, $params)
     {
-        $response = parent::RestClient('patch', 'items/' . $id . '/refund', $params);
+        $response = PromisePay::RestClient('patch', 'items/' . $id . '/refund', $params);
         return json_decode($response->raw_body, true);
     }
 }

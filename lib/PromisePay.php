@@ -27,37 +27,29 @@ class PromisePay {
         if (!defined(__NAMESPACE__ . '\API_LOGIN')) {
             new Configuration;
         }
+        
+        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+            die("Fatal error: The minimum version of PHP needed for this package is 5.3.0. Exiting...");
+        }
     }
     
     /**
      * Static method invoker
      *
-     * @param string $neededStaticMethodName
+     * @param string $neededClassName
      * @param mixed $passableArgs
-     * @return mixed
+     * @return object
      */
-     
-    public static function __callStatic($neededStaticMethodName, $passableArgs) {
-        /* 
-            Get all classes that are directly under PromisePay namespace 
-            (in other words, exclude classes that fall under, for example, PromisePay\Exceptions namespace).
-            
-            Find the appropriate class, forward the call and return the result.
-        */
+    public static function __callStatic($neededClassName, $autoPassedArgs) {
+        $neededClassName = __NAMESPACE__ . '\\' . $neededClassName . 'Repository';
         
-        foreach (get_declared_classes() as $declaredClass) {
-            if (substr_count($declaredClass, '\\') === 1 && substr($declaredClass, 0, strlen(__NAMESPACE__)) === __NAMESPACE__ && in_array($neededStaticMethodName, get_class_methods($declaredClass))) {
-                return forward_static_call_array(array($declaredClass, $neededStaticMethodName), $passableArgs);
-            }
+        if (class_exists($neededClassName)) {
+            return new $neededClassName;
+        } else {
+            throw new Exception\NotFound("Class $neededClassName not found");
         }
+        
     }
-    
-    
-    /*
-    public static function __callStatic($neededRepository, $passableArgs) {
-        var_dump($neededRepository, $passableArgs);
-    }
-    */
 
     /**
      * Interface for performing requests to PromisePay endpoints

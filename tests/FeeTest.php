@@ -13,7 +13,6 @@ class FeeTest extends \PHPUnit_Framework_TestCase {
         $this->GUID = GUID();
         
         $this->feeData = array(
-            'id'          => $this->GUID,
             'amount'      => 1000,
             'name'        => 'fee test',
             'fee_type_id' => (string) $this->enum->Fixed,
@@ -25,7 +24,7 @@ class FeeTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testCreateFee() {
-        $createFee = PromisePay::createFee($this->feeData);
+        $createFee = PromisePay::Fee()->create($this->feeData);
         
         $this->assertNotNull($createFee['id']);
         $this->assertEquals($createFee['name'], $this->feeData['name']);
@@ -38,21 +37,34 @@ class FeeTest extends \PHPUnit_Framework_TestCase {
         $data = $this->feeData;
         $data['to'] = 'test';
         
-        $createFee = PromisePay::createFee($data);
+        $createFee = PromisePay::Fee()->create($data);
         
         $this->assertNotNull($createFee);
     }
 
     public function testGetFeeById() {
-        $id  = '79116c9f-d750-4faa-85c7-b7da36f23b38';
-        $getFeeById = PromisePay::getFeeById($id);
+        $createFee = PromisePay::Fee()->create($this->feeData);
+        
+        $this->assertNotNull($createFee['id']);
+        $this->assertEquals($createFee['name'], $this->feeData['name']);
+        
+        $getFeeById = PromisePay::Fee()->get($createFee['id']);
         
         $this->assertNotNull($getFeeById['id']);
-        $this->assertEquals($id, $getFeeById['id']);
+        $this->assertEquals($createFee['id'], $getFeeById['id']);
+        $this->assertEquals($createFee['name'], $getFeeById['name']);
     }
 
     public function testListSuccessfull() {
-        $this->assertTrue(is_array(PromisePay::getListOfFees()));
+        $this->feeData['name'] = 'Fee Test Fee Test 123456';
+        
+        $createFee = PromisePay::Fee()->create($this->feeData);
+        
+        $getList = PromisePay::Fee()->getList();
+        
+        var_dump($createFee['id'], $getList);
+        
+        $this->assertTrue(is_array($getList));
     }
 
 }

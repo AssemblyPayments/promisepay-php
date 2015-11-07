@@ -21,9 +21,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
             "description"     => 'Description'
         );
     }
-
+    
     public function testCreateItem() {
-        $createItem = PromisePay::createItem($this->itemData);
+        $createItem = PromisePay::Item()->create($this->itemData);
         
         $this->assertEquals($this->itemData['id'], $createItem['id']);
         $this->assertEquals($this->itemData['name'], $createItem['name']);
@@ -31,35 +31,34 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($this->itemData['payment_type_id'], $createItem['payment_type_id']);
         $this->assertEquals($this->itemData['description'], $createItem['description']);
     }
-
+    
     public function testListAllItems() {
-        $fetchList = PromisePay::getListOfItems(200);
+        $fetchList = PromisePay::Item()->getList(200);
         
         $this->assertNotNull($fetchList);
         $this->assertTrue(count($fetchList) > 0);
     }
-
+    
     /**
      * @expectedException PromisePay\Exception\Argument
      */
     public function testListItemsNegativeParams() {
-        PromisePay::getListOfItems(-10, -20);
+        PromisePay::Item()->getList(-10, -20);
     }
-
+    
     /**
      * @expectedException PromisePay\Exception\Argument
      */
     public function testListItemsTooHighLimit() {
-        PromisePay::getListOfItems(201);
+        PromisePay::Item()->getList(201);
     }
-    
     
     public function testGetItem() {
         // Create the item
-        PromisePay::createItem($this->itemData);
+        PromisePay::Item()->create($this->itemData);
         
         // Then, fetch it
-        $getItem = PromisePay::getItemById($this->GUID);
+        $getItem = PromisePay::Item()->get($this->GUID);
 
         $this->assertNotNull($getItem);
         $this->assertEquals($this->GUID, $getItem['id']);
@@ -67,16 +66,16 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
     
     public function testDeleteItem() {
         // Create the item
-        PromisePay::createItem($this->itemData);
+        PromisePay::Item()->create($this->itemData);
         
         // Fetch its data
-        $getItem = PromisePay::getItemById($this->GUID);
+        $getItem = PromisePay::Item()->get($this->GUID);
         
         $this->assertNotNull($getItem);
         $this->assertEquals($this->GUID, $getItem['id']);
         
         // Finally, delete it
-        $deleteItem = PromisePay::deleteItem($getItem['id']);
+        $deleteItem = PromisePay::Item()->delete($getItem['id']);
         
         $this->assertNotNull($deleteItem['id']);
         $this->assertEquals($deleteItem['state'], 'cancelled');
@@ -87,7 +86,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $data = $this->itemData;
         
         // Create the item
-        $createItem = PromisePay::createItem($data);
+        $createItem = PromisePay::Item()->create($data);
         
         $this->assertEquals($this->GUID, $createItem['id']);
         
@@ -96,13 +95,14 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $data['description'] = 'Test123Description';
         
         // Finally, modify the item
-        $updateItem = PromisePay::updateItem($createItem['id'], $data);
+        $updateItem = PromisePay::Item()->update($createItem['id'], $data);
         
         $this->assertEquals($data['name'], $updateItem['name']);
         $this->assertEquals($data['description'], $updateItem['description']);
     }
     
     public function testMakePayment() {
+        // TODO AFTER USER REPO
         $user_guid = GUID();
         $userData = array(
             'id'            => $user_guid,
@@ -121,10 +121,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $itemData = $this->itemData;
         $itemData['buyer_id'] = $user_guid;
         
-        $createUser = PromisePay::createUser($userData);
+        //$createUser = PromisePay::Item()->create($userData);
         
         // Create the item
-        $createItem = PromisePay::createItem($itemData);
+        //$createItem = PromisePay::Item()->create($itemData);
         
         //var_dump($createItem, $createUser);
         
@@ -133,13 +133,15 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         //var_dump($makePayment);
     }
     
-    
     public function testListTransactionsForItem() {
         // Create the item
-        PromisePay::createItem($this->itemData);
+        $createItem = PromisePay::Item()->create($this->itemData);
         
-        $listTransactions = PromisePay::getListOfTransactionsForItem($this->GUID);
+        $this->assertEquals($this->GUID, $createItem['id']);
         
+        //$listTransactions = PromisePay::Item()->getListOfTransactions($createItem['id']);
+        
+        // CONTINUE AFTER MAKE PAYMENT ISSUE IS RESOLVED
         //var_dump($listTransactions);
         
         /*
@@ -150,30 +152,62 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $this->assertNotNull($transactions);
         */
     }
-    /*
+    
     public function testGetStatusForItem() {
-        $repo = new ItemRepository();
-        $status = $repo->getItemStatus("7c269f52-2236-4aa5-899e-a2e3ecadbc3f");
+        // Create the item
+        $createItem = PromisePay::Item()->create($this->itemData);
         
-        $this->assertNotNull($status);
+        $this->assertEquals($this->GUID, $createItem['id']);
+        
+        // Get its status
+        $itemStatus = PromisePay::Item()->getStatus($createItem['id']);
+        
+        $this->assertNotNull($itemStatus['status']);
     }
     
     public function testListFeesForItem() {
-        $repo = new ItemRepository();
-        $fees = $repo->getListFeesForItems("7c269f52-2236-4aa5-899e-a2e3ecadbc3f");
+        // Create an item
+        $createItem = PromisePay::Item()->create($this->itemData);
         
-        $this->assertNotNull($fees);
+        $this->assertEquals($this->GUID, $createItem['id']);
+        
+        // Setup fee data
+        $feeData = array(
+            'amount'      => 1000,
+            'name'        => 'fee test',
+            'fee_type_id' => '1',
+            'cap'         => '1',
+            'max'         => '3',
+            'min'         => '2',
+            'to'          => 'buyer'
+        );
+        
+        // Create a fee
+        $createFee = PromisePay::Fee()->create($feeData);
+        
+        // TODO: ADD A FEE TO THE ITEM
+        
+        //$itemFees = PromisePay::Item()->getListOfFees($createItem['id']);
+        
+        //var_dump($itemFees);
+        
+        //$this->assertNotNull($itemStatus['fee_list']);
     }
     
     public function testGetBuyerForItem() {
-        \PHPUnit_Framework_Error_Notice::$enabled = FALSE;
+        // Create an item
+        $createItem = PromisePay::Item()->create($this->itemData);
         
-        $repo = new ItemRepository();
-        $user = $repo->getBuyerOfItem("7c269f52-2236-4aa5-899e-a2e3ecadbc3f");
+        $this->assertEquals($this->GUID, $createItem['id']);
         
-        $this->assertNotNull($user);
+        $getBuyer = PromisePay::Item()->getBuyer("7c269f52-2236-4aa5-899e-a2e3ecadbc3f");
+        
+        //var_dump($getBuyer);
+        
+        $this->assertNotNull($getBuyer);
     }
     
+    /*
     public function testGetSellerForItem() {
         \PHPUnit_Framework_Error_Notice::$enabled = FALSE;
         

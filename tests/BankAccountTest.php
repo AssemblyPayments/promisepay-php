@@ -4,11 +4,11 @@ use PromisePay\PromisePay;
 
 class BankAccountTest extends \PHPUnit_Framework_TestCase {
     
-    protected $userId, $bankAccountInfo;
+    protected $userId, $bankAccountData;
     
     public function setUp() {
         $this->userId = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';
-        $this->bankAccountInfo = array(
+        $this->bankAccountData = array(
             "user_id"        => $this->userId,
             "active"         => 'true',
             "bank_name"      => 'bank for test',
@@ -22,15 +22,15 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testCreateBankAccount() {
-        $createBankAccount = PromisePay::BankAccount()->create($this->bankAccountInfo);
+        $createBankAccount = PromisePay::BankAccount()->create($this->bankAccountData);
         
-        $this->assertEquals($this->bankAccountInfo['account_name'], $createBankAccount['bank']['account_name']);
+        $this->assertEquals($this->bankAccountData['account_name'], $createBankAccount['bank']['account_name']);
         $this->assertNotNull($createBankAccount['created_at']);
         $this->assertNotNull($createBankAccount['updated_at']);
     }
 
     public function testGetBankAccount() {
-        $createBankAccount = PromisePay::BankAccount()->create($this->bankAccountInfo);
+        $createBankAccount = PromisePay::BankAccount()->create($this->bankAccountData);
         $createBankAccountId = $createBankAccount['id'];
         
         $this->assertNotNull($createBankAccountId);
@@ -41,14 +41,14 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testGetUserForBankAccount() {
-        $createBankAccount = PromisePay::BankAccount()->create($this->bankAccountInfo);
+        $createBankAccount = PromisePay::BankAccount()->create($this->bankAccountData);
         $getUser = PromisePay::BankAccount()->getUser($createBankAccount['id']);
         
         $this->assertEquals($this->userId, $getUser['id']);
     }
 
     public function testDeleteBankAccount() {
-        $createBankAccount = PromisePay::BankAccount()->create($this->bankAccountInfo);
+        $createBankAccount = PromisePay::BankAccount()->create($this->bankAccountData);
         $bankAccountId = $createBankAccount['id'];
         
         $deleteBankAccount = PromisePay::BankAccount()->delete($bankAccountId);

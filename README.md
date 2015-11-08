@@ -42,16 +42,20 @@ Before interacting with PromisePay API, you need to generate an API token. See [
 
 Once you have recorded your API token, configure the PHP package - see below.
 
-Open the file **libs/promisepay-credentials.xml** and replace the existing credentials with the following:
+Open the file **SDK_Config.php** and replace the existing credentials with the following:
 
-```xml
-	<?xml version='1.0'?>
-		<ApiCredentials>
-   			<ApiUrl>https://test.api.promisepay.com/</ApiUrl>
-   			<ApiLogin>user.name@yourdomain.com</ApiLogin>
-   			<ApiPassword>Password</ApiPassword>
-   			<ApiKey>APIToken</ApiKey>
-	</ApiCredentials>
+```php
+define(__NAMESPACE__ . '\API_LOGIN', 'YOUR EMAIL ADDRESS');
+define(__NAMESPACE__ . '\API_PASSWORD', 'YOUR API PASSWORD');
+
+/*
+ * SUPPORTED ENVIRONMENT VALUES
+ *
+ * Test environment:        https://test.api.promisepay.com/
+ * Production environment:  https://secure.api.promisepay.com/
+*/
+define(__NAMESPACE__ . '\API_URL', 'TEST OR PRODUCTION ENVIRONMENT URL');
+
 ```
 
 #3. Examples
@@ -60,137 +64,94 @@ Open the file **libs/promisepay-credentials.xml** and replace the existing crede
 The below example shows the request for a marketplace configured to have the Item and User IDs generated automatically for them.
 
 ```php
-$repo = new TokenRepository();
-$sessionToken = new Token($arr = array(
-			   'current_user' 			=> 'seller',
-           	   'item_name'				=> 'Test Item',
-          		   'amount'					=> '2500',
-           	   'seller_lastname' 		=> 'Seller',
-           	   'seller_firstname'		=> 'Sally',
-           	   'buyer_lastname'			=> 'Buyer',
-           	   'buyer_firstname'		=> 'Bobby',
-           	   'buyer_country'			=> 'AUS',
-           	   'seller_country'			=> 'USA',
-           	   'seller_email'			=> 'sally.seller@promisepay.com',
-           	   'buyer_email'			=> 'bobby.buyer@promisepay.com',
-           	   'fee_ids'				=> '',
-           	   'payment_type_id'		=> '2'))
-$repo->requestSessionToken($sessionToken)
+//TODO
 ```
 
 #####Example 2 - Request session token
 The below example shows the request for a marketplace that passes the Item and User IDs.
 
 ```php
-$repo = new TokenRepository();
-$sessionToken = new Token($arr = array(
-			   'current_user_id' 		=> 'seller1234',
-           	   'item_name'				=> 'Test Item',
-          		   'amount'					=> '2500',
-           	   'seller_lastname' 		=> 'Seller',
-           	   'seller_firstname'		=> 'Sally',
-           	   'buyer_lastname'			=> 'Buyer',
-           	   'buyer_firstname'		=> 'Bobby',
-           	   'buyer_country'			=> 'AUS',
-           	   'seller_country'			=> 'USA',
-           	   'seller_email'			=> 'sally.seller@promisepay.com',
-           	   'buyer_email'			=> 'bobby.buyer@promisepay.com',
-           	   'external_item_id'		=> 'TestItemId1234',
-           	   'external_seller_id'		=> 'seller1234',
-           	   'external_buyer_id'		=> 'buyer1234',
-           	   'fee_ids'				=> '',
-           	   'payment_type_id'		=> '2'))
-$repo->requestSessionToken($sessionToken)
+//TODO
 ```
 ##Items
 
 #####Create an item
 
 ```php
-$repo = new ItemRepository();
-$user = new Item($arr = array(
-           'id'            => 'External_id',
-           'name'          => 'Item Name',
-           'amount'        => '2000',
-           'payment_type'  => '1',
-           'buyer_id'      => 'External_buyer_id',
-           'seller_id'     => 'External_seller_id',
-           'fee_ids'       => 'fee_id_1,fee_id_2',
-           'description'   => 'Item Description'));
-$repo->createItem($user)
+$itemData = array(
+    "id"              => 'Item_id',
+    "name"            => 'Test Item #1',
+    "amount"          => 1000,
+    "payment_type_id" => 1,
+    "buyer_id"        => 'External_buyer_id',
+    "seller_id"       => 'External_seller_id',
+    "description"     => 'Description'
+);
+
+$createItem = PromisePay::Item()->create($itemData);
 ```
 #####Get an item
 
 ```php
-$repo = new ItemRepository();
-$item = $repo->getItemById('item_id');
+$getItem = PromisePay::Item()->get('Item_id');
 ```
 #####Get a list of items
 ```php
-$repo = new ItemRepository();
-$listOfItems = $repo->getListOfItems(20, 0); // limit, offset
+$fetchList = PromisePay::Item()->getList(200, 0); //limit, offset
 ```
 #####Update an item
 ```php
-$repo = new ItemRepository();
-$item = new Item($arr = array(
-           'id'            => 'External_id',
-           'name'          => 'Item Name',
-           'amount'        => '2000',
-           'payment_type'  => '1',
-           'buyer_id'      => 'External_buyer_id',
-           'seller_id'     => 'External_seller_id',
-           'fee_ids'       => 'fee_id_1,fee_id_2',
-           'description'   => 'Item Description'));
-$repo->updateItem($item, 'user', 'account', 'release_amount');
+$itemData = array(
+    "id"              => 'Item_id',
+    "name"            => 'Test Item #1',
+    "amount"          => 1000,
+    "payment_type_id" => 1,
+    "buyer_id"        => 'External_buyer_id',
+    "seller_id"       => 'External_seller_id',
+    "description"     => 'Description'
+);
+
+$createItem = PromisePay::Item()->update($itemData);
 ```
 
 #####Delete an item
 ```php
-$repo = new ItemRepository();
-$repo->deleteItem('item_id');
+$deleteItem = PromisePay::Item()->delete('item_id');
 ```
 
 #####Get an item status
 ```php
-$repo = new ItemRepository();
-$repo->getItemStatus('item_id');
+$itemStatus = PromisePay::Item()->getStatus('item_id');
 ```
 
 #####Get an item's buyer
 ```php
-$repo = new ItemRepository();
-$buyer = $repo->getBuyerOfItem('item_id');
+//TODO
 ```
 
 #####Get an item's seller
 ```php
-$repo = new ItemRepository();
-$seller = $repo->getSellerForItem('item_id');
+//TODO
 ```
 
 #####Get an item's fees
 ```php
-$repo = new ItemRepository();
-$fees = $repo->getListFeesForItems('item_id');
+//TODO
 ```
 
 #####Get an item's transactions
 ```php
-$repo = new ItemRepository();
-$transactions = $repo->getListOfTransactionsForItem('item_id');
+//TODO
 ```
 
 #####Get an item's wire details
 ```php
-$repo = new ItemRepository();
-$wireDetails = $repo->getWireDetailsForItem('item_id');
+$wireDetails = PromisePay::Item()->getWireDetails('item_id');
 ```
 
 #####Get an item's BPAY details
 ```php
-$repo = new ItemRepository();
-$bpayDetails = $repo->getBPayDetailsForItem('item_id');
+$bPayDetails = PromisePay::Item()->getBPayDetails('item_id');
 ```
 
 
@@ -198,78 +159,66 @@ $bpayDetails = $repo->getBPayDetailsForItem('item_id');
 
 #####Create a user
 ```php
-$repo = new UserRepository();
-$user = new User($arr = array(
-           'id'            => id,
-           'first_name'    => 'First Name',
-           'last_name'     => 'Last Name',
-           'email'         => 'email'
-           'mobile'        => 'mobile phone'
-           'address_line1' => 'a line 1',
-           'address_line2' => 'a line 2',
-           'state'         => 'state',
-           'city'          => 'city',
-           'zip'           => '90210',
-           'country'       => 'AUS'));
-$repo->createUser($user)
+$userData = array(
+    'id'            => 'USER_ID',
+    'first_name'    => 'UserCreateTest',
+    'last_name'     => 'UserLastname',
+    'email'         => email@google.com',
+    'mobile'        => '5455400012',
+    'address_line1' => 'a_line1',
+    'address_line2' => 'a_line2',
+    'state'         => 'state',
+    'city'          => 'city',
+    'zip'           => '90210',
+    'country'       => 'AUS'
+);
+$createUser = PromisePay::User()->create($userData);
 ```
 #####Get a user
 ```php
-$repo = new UserRepository();
-$user = $repo->getUserById('User id');
+$getUser = PromisePay::User()->get('USER_ID');
 ```
 #####Get a list of users
 ```php
-$repo = new UserRepository();
-$users = $repo->getListOfUsers(20, 0); // limit, offset
+$usersList = PromisePay::User()->getList(200, 0); //limit, offset
 ```
 #####Update a user
 ```php
-$repo = new UserRepository();
-$user = new User($arr = array(
-           'id'            => id,
-           'first_name'    => 'First Name',
-           'last_name'     => 'Last Name',
-           'email'         => 'email'
-           'mobile'        => 'mobile phone'
-           'address_line1' => 'a line 1',
-           'address_line2' => 'a line 2',
-           'state'         => 'state',
-           'city'          => 'city',
-           'zip'           => '90210',
-           'country'       => 'AUS'));
-$repo->updateUser($user)
-```
-#####Delete a User
-```php
-$repo = new UserRepository();
-$repo->deleteUser('User_id');
+$userData = array(
+    'id'            => 'USER_ID',
+    'first_name'    => 'UserCreateTest',
+    'last_name'     => 'UserLastname',
+    'email'         => email@google.com',
+    'mobile'        => '5455400012',
+    'address_line1' => 'a_line1',
+    'address_line2' => 'a_line2',
+    'state'         => 'state',
+    'city'          => 'city',
+    'zip'           => '90210',
+    'country'       => 'AUS'
+);
+$updateUser = PromisePay::User()->update($createUser['id'], $userData);
 ```
 #####Get a user's card accounts
 ```php
-$repo = new UserRepository();
-$usersCardAccounts = $repo->getListOfCardAccountsForUser('User_id');
+$userCardAccounts = PromisePay::User()->getListOfCardAccounts('USER_ID');
 ```
 #####Get a user's PayPal accounts
 ```php
-$repo = new UserRepository();
-$usersPayPalAccounts = $repo->getListOfPayPalAccountsForUser('User_id');
+$userPayPalAccounts = PromisePay::User()->getListOfPayPalAccounts('USER_ID');
 ```
 
 #####Get a user's bank accounts
 ```php
-$repo = new UserRepository();
-$usersBankAccounts = $repo->getListOfBankAccountsForUser('User_id');
+$userBankAccounts = PromisePay::User()->getListOfBankAccounts('USER_ID');
 ```
 #####Get a user's items
 ```php
-$repo = new UserRepository();
-$items = $repo->getListOfItemsForUser('User_id');
+$getListOfItems = PromisePay::User()->getListOfItems('USER_ID');
 ```
 #####Set a user's disbursement account
 ```php
-$repo = new UserRepository();
-$repo->setDisbursementAccount('user_id', 'account_id');
+//TODO
 ```
 
 ##Item Actions
@@ -277,252 +226,208 @@ $repo->setDisbursementAccount('user_id', 'account_id');
 #####Make payment
 
 ```php
-$repo = new ItemRepository();
-$repo->makePayment('Item_id', 'Card_account_id')
+//TODO
 ```
 #####Request payment
 ```php
-$repo = new ItemRepository();
-$requestPayment = $repo->requestPayment('Item_id');
+//TODO
 ```
 #####Release payment
 ```php
-$repo = new ItemRepository();
-$releasePayment = $repo->releasePayment('Item_id', 'Release amount');
+//TODO
 ```
 #####Request release
 ```php
-$repo = new ItemRepository();
-$requestRelease = $repo->requestRelease('Item_id', 'Release amount');
+//TODO
 ```
 #####Cancel
 ```php
-$repo = new ItemRepository();
-$repo->cancelItem('Item_id');
+//TODO
 ```
 #####Acknowledge wire
 ```php
-$repo = new ItemRepository();
-$acknowledgeWire = $repo->acknowledgeWire('Item_id');
+//TODO
 ```
 #####Acknowledge PayPal
 ```php
-$repo = new ItemRepository();
-$acknowledgePayPal = $repo->acknowledgePayPal('Item_id');
+//TODO
 ```
 #####Revert wire
 ```php
-$repo = new ItemRepository();
-$repo->revertWire('Item_id');
+//TODO
 ```
 #####Request refund
 ```php
-$repo = new ItemRepository();
-$repo->requestRefund('Item_id', 'Refund amount', 'Refund message');
+//TODO
 ```
 #####Refund
 ```php
-$repo = new ItemRepository();
-$repo = refund('Item id', 'Refund Amount', 'Refund message')
+//TODO
 ```
 
 ##Card Accounts
 #####Create a card account
 
 ```php
-$repo = new CardAccountRepository();
-$user = new CardAccount($arr = array(
-           'user_id'       => id,
-           'full_name'     => 'Bobby Buyer',
-           'number'        => '4111111111111111',
-           'expiry_month'  => '06'
-           'expiry_year'   => '2016'
-           'cvv' 			=> '123'));
-$repo->createCardAccount($user)
+$cardAccountData = array(
+   'user_id'      => 'USER_ID',
+   'full_name'    => 'Bobby Buyer',
+   'number'       => '4111111111111111',
+   "expiry_month" => '06',
+   "expiry_year"  => '2020',
+   "cvv"          => '123'
+);
+$createAccount = PromisePay::CardAccount()->create($cardAccountData);
 ```
 
 #####Get a card account
 ```php
-$repo = new CardAccountRepository();
-$card = $repo->getCardAccountById('Account_id')
+$fetchCardAccount = PromisePay::CardAccount()->get('CARD_ACCOUNT_ID');
 ```
 #####Delete a card account
 ```php
-$repo = new CardAccountRepository();
-$repo->deleteCardAccount('Account_id')
+$deleteCardAccount = PromisePay::CardAccount()->delete('CARD_ACCOUNT_ID');
 ```
 #####Get a card account's users
 ```php
-$repo = new CardAccountRepository();
-$users = $repo->getUserForCardAccount('Card Account');
+$getList = PromisePay::CardAccount()->getUser('CARD_ACCOUNT_ID');
 ```
 
 ##Bank Accounts
 #####Create a bank account
 
 ```php
-$repo = new BankAccountRepository();
-$bankAccount = new BankAccount($arr = array(
-			   'user_id' 			=> 'External_seller_id',
-           	   'bank_name'			=> 'Test Bank',
-          	   'account_name'		=> 'Sally Seller',
-           	   'routing_number' 	=> '123456',
-           	   'account_number'		=> '12345678',
-           	   'account_type'		=> 'checking',
-           	   'holder_type'		=> 'personal',
-           	   'country'		=> 'AUS'));
-$repo->createBankAccount($bankAccount)
+$bankAccountData = array(
+    "user_id"        => $this->userId,
+    "active"         => 'true',
+    "bank_name"      => 'bank for test',
+    "account_name"   => 'test acc',
+    "routing_number" => '12344455512',
+    "account_number" => '123334242134',
+    "account_type"   => 'savings',
+    "holder_type"    => 'personal',
+    "country"        => 'USA',
+);
+
+$createBankAccount = PromisePay::BankAccount()->create($bankAccountData);
 ```
 #####Get a bank account
 ```php
-$repo = new BankAccountRepository();
-$bankAccount = $repo->getBankAccountById('Account_id');
+$bankAccountLookup = PromisePay::BankAccount()->get('BANK_ACCOUNT_ID');
 ```
 #####Delete a bank account
 ```php
-$repo = new BankAccountRepository();
-$repo->deleteBankAccount('Account_id');
+$deleteBankAccount = PromisePay::BankAccount()->delete('BANK_ACCOUNT_ID');
 ```
 #####Get a bank account's users
 ```php
-$repo = new BankAccountRepository();
-$user = $repo->getUserForBankAccount('Account_id');
+$getUser = PromisePay::BankAccount()->getUser('BANK_ACCOUNT_ID');
 ```
 
 ##PayPal Accounts
 #####Create a PayPal account
 ```php
-$repo  = new PayPalAccountRepository();
-$params  = array(
-    'user_id'=> 'User id',
-    'active'=>'true',
-    'paypal'=>array(
-        'email'=>'User email'
-        )
-    );
-$ppalAccount = new PayPalAccount($params);
-$repo->createPayPalAccount($ppalAccount);
-```
+$payPalData = array(
+    'user_id'      => $this->userId,
+    'paypal_email' => 'test@paypalname.com'
+);
+$createPayPalAccount = PromisePay::PayPalAccount()->create($payPalData);
+``` 
 #####Get a PayPal account
 ```php
-$repo = new PayPalAccountRepository();
-$paypalAccount = $repo->getPayPalAccountById('account_id');
+$getPayPalAccount = PromisePay::PayPalAccount()->get('PAYPAL_ACCOUNT_ID');
 ```
 #####Delete a PayPal account
 ```php
-$repo = new PayPalAccountRepository();
-$repo->deletePayPalAccount('Account id')
+$deletePayPalAccount = PromisePay::PayPalAccount()->delete('PAYPAL_ACCOUNT_ID');
 ```
 #####Get a PayPal account's users
 ```php
-$repo = new PayPalAccountRepository();
-$users = $repo->getUserForPayPalAccount('Account id')
+$getUser = PromisePay::PayPalAccount()->getUser('PAYPAL_ACCOUNT_ID');
 ```
 
 ##Companies
 
 #####Create a company
 ```php
-$repo = new CompanyRepository();
-$params = array(
-    'user_id' => "1",
-	'name' => "Acme Co",
-	'legal_name' => "Acme Co Pty Ltd",
-	'tax_number' => "1231231",
-	'charge_tax' => true,
-	'address_line1' => "123 Test St",
-	'address_line2' => "",
-	'city' => "Melbourne",
-	'state' => "VIC",
-	'zip' => "3000",
-	'country' => "AUS"
-    );
-$company = new Company($params);
-$repo->createCompany($company);
+$companyInfo = array(
+    'user_id'    => $this->userId,
+    'legal_name' => 'Test edit company',
+    'name'       => 'test company name edit',
+    'country'    => 'AUS'
+);
+
+$companyCreate = PromisePay::Company()->create($companyInfo);
 ```
 
 #####Get a company
 ```php
-$repo = new CompanyRepository();
-$company = $repo->getCompanyById('company_id');
+$companyData = PromisePay::Company()->get('COMPANY_ID');
 ```
 
 #####Get a list of companies
 ```php
-$repo = new CompanyRepository();
-$company = $repo->getListOfCompanies(20, 0); // limit, offset
+$companiesList = PromisePay::Company()->getList(200, 0); // limit, offset
 ```
 
 #####Update a company
 ```php
-$repo = new CompanyRepository();
-$params = array(
-	'id' => "e466dfb4-f05c-4c7f-92a3-09a0a28c7af5",
+$companyInfo = array(
+    'id' => "e466dfb4-f05c-4c7f-92a3-09a0a28c7af5",
     'user_id' => "1",
-	'name' => "Acme Co",
-	'legal_name' => "Acme Co Pty Ltd",
-	'tax_number' => "1231231",
-	'charge_tax' => true,
-	'address_line1' => "123 Test St",
-	'address_line2' => "",
-	'city' => "Melbourne",
-	'state' => "VIC",
-	'zip' => "3000",
-	'country' => "AUS"
-    );
-$company = new Company($params);
-$repo->updateCompany($company);
+    'name' => "Acme Co",
+    'legal_name' => "Acme Co Pty Ltd",
+    'tax_number' => "1231231",
+    'charge_tax' => true,
+    'address_line1' => "123 Test St",
+    'address_line2' => "",
+    'city' => "Melbourne",
+    'state' => "VIC",
+    'zip' => "3000",
+    'country' => "AUS"
+);
+$companyUpdate = PromisePay::Company()->update('COMPANY_ID', $companyInfo);
 ```
 
 ##Fees
 #####Get a list of fees
 ```php
-$repo = new FeeRepository();
-$fees = $repo->getListOfFees(20, 0); // limit, offset
+$getList = PromisePay::Fee()->getList(200, 0); // limit, offset
 ```
 #####Get a fee
 ```php
-$repo = new FeeRepository();
-$fee = $repo->getFeeById('Fee id');
+$getFeeById = PromisePay::Fee()->get('FEE_ID');
 ```
 #####Create a fee
 ```php
-$enum = new FeeType();
-$repo = new FeeRepository();
-$data = array(
-    'id'=>'fee id',
-    'amount'=>1000,
-    'name'=>'fee name',
-    'fee_type'=>$enum->Fixed,
-    'cap'=>'1',
-    'max'=>'3',
-    'min'=>'2',
-    'to'=>'buyer'
-    );
-$fee = new Fee($data);
-$repo->createFee($fee);
+$feeData = array(
+    'amount'      => 1000,
+    'name'        => 'fee test',
+    'fee_type_id' => (string) $this->enum->Fixed,
+    'cap'         => '1',
+    'max'         => '3',
+    'min'         => '2',
+    'to'          => 'buyer'
+);
+$createFee = PromisePay::Fee()->create($feeData);
 ```
 
 ##Transactions
 #####Get a list of transactions
 ```php
-$repo = new TransactionRepository();
-$trans = $repo->getListOfTransactions(20, 0); // limit, offset
+//TODO
 ```
 #####Get a transaction
 ```php
-$repo = new TransactionRepository();
-$transaction = $repo->getTransaction('transaction_id');
+//TODO
 ```
 #####Get a transaction's users
 ```php
-$repo = new TransactionRepository();
-$users = $repo->getUserForTransaction('transaction id');
+//TODO
 ```
 #####Get a transaction's fees
 ```php
-$repo = new TransactionRepository();
-$fees = $repo->getFeeForTransaction('transaction id');
+//TODO
 ```
 
 #4. Contributing

@@ -8,8 +8,9 @@ class PayPalAccountTest extends \PHPUnit_Framework_TestCase {
     
     public function setUp() {
         $this->userId = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';
+        
         $this->payPalData = array(
-            'user_id' => $this->userId,
+            'user_id'      => $this->userId,
             'paypal_email' => 'test@paypalname.com'
         );
     }

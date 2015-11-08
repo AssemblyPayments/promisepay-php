@@ -4,12 +4,13 @@ use Promisepay\PromisePay;
 
 class CardAccountTest extends \PHPUnit_Framework_TestCase {
     
-    protected $userId, $bankAccountInfo;
+    protected $GUID, $userId, $cardAccountData, $userData;
     
     public function setUp() {
+        $this->GUID = GUID();
         $this->userId = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';
         
-        $this->cardAccountInfo = array(
+        $this->cardAccountData = array(
            'user_id'      => $this->userId,
            'full_name'    => 'Bobby Buyer',
            'number'       => '4111111111111111',
@@ -17,17 +18,31 @@ class CardAccountTest extends \PHPUnit_Framework_TestCase {
            "expiry_year"  => '2020',
            "cvv"          => '123'
         );
+        
+        $this->userData = array(
+            'id'            => $this->GUID,
+            'first_name'    => 'Bobby',
+            'last_name'     => 'Buyer',
+            'email'         => $this->GUID . '@google.com',
+            'mobile'        => $this->GUID . '00012',
+            'address_line1' => 'a_line1',
+            'address_line2' => 'a_line2',
+            'state'         => 'state',
+            'city'          => 'city',
+            'zip'           => '90210',
+            'country'       => 'AUS'
+        );
     }
     
     public function testCreateCardAccountTest() {
-       $createAccount = PromisePay::CardAccount()->create($this->cardAccountInfo);
+       $createAccount = PromisePay::CardAccount()->create($this->cardAccountData);
        
        $this->assertNotNull($createAccount['created_at']);
        $this->assertNotNull($createAccount['id']);
     }
-
+    
     public function testGetCardAccountById() {
-       $createAccount = PromisePay::CardAccount()->create($this->cardAccountInfo);
+       $createAccount = PromisePay::CardAccount()->create($this->cardAccountData);
        
        $this->assertNotNull($createAccount['created_at']);
        $this->assertNotNull($createAccount['id']);
@@ -36,9 +51,9 @@ class CardAccountTest extends \PHPUnit_Framework_TestCase {
 
        $this->assertNotNull($fetchCardAccount['created_at']);
     }
-
+    
     public function testDeleteCardAccount() {
-       $createAccount = PromisePay::CardAccount()->create($this->cardAccountInfo);
+       $createAccount = PromisePay::CardAccount()->create($this->cardAccountData);
        
        $this->assertNotNull($createAccount['id']);
        
@@ -48,18 +63,19 @@ class CardAccountTest extends \PHPUnit_Framework_TestCase {
        $this->assertEquals($deleteCardAccount, 'Successfully redacted');
     }
     
-    public function testListBankAccountsForUser() {
-        $createAccount = PromisePay::CardAccount()->create($this->cardAccountInfo);
+    public function testListCardAccountsForUser() {
+        // First, create the user
+        $createUser = PromisePay::User()->create($this->userData);
+        
+        // Update the cardAccountData
+        $this->cardAccountData['user_id'] = $createUser['id'];
+        
+        // Create the Card Account
+        $createAccount = PromisePay::CardAccount()->create($this->cardAccountData);
         
         $getList = PromisePay::CardAccount()->getUser($createAccount['id']);
         
-        //var_dump($getList);
-        
-        //PromisePay::CardAccount()->getCardAccount();
-        
-        $this->markTestIncomplete(
-          'https://trello.com/c/GGKTwJl5/70-issue-regarding-card-accounts-id-users'
-        );
+        $this->assertEquals($this->cardAccountData['full_name'], $getList['full_name']);
     }
 
 }

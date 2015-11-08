@@ -55,7 +55,7 @@ class FeeTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($createFee['name'], $getFeeById['name']);
     }
 
-    public function testListSuccessfull() {
+    public function testList() {
         $this->feeData['name'] = 'Fee Test Fee Test 123456';
         
         $createFee = PromisePay::Fee()->create($this->feeData);

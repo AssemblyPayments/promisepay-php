@@ -37,6 +37,6 @@ class CardAccountRepository {
         $response = PromisePay::RestClient('get', 'card_accounts/' . $id . '/users');
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
-        return $jsonDecodedResponse;
+        return $jsonDecodedResponse['users'];
     }
 }

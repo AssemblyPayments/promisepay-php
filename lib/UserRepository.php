@@ -17,37 +17,37 @@ class UserRepository {
         return $jsonDecodedResponse['users'];
     }
     
-    public static function getUserById($id)
+    public static function get($id)
     {
-        parent::checkIdNotNull($id);
+        PromisePay::checkIdNotNull($id);
         
-        $response = parent::RestClient('get', 'users/' . $id);
+        $response = PromisePay::RestClient('get', 'users/' . $id);
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
         return $jsonDecodedResponse['users'];
     }
     
-    public static function getListOfUsers($limit = 20, $offset = 0)
+    public static function getList($limit = 20, $offset = 0)
     {
-        parent::paramsListCorrect($limit, $offset);
+        PromisePay::paramsListCorrect($limit, $offset);
         
         $params = array(
             'limit' => $limit,
             'offset' => $offset
         );
         
-        $response = parent::RestClient('get', 'users/', $params);
+        $response = PromisePay::RestClient('get', 'users/', $params);
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
         return $jsonDecodedResponse['users'];
     }
     
-    public static function updateUser($id, $params)
+    public static function update($id, $params)
     {
-        parent::checkIdNotNull($id);
+        PromisePay::checkIdNotNull($id);
         self::validateUser($params);
         
-        $response = parent::RestClient('patch', 'users/' . $id . "/", $params);
+        $response = PromisePay::RestClient('patch', 'users/' . $id . "/", $params);
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
         return $jsonDecodedResponse['users'];
@@ -55,50 +55,57 @@ class UserRepository {
 
     public static function sendMobilePin($id)
     {
-        parent::checkIdNotNull($id);
+        PromisePay::checkIdNotNull($id);
         
-        $response = parent::RestClient('post', '/users/' . $id . '/mobile_pin');
+        $response = PromisePay::RestClient('post', '/users/' . $id . '/mobile_pin');
         return json_decode($response->raw_body, true);
     }
 
-    public static function getListOfItemsForUser($id)
+    public static function getListOfItems($id)
     {
-        parent::checkIdNotNull($id);
+        PromisePay::checkIdNotNull($id);
         
-        $response = parent::RestClient('get', 'users/' . $id . '/items');
-        return json_decode($response->raw_body, true);
+        $response = PromisePay::RestClient('get', 'users/' . $id . '/items');
+        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        
+        return $jsonDecodedResponse['items'];
     }
 
-    public static function getListOfCardAccountsForUser($id)
+    public static function getListOfBankAccounts($id)
     {
-        parent::checkIdNotNull($id);
+        PromisePay::checkIdNotNull($id);
         
-        $response = parent::RestClient('get', 'users/' . $id . '/card_accounts');
-        return json_decode($response->raw_body, true);
+        $response = PromisePay::RestClient('get', 'users/' . $id . '/bank_accounts');
+        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        
+        return $jsonDecodedResponse['bank_accounts'];
     }
 
-    public static function getListOfPayPalAccountsForUser($id)
+    public static function getListOfCardAccounts($id)
     {
-        parent::checkIdNotNull($id);
+        PromisePay::checkIdNotNull($id);
         
-        $response = parent::RestClient('get', 'users/' . $id . '/paypal_accounts');
-        return json_decode($response->raw_body, true);
+        $response = PromisePay::RestClient('get', 'users/' . $id . '/card_accounts');
+        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        
+        return $jsonDecodedResponse['card_accounts'];
     }
 
-    public static function getListOfBankAccountsForUser($id)
+    public static function getListOfPayPalAccounts($id)
     {
-        parent::checkIdNotNull($id);
+        PromisePay::checkIdNotNull($id);
         
-        $response = parent::RestClient('get', 'users/' . $id . '/bank_accounts');
-        return json_decode($response->raw_body, true);
+        $response = PromisePay::RestClient('get', 'users/' . $id . '/paypal_accounts');
+        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        
+        return $jsonDecodedResponse['paypal_accounts'];
     }
 
     public static function setDisbursementAccount($id, $params)
     {
-        parent::checkIdNotNull($id);
-        self::validateUser($params);
+        PromisePay::checkIdNotNull($id);
         
-        $response = parent::RestClient('post', 'users/' . $id . '/disbursement_account', $params);
+        $response = PromisePay::RestClient('post', 'users/' . $id . '/disbursement_account', $params);
         return json_decode($response->raw_body, true);
     }
     

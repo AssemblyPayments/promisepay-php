@@ -113,7 +113,7 @@ class PromisePay {
 
     public static function paramsListCorrect($limit, $offset) {
         if (!is_int($limit) || !is_int($offset)) {
-            Logger:logging('Fatal error: Limit and offset value should be integers!');
+            Logger::logging('Fatal error: Limit and offset value should be integers!');
             throw new Exception\Argument('Limit and offset value should be integers!');
         }
         

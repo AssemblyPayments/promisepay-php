@@ -1,12 +1,11 @@
 <?php
-
 namespace PromisePay\Log;
 
 /**
  * Class Logger
  * @package PromisePay\Log
  */
-class Logger{
+class Logger {
 
     /**
      * Enable or disable PromisePay logger.
@@ -19,12 +18,16 @@ class Logger{
      */
     public static function logging($errorMessage){
 
-        if($errorMessage && self::$enable == true) {
+        if ($errorMessage && self::$enable === true) {
             $path = dirname(__FILE__) . "/report/";
             $reportFilename = 'PromisePayLog-' . date("Ymd");
-            file_put_contents($path . $reportFilename, $errorMessage);
+            
+            if (is_writable($path . $reportFilename)) {
+                file_put_contents($path . $reportFilename, $errorMessage . PHP_EOL, FILE_APPEND);
+            } else {
+                trigger_error("Log file is not writable.");
+            }
         }
-
-        return;
+        
     }
 }

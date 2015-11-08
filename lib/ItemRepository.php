@@ -78,7 +78,7 @@ class ItemRepository {
         $response = PromisePay::RestClient('get', 'items/' . $id . '/fees');
         $jsonDecodedResponse = json_decode($response, true);
         
-        return $jsonDecodedResponse['fees'];
+        return $jsonDecodedResponse;
     }
 
     public static function getBuyer($id)
@@ -96,13 +96,17 @@ class ItemRepository {
     public static function getWireDetails($id)
     {
         $response = PromisePay::RestClient('get', 'items/' . $id . '/wire_details');
-        return json_decode($response->raw_body, true);
+        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        
+        return $jsonDecodedResponse['items'];
     }
 
     public static function getBPayDetails($id)
     {
         $response = PromisePay::RestClient('get', 'items/' . $id . '/bpay_details');
-        return json_decode($response->raw_body, true);
+        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        
+        return $jsonDecodedResponse['items'];
     }
 
     public static function requestPayment($id)

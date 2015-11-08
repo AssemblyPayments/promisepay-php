@@ -60,11 +60,9 @@ class FeeTest extends \PHPUnit_Framework_TestCase {
         
         $createFee = PromisePay::Fee()->create($this->feeData);
         
-        $getList = PromisePay::Fee()->getList();
+        $getList = PromisePay::Fee()->getList(200);
         
-        var_dump($createFee['id'], $getList);
-        
-        $this->assertTrue(is_array($getList));
+        $this->assertTrue(in_array($createFee, $getList));
     }
 
 }

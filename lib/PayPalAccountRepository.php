@@ -9,7 +9,7 @@ use PromisePay\Log;
  *
  * @package PromisePay
  */
-class PayPalAccountRepository extends PromisePay {
+class PayPalAccountRepository {
     /**
      * List a PayPal account on a marketplace.
      *
@@ -20,8 +20,11 @@ class PayPalAccountRepository extends PromisePay {
      * @param string $id
      * @return PayPalAccount object
      */
-    public function getPayPalAccountById($id) {
-        $response = $this->RestClient('get', 'paypal_accounts/'.$id);
+    public static function get($id) {
+        PromisePay::checkIdNotNull($id);
+        
+        $response = PromisePay::RestClient('get', 'paypal_accounts/' . $id);
+        
         return json_decode($response->raw_body, true);
     }
     
@@ -34,9 +37,11 @@ class PayPalAccountRepository extends PromisePay {
      * @param PayPalAccount $paypal
      * @return PayPalAccount 
      */
-    public function createPayPalAccount($params) {
-        $response = $this->RestClient('post', 'paypal_accounts/', $params);
-        return json_decode($response->raw_body, true);
+    public static function create($params) {
+        $response = PromisePay::RestClient('post', 'paypal_accounts/', $params);
+        $jsonDecodedResponse = json_decode($response, true);
+        
+        return $jsonDecodedResponse['paypal_accounts'];
     }
     
     /**
@@ -49,9 +54,13 @@ class PayPalAccountRepository extends PromisePay {
      * @param string $id
      * @return object
      */
-    public function deletePayPalAccount($id) {
-        $response = $this->RestClient('delete', 'paypal_accounts/'.$id);
-        return json_decode($response->raw_body, true);
+    public static function delete($id) {
+        PromisePay::checkIdNotNull($id);
+        
+        $response = PromisePay::RestClient('delete', 'paypal_accounts/' . $id);
+        $jsonDecodedResponse = json_decode($response, true);
+        
+        return $jsonDecodedResponse['paypal_account'];
     }
     
     /**
@@ -63,10 +72,13 @@ class PayPalAccountRepository extends PromisePay {
      * @param string $id
      * @return User|null
      */
-    public function getUserForPayPalAccount($id)
-    {
-        $response = $this->RestClient('get','/paypal_accounts/'.$id.'/users');
-        return json_decode($response->raw_body, true);
+    public static function getUser($id) {
+        PromisePay::checkIdNotNull($id);
+        
+        $response = PromisePay::RestClient('get','/paypal_accounts/' . $id . '/users');
+        $jsonDecodedResponse = json_decode($response, true);
+        
+        return $jsonDecodedResponse['users'];
     }
 
 }

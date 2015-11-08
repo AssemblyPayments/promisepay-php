@@ -3,19 +3,23 @@ namespace PromisePay;
 
 use PromisePay\Exception;
 use PromisePay\Log;
+use PromisePay\PromisePay;
 
-class TokenRepository extends PromisePay
+class TokenRepository
 {
-    public function requestToken()
+    public static function requestToken()
     {
-        $response = $this->RestClient('get', 'request_token/');
-        $jsonData = json_decode($response->raw_body, true)['request_token'];
-        return $jsonData;
+        $response = PromisePay::RestClient('get', 'request_token/');
+        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        
+        return $jsonDecodedResponse;
     }
 
-    public function requestSessionToken($params)
+    public static function requestSessionToken($params)
     {
-        $response = $this->RestClient('get', 'request_session_token/', $params);
-        return json_decode($response->raw_body, true);
+        $response = PromisePay::RestClient('get', 'request_session_token/', $params);
+        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        
+        return $jsonDecodedResponse;
     }
 }

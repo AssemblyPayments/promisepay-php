@@ -3,31 +3,43 @@ namespace PromisePay;
 
 use PromisePay\Exception;
 use PromisePay\Log;
+use PromisePay\PromisePay;
 
-class TransactionRepository extends PromisePay
-{
-    public function getListOfTransactions($params)
+class TransactionRepository {
+    public static function getList($limit = 10, $offset = 0)
     {
-        $response = $this->RestClient('get', 'transactions/', $params);
-        return json_decode($response->raw_body, true);
+        $requestParams = array(
+            'limit'  => $limit,
+            'offset' => $offset
+        );
+        
+        $response = PromisePay::RestClient('get', 'transactions/', $requestParams);
+        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        
+        return $jsonDecodedResponse;
     }
 
-    public function getTransaction($id)
+    public static function get($id)
     {
-
-        $response = $this->RestClient('get', 'transactions/' . $id);
-        return json_decode($response->raw_body, true);
+        $response = PromisePay::RestClient('get', 'transactions/' . $id);
+        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        
+        return $jsonDecodedResponse;
     }
 
-    public function getUserForTransaction($id)
+    public static function getUser($id)
     {
-        $response = $this->RestClient('get', 'transactions/' . $id . '/users');
-        return json_decode($response->raw_body, true);
+        $response = PromisePay::RestClient('get', 'transactions/' . $id . '/users');
+        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        
+        return $jsonDecodedResponse;
     }
 
-    public function getFeeForTransaction($id)
+    public static function getFee($id)
     {
-        $response = $this->RestClient('get', 'transactions/' . $id . '/fees');
-        return json_decode($response->raw_body, true);
+        $response = PromisePay::RestClient('get', 'transactions/' . $id . '/fees');
+        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        
+        return $jsonDecodedResponse;
     }
 }

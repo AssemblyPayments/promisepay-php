@@ -6,8 +6,15 @@ use PromisePay\Log;
 
 class FeeRepository {
     
-    public static function getList() {
-        $response = PromisePay::RestClient('get', 'fees/');
+    public static function getList($limit = 20, $offset = 0) {
+        PromisePay::paramsListCorrect($limit, $offset);
+        
+        $requestParams = array(
+            'limit' => $limit,
+            'offset' => $offset
+        );
+        
+        $response = PromisePay::RestClient('get', 'fees/', $requestParams);
         $jsonDecodedResponse = json_decode($response, true);
         
         return $jsonDecodedResponse['fees'];

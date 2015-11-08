@@ -119,25 +119,6 @@ class UserTest extends \PHPUnit_Framework_TestCase {
         PromisePay::getUserById("");
     }
 
-    public function testDeleteUserSuccess() {
-        $createUser = PromisePay::createUser($this->userData);
-        
-        $deleteUser = PromisePay::deleteUser($createUser['id']);
-        
-        //var_dump($deleteUser);
-        
-        //delete action not working ina API, Uncomment asserting below after fix.
-        //$this->assertTrue($userRepo->deleteUser($createdUser->getId()));
-    }
-
-    /**
-     * @expectedException PromisePay\Exception\Argument
-     */
-    public function testDeleteUserMissedId()
-    {
-        PromisePay::deleteUser("");
-    }
-
     public function testEditUserSuccess()
     {
         $userData = $this->userData;

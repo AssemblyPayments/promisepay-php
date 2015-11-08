@@ -5,13 +5,13 @@ use PromisePay\PromisePay;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class UserRepository extends PromisePay {
+class UserRepository {
     
-    public static function createUser($params)
+    public static function create($params)
     {
         self::validateUser($params);
         
-        $response = parent::RestClient('post', 'users/', $params);
+        $response = PromisePay::RestClient('post', 'users/', $params);
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
         return $jsonDecodedResponse['users'];
@@ -51,15 +51,6 @@ class UserRepository extends PromisePay {
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
         return $jsonDecodedResponse['users'];
-    }
-
-    public static function deleteUser($id)
-    {
-        parent::checkIdNotNull($id);
-        
-        $response = parent::RestClient('delete', 'users/' . $id);
-        
-        return json_decode($response->raw_body, true);
     }
 
     public static function sendMobilePin($id)

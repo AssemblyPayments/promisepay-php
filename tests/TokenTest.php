@@ -1,17 +1,13 @@
 <?php
 namespace PromisePay\Tests;
-
-use PromisePay\DataObjects\Token;
-use PromisePay\TokenRepository;
+use PromisePay\PromisePay;
 
 class TokenTest extends \PHPUnit_Framework_TestCase {
     
-    public function setUp() {
-        require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
-    }
+    protected $tokenData;
     
-    public function testRequestSessionToken() {
-        $data = array(
+    public function setUp() {
+        $this->tokenData = array(
             'current_user_id'    => 'ec9bf096-c505-4bef-87f6-18822b9dbf2c',
             'item_name'          => 'bear',
             'amount'             => '$100',
@@ -29,18 +25,18 @@ class TokenTest extends \PHPUnit_Framework_TestCase {
             'buyer_country'      => 'AUS',
             'external_buyer_id'  => 'fdf58725-96bd-4bf8-b5e6-9b61be20662e',
         );
+    }
+    
+    public function testRequestToken() {
+        $requestToken = PromisePay::Token()->requestToken();
         
-        $token = new Token($data);
-        $repo = new TokenRepository();
-        
-        $this->assertTrue(is_array($repo->requestSessionToken($token)));
+        var_dump($requestToken);
     }
 
-    public function testGetWidget() {
-        $repo = new TokenRepository();
-        $getWidget = $repo->getWidget('aaa-bbb-cc');
+    public function testRequestSessionToken() {
+        $requestSessionToken = PromisePay::Token()->requestSessionToken($this->tokenData);
         
-        $this->assertTrue($getWidget instanceof Widget || $getWidget === null);
+        var_dump($requestSessionToken);
     }
     
 }

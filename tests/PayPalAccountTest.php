@@ -1,92 +1,62 @@
 <?php
 namespace PromisePay\Tests;
-
-use PromisePay\PayPalAccountRepository;
-use PromisePay\DataObjects\PayPalAccount;
+use PromisePay\PromisePay;
 
 class PayPalAccountTest extends \PHPUnit_Framework_TestCase {
     
+    protected $userId, $payPalData;
+    
     public function setUp() {
-        require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'init.php');
+        $this->userId = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';
+        $this->payPalData = array(
+            'user_id' => $this->userId,
+            'paypal_email' => 'test@paypalname.com'
+        );
     }
 
     public function testCreatePaypalAccount() {
-        $repo  = new PayPalAccountRepository();
-        $userid = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';
+        // Create a PayPal Account
+        $createPayPalAccount = PromisePay::PayPalAccount()->create($this->payPalData);
         
-        $params = array(
-            'user_id' => $userid,
-            'active'  => 'true',
-            'paypal'  => array(
-                'email' => 'test@paypalname.com'
-            )
-        );
-
-        $ppalAccount = new PayPalAccount($params);
-        $create = $repo->createPayPalAccount($ppalAccount);
-
-        $this->assertEquals($ppalAccount->getPayPal()->getPayPalAccountEmail(), $create->getPayPal()->getPayPalAccountEmail());
-
-        $this->assertNotNull($create->getCreatedAt());
-        $this->assertNotNull($create->getUpdatedAt());
+        $this->assertTrue(array_key_exists('paypal', $createPayPalAccount));
+        $this->assertTrue(is_array($createPayPalAccount['paypal']));
+        $this->assertEquals($this->payPalData['paypal_email'], $createPayPalAccount['paypal']['email']);
+        $this->assertNotNull($createPayPalAccount['created_at']);
     }
-
-    public function testGetAccountSuccessfully() {
-        $repo  = new PayPalAccountRepository();
-        $userid = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';
+    
+    public function testGetAccount() {
+        // Create a PayPal Account
+        $createPayPalAccount = PromisePay::PayPalAccount()->create($this->payPalData);
         
-        $params = array(
-            'user_id' => $userid,
-            'active'  => 'true',
-            'paypal'  => array(
-                'email' => 'test@paypalname.com'
-            )
-        );
+        // Get the PayPal Account
+        $getPayPalAccount = PromisePay::PayPalAccount()->get($createPayPalAccount['id']);
         
-        $ppalAccount = new PayPalAccount($params);
-        $createPaypalAccount = $repo->createPayPalAccount($ppalAccount);
-        $getPaypalAccount = $repo->getPayPalAccountById($createPaypalAccount->getId());
-        
-        $this->assertEquals($createPaypalAccount->getId(), $getPaypalAccount->getId());
+        $this->assertTrue(array_key_exists('paypal', $createPayPalAccount));
+        $this->assertTrue(is_array($createPayPalAccount['paypal']));
+        $this->assertEquals($this->payPalData['paypal_email'], $createPayPalAccount['paypal']['email']);
+        $this->assertNotNull($createPayPalAccount['created_at']);
     }
-
-    public function testGetUserForAccountSuccessfully() {
-        $repo  = new PayPalAccountRepository();
-        $userid = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';
+    
+    
+    public function testGetUserForAccount() {
+        // Create a PayPal Account
+        $createPayPalAccount = PromisePay::PayPalAccount()->create($this->payPalData);
         
-        $params = array(
-            'user_id' => $userid,
-            'active'  => 'true',
-            'paypal'  => array(
-                'email' => 'test@paypalname.com'
-            )
-        );
+        // Get user for account
+        $getUser = PromisePay::PayPalAccount()->getUser($createPayPalAccount['id']);
         
-        $ppalAccount = new PayPalAccount($params);
-
-        $createPaypalAccount = $repo->createPayPalAccount($ppalAccount);
-        $getUsersPaypalAccount = $repo->getUserForPayPalAccount($createPaypalAccount->getId());
-
-        $gotUserId = $getUsersPaypalAccount->getId();
-        $this->assertEquals($gotUserId, $userid);
+        $this->assertEquals($this->userId, $getUser['id']);
     }
-
+    
+    
     public function testDeletePayPalAccount() {
-        $repo  = new PayPalAccountRepository();
-        $userid = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';
+        // Create a PayPal Account
+        $createPayPalAccount = PromisePay::PayPalAccount()->create($this->payPalData);
         
-        $params = array(
-            'user_id' => $userid,
-            'active'  => 'true',
-            'paypal'  => array(
-                'email' => 'test@paypalname.com'
-            )
-        );
+        // Then, delete it
+        $deletePayPalAccount = PromisePay::PayPalAccount()->delete($createPayPalAccount['id']);
         
-        $ppalAccount = new PayPalAccount($params);
-        $repo->createPayPalAccount($ppalAccount);
-        
-        $deleteRequest = $repo->deletePayPalAccount($userid);
-        $this->assertNotNull(json_decode($deleteRequest));
+        $this->assertEquals($deletePayPalAccount, 'Successfully redacted');
     }
+    
 }

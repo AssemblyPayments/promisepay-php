@@ -51,9 +51,15 @@ class CardAccountTest extends \PHPUnit_Framework_TestCase {
     public function testListBankAccountsForUser() {
         $createAccount = PromisePay::CardAccount()->create($this->cardAccountInfo);
         
-        $getList = PromisePay::CardAccount()->getUser($this->userId);
+        $getList = PromisePay::CardAccount()->getUser($createAccount['id']);
         
-        var_dump($getList);
+        //var_dump($getList);
+        
+        //PromisePay::CardAccount()->getCardAccount();
+        
+        $this->markTestIncomplete(
+          'https://trello.com/c/GGKTwJl5/70-issue-regarding-card-accounts-id-users'
+        );
     }
 
 }

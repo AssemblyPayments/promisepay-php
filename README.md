@@ -203,7 +203,7 @@ $userData = array(
     'zip'           => '90210',
     'country'       => 'AUS'
 );
-$updateUser = PromisePay::User()->update($createUser['id'], $userData);
+$updateUser = PromisePay::User()->update('USER_ID', $userData);
 ```
 #####Get a user's card accounts
 ```php
@@ -304,7 +304,7 @@ $getList = PromisePay::CardAccount()->getUser('CARD_ACCOUNT_ID');
 
 ```php
 $bankAccountData = array(
-    "user_id"        => $this->userId,
+    "user_id"        => 'USER_ID',
     "active"         => 'true',
     "bank_name"      => 'bank for test',
     "account_name"   => 'test acc',
@@ -334,7 +334,7 @@ $getUser = PromisePay::BankAccount()->getUser('BANK_ACCOUNT_ID');
 #####Create a PayPal account
 ```php
 $payPalData = array(
-    'user_id'      => $this->userId,
+    'user_id'      => 'USER_ID',
     'paypal_email' => 'test@paypalname.com'
 );
 $createPayPalAccount = PromisePay::PayPalAccount()->create($payPalData);
@@ -357,7 +357,7 @@ $getUser = PromisePay::PayPalAccount()->getUser('PAYPAL_ACCOUNT_ID');
 #####Create a company
 ```php
 $companyInfo = array(
-    'user_id'    => $this->userId,
+    'user_id'    => 'USER_ID',
     'legal_name' => 'Test edit company',
     'name'       => 'test company name edit',
     'country'    => 'AUS'
@@ -409,7 +409,7 @@ $getFeeById = PromisePay::Fee()->get('FEE_ID');
 $feeData = array(
     'amount'      => 1000,
     'name'        => 'fee test',
-    'fee_type_id' => (string) $this->enum->Fixed,
+    'fee_type_id' => '1',
     'cap'         => '1',
     'max'         => '3',
     'min'         => '2',

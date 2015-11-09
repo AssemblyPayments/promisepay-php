@@ -37,6 +37,12 @@ Download the latest release from GitHub, then include the **init.php** file - se
 require init.php
 ```
 
+### Prerequisites
+
+   - PHP 5.3 or above
+   - [curl](http://php.net/manual/en/book.curl.php) and [json](http://php.net/manual/en/book.json.php)  extensions must be enabled
+   
+
 #2. Configuration
 Before interacting with PromisePay API, you need to generate an API token. See [http://docs.promisepay.com/v2.2/docs/request_token](http://docs.promisepay.com/v2.2/docs/request_token) for more information.
 

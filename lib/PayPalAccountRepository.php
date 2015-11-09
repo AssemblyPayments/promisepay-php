@@ -21,8 +21,6 @@ class PayPalAccountRepository {
      * @return PayPalAccount object
      */
     public static function get($id) {
-        PromisePay::checkIdNotNull($id);
-        
         $response = PromisePay::RestClient('get', 'paypal_accounts/' . $id);
         
         return json_decode($response->raw_body, true);
@@ -55,8 +53,6 @@ class PayPalAccountRepository {
      * @return object
      */
     public static function delete($id) {
-        PromisePay::checkIdNotNull($id);
-        
         $response = PromisePay::RestClient('delete', 'paypal_accounts/' . $id);
         $jsonDecodedResponse = json_decode($response, true);
         
@@ -73,8 +69,6 @@ class PayPalAccountRepository {
      * @return User|null
      */
     public static function getUser($id) {
-        PromisePay::checkIdNotNull($id);
-        
         $response = PromisePay::RestClient('get','/paypal_accounts/' . $id . '/users');
         $jsonDecodedResponse = json_decode($response, true);
         

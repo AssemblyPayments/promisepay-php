@@ -7,16 +7,9 @@ use PromisePay\Log;
 class ItemRepository
 {
 
-    public static function getList($limit = 10, $offset = 0)
+    public static function getList($params)
     {
-        PromisePay::paramsListCorrect($limit, $offset);
-
-        $requestQuery = array(
-            'limit' => $limit,
-            'offset' => $offset
-        );
-
-        $response = PromisePay::RestClient('get', 'items/', $requestQuery);
+        $response = PromisePay::RestClient('get', 'items/', $params);
         $jsonDecodedResponse = json_decode($response, true);
 
         return $jsonDecodedResponse['items'];
@@ -122,7 +115,6 @@ class ItemRepository
         $jsonDecodedResponse = json_decode($response, true);
 
         return $jsonDecodedResponse['items'];
-
     }
 
     public static function requestRelease($id, $params)

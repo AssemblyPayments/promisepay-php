@@ -7,8 +7,6 @@ use PromisePay\Log;
 class CardAccountRepository {
     
     public static function get($id) {
-        PromisePay::checkIdNotNull($id);
-        
         $response = PromisePay::RestClient('get', 'card_accounts/' . $id);
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
@@ -23,8 +21,6 @@ class CardAccountRepository {
     }
 
     public static function delete($id) {
-        PromisePay::checkIdNotNull($id);
-        
         $response = PromisePay::RestClient('delete', 'card_accounts/' . $id);
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
@@ -32,8 +28,6 @@ class CardAccountRepository {
     }
 
     public static function getUser($id) {
-        PromisePay::checkIdNotNull($id);
-        
         $response = PromisePay::RestClient('get', 'card_accounts/' . $id . '/users');
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         

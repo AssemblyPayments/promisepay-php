@@ -6,14 +6,9 @@ use PromisePay\Log;
 use PromisePay\PromisePay;
 
 class TransactionRepository {
-    public static function getList($limit = 10, $offset = 0)
+    public static function getList($params)
     {
-        $requestParams = array(
-            'limit'  => $limit,
-            'offset' => $offset
-        );
-        
-        $response = PromisePay::RestClient('get', 'transactions/', $requestParams);
+        $response = PromisePay::RestClient('get', 'transactions/', $params);
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
         return $jsonDecodedResponse;

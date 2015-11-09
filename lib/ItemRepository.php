@@ -4,20 +4,14 @@ namespace PromisePay;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class ItemRepository {
-    
-    public static function getList($limit = 10, $offset = 0)
+class ItemRepository
+{
+
+    public static function getList($params)
     {
-        PromisePay::paramsListCorrect($limit, $offset);
-        
-        $requestQuery = array(
-            'limit'  => $limit,
-            'offset' => $offset
-        );
-        
-        $response = PromisePay::RestClient('get', 'items/', $requestQuery);
+        $response = PromisePay::RestClient('get', 'items/', $params);
         $jsonDecodedResponse = json_decode($response, true);
-        
+
         return $jsonDecodedResponse['items'];
     }
 
@@ -25,7 +19,7 @@ class ItemRepository {
     {
         $response = PromisePay::RestClient('get', 'items/' . $id);
         $jsonDecodedResponse = json_decode($response, true);
-        
+
         return $jsonDecodedResponse['items'];
     }
 
@@ -33,7 +27,7 @@ class ItemRepository {
     {
         $response = PromisePay::RestClient('post', 'items/', $params);
         $jsonDecodedResponse = json_decode($response, true);
-        
+
         return $jsonDecodedResponse['items'];
     }
 
@@ -41,7 +35,7 @@ class ItemRepository {
     {
         $response = PromisePay::RestClient('delete', 'items/' . $id);
         $jsonDecodedResponse = json_decode($response, true);
-        
+
         return $jsonDecodedResponse['items'];
     }
 
@@ -49,14 +43,16 @@ class ItemRepository {
     {
         $response = PromisePay::RestClient('patch', 'items/' . $id . '/', $params);
         $jsonDecodedResponse = json_decode($response, true);
-        
+
         return $jsonDecodedResponse['items'];
     }
-    
+
     public static function makePayment($id, $params)
     {
         $response = PromisePay::RestClient('patch', 'items/' . $id . '/make_payment', $params);
-        return json_decode($response->raw_body, true);
+        $jsonDecodedResponse = json_decode($response, true);
+
+        return $jsonDecodedResponse['items'];
     }
 
     public static function getListOfTransactions($id)
@@ -69,7 +65,7 @@ class ItemRepository {
     {
         $response = PromisePay::RestClient('get', 'items/' . $id . '/status');
         $jsonDecodedResponse = json_decode($response, true);
-        
+
         return $jsonDecodedResponse['items'];
     }
 
@@ -77,7 +73,7 @@ class ItemRepository {
     {
         $response = PromisePay::RestClient('get', 'items/' . $id . '/fees');
         $jsonDecodedResponse = json_decode($response, true);
-        
+
         return $jsonDecodedResponse;
     }
 
@@ -96,71 +92,84 @@ class ItemRepository {
     public static function getWireDetails($id)
     {
         $response = PromisePay::RestClient('get', 'items/' . $id . '/wire_details');
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
-        
-        return $jsonDecodedResponse['items'];
+        return json_decode($response->raw_body, true);
     }
 
     public static function getBPayDetails($id)
     {
         $response = PromisePay::RestClient('get', 'items/' . $id . '/bpay_details');
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
-        
-        return $jsonDecodedResponse['items'];
+        return json_decode($response->raw_body, true);
     }
 
     public static function requestPayment($id)
     {
         $response = PromisePay::RestClient('patch', 'items/' . $id . '/request_payment');
-        return json_decode($response->raw_body, true);
+        $jsonDecodedResponse = json_decode($response, true);
+
+        return $jsonDecodedResponse['items'];
     }
 
     public static function releasePayment($id, $params)
     {
         $response = PromisePay::RestClient('patch', 'items/' . $id . '/release_payment', $params);
-        return json_decode($response->raw_body, true);
-    }
+        $jsonDecodedResponse = json_decode($response, true);
 
+        return $jsonDecodedResponse['items'];
+    }
 
     public static function requestRelease($id, $params)
     {
         $response = PromisePay::RestClient('patch', 'items/' . $id . '/request_release', $params);
-        return json_decode($response->raw_body, true);
+        $jsonDecodedResponse = json_decode($response, true);
+
+        return $jsonDecodedResponse['items'];
     }
 
     public static function cancelItem($id)
     {
         $response = PromisePay::RestClient('patch', 'items/' . $id . '/cancel');
-        return json_decode($response->raw_body, true);
+        $jsonDecodedResponse = json_decode($response, true);
+
+        return $jsonDecodedResponse['items'];
     }
 
     public static function acknowledgeWire($id)
     {
         $response = PromisePay::RestClient('patch', 'items/' . $id . '/acknowledge_wire');
-        return json_decode($response->raw_body, true);
+        $jsonDecodedResponse = json_decode($response, true);
+
+        return $jsonDecodedResponse['items'];
     }
 
     public static function acknowledgePayPal($id)
     {
         $response = PromisePay::RestClient('patch', 'items/' . $id . '/acknowledge_paypal');
-        return json_decode($response->raw_body, true);
+        $jsonDecodedResponse = json_decode($response, true);
+
+        return $jsonDecodedResponse['items'];
     }
 
     public static function revertWire($id)
     {
         $response = PromisePay::RestClient('patch', 'items/' . $id . '/revert_wire');
-        return json_decode($response->raw_body, true);
+        $jsonDecodedResponse = json_decode($response, true);
+
+        return $jsonDecodedResponse['items'];
     }
 
     public static function requestRefund($id, $params)
     {
         $response = PromisePay::RestClient('patch', 'items/' . $id . '/request_refund', $params);
-        return json_decode($response->raw_body, true);
+        $jsonDecodedResponse = json_decode($response, true);
+
+        return $jsonDecodedResponse['items'];
     }
 
     public static function refund($id, $params)
     {
         $response = PromisePay::RestClient('patch', 'items/' . $id . '/refund', $params);
-        return json_decode($response->raw_body, true);
+        $jsonDecodedResponse = json_decode($response, true);
+
+        return $jsonDecodedResponse['items'];
     }
 }

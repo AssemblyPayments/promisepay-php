@@ -20,15 +20,8 @@ class CompanyRepository {
      * @param int $offset
      * @return array
      */
-    public static function getList($limit = 20, $offset = 0) {
-        PromisePay::paramsListCorrect($limit, $offset);
-        
-        $requestParams = array(
-            'limit' => $limit,
-            'offset' => $offset
-        );
-        
-        $response = PromisePay::RestClient('get', 'companies/', $requestParams);
+    public static function getList($params) {
+        $response = PromisePay::RestClient('get', 'companies/', $params);
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
         return $jsonDecodedResponse['companies'];
@@ -42,8 +35,6 @@ class CompanyRepository {
      * @return array
      */
     public static function get($id) {
-        PromisePay::checkIdNotNull($id);
-        
         $response = PromisePay::RestClient('get', 'companies/' . $id);
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
@@ -58,8 +49,8 @@ class CompanyRepository {
      * @param string $id
      * @return array
      */
-    public static function create($companyData) {
-        $response = PromisePay::RestClient('post', 'companies/', $companyData);
+    public static function create($params) {
+        $response = PromisePay::RestClient('post', 'companies/', $params);
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
         return $jsonDecodedResponse['companies'];
@@ -73,10 +64,8 @@ class CompanyRepository {
      * @param string $id
      * @return array
      */
-    public static function update($id, $companyData) {
-        PromisePay::checkIdNotNull($id);
-
-        $response = PromisePay::RestClient('patch', 'companies/' . $id, $companyData);
+    public static function update($id, $params) {
+        $response = PromisePay::RestClient('patch', 'companies/' . $id, $params);
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
         return $jsonDecodedResponse['companies'];

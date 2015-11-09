@@ -85,12 +85,12 @@ The below example shows the request for a marketplace that passes the Item and U
 
 ```php
 $itemData = array(
-    "id"              => 'Item_id',
+    "id"              => 'ITEM_ID',
     "name"            => 'Test Item #1',
     "amount"          => 1000,
     "payment_type_id" => 1,
-    "buyer_id"        => 'External_buyer_id',
-    "seller_id"       => 'External_seller_id',
+    "buyer_id"        => 'BUYER_ID',
+    "seller_id"       => 'SELLER_ID',
     "description"     => 'Description'
 );
 
@@ -99,7 +99,7 @@ $createItem = PromisePay::Item()->create($itemData);
 #####Get an item
 
 ```php
-$getItem = PromisePay::Item()->get('Item_id');
+$getItem = PromisePay::Item()->get('ITEM_ID');
 ```
 #####Get a list of items
 ```php
@@ -108,12 +108,12 @@ $fetchList = PromisePay::Item()->getList(200, 0); //limit, offset
 #####Update an item
 ```php
 $itemData = array(
-    "id"              => 'Item_id',
+    "id"              => 'ITEM_ID',
     "name"            => 'Test Item #1',
     "amount"          => 1000,
     "payment_type_id" => 1,
-    "buyer_id"        => 'External_buyer_id',
-    "seller_id"       => 'External_seller_id',
+    "buyer_id"        => 'BUYER_ID',
+    "seller_id"       => 'SELLER_ID',
     "description"     => 'Description'
 );
 
@@ -122,12 +122,12 @@ $createItem = PromisePay::Item()->update($itemData);
 
 #####Delete an item
 ```php
-$deleteItem = PromisePay::Item()->delete('item_id');
+$deleteItem = PromisePay::Item()->delete('ITEM_ID');
 ```
 
 #####Get an item status
 ```php
-$itemStatus = PromisePay::Item()->getStatus('item_id');
+$itemStatus = PromisePay::Item()->getStatus('ITEM_ID');
 ```
 
 #####Get an item's buyer
@@ -152,12 +152,12 @@ $itemStatus = PromisePay::Item()->getStatus('item_id');
 
 #####Get an item's wire details
 ```php
-$wireDetails = PromisePay::Item()->getWireDetails('item_id');
+$wireDetails = PromisePay::Item()->getWireDetails('ITEM_ID');
 ```
 
 #####Get an item's BPAY details
 ```php
-$bPayDetails = PromisePay::Item()->getBPayDetails('item_id');
+$bPayDetails = PromisePay::Item()->getBPayDetails('ITEM_ID');
 ```
 
 

@@ -37,6 +37,12 @@ Download the latest release from GitHub, then include the **init.php** file - se
 require init.php
 ```
 
+### Prerequisites
+
+   - PHP 5.3 or above
+   - [curl](http://php.net/manual/en/book.curl.php) and [json](http://php.net/manual/en/book.json.php)  extensions must be enabled
+   
+
 #2. Configuration
 Before interacting with PromisePay API, you need to generate an API token. See [http://docs.promisepay.com/v2.2/docs/request_token](http://docs.promisepay.com/v2.2/docs/request_token) for more information.
 
@@ -79,12 +85,12 @@ The below example shows the request for a marketplace that passes the Item and U
 
 ```php
 $itemData = array(
-    "id"              => 'Item_id',
+    "id"              => 'ITEM_ID',
     "name"            => 'Test Item #1',
     "amount"          => 1000,
     "payment_type_id" => 1,
-    "buyer_id"        => 'External_buyer_id',
-    "seller_id"       => 'External_seller_id',
+    "buyer_id"        => 'BUYER_ID',
+    "seller_id"       => 'SELLER_ID',
     "description"     => 'Description'
 );
 
@@ -93,7 +99,7 @@ $createItem = PromisePay::Item()->create($itemData);
 #####Get an item
 
 ```php
-$getItem = PromisePay::Item()->get('Item_id');
+$getItem = PromisePay::Item()->get('ITEM_ID');
 ```
 #####Get a list of items
 ```php
@@ -102,12 +108,12 @@ $fetchList = PromisePay::Item()->getList(200, 0); //limit, offset
 #####Update an item
 ```php
 $itemData = array(
-    "id"              => 'Item_id',
+    "id"              => 'ITEM_ID',
     "name"            => 'Test Item #1',
     "amount"          => 1000,
     "payment_type_id" => 1,
-    "buyer_id"        => 'External_buyer_id',
-    "seller_id"       => 'External_seller_id',
+    "buyer_id"        => 'BUYER_ID',
+    "seller_id"       => 'SELLER_ID',
     "description"     => 'Description'
 );
 
@@ -116,12 +122,12 @@ $createItem = PromisePay::Item()->update($itemData);
 
 #####Delete an item
 ```php
-$deleteItem = PromisePay::Item()->delete('item_id');
+$deleteItem = PromisePay::Item()->delete('ITEM_ID');
 ```
 
 #####Get an item status
 ```php
-$itemStatus = PromisePay::Item()->getStatus('item_id');
+$itemStatus = PromisePay::Item()->getStatus('ITEM_ID');
 ```
 
 #####Get an item's buyer
@@ -146,12 +152,12 @@ $itemStatus = PromisePay::Item()->getStatus('item_id');
 
 #####Get an item's wire details
 ```php
-$wireDetails = PromisePay::Item()->getWireDetails('item_id');
+$wireDetails = PromisePay::Item()->getWireDetails('ITEM_ID');
 ```
 
 #####Get an item's BPAY details
 ```php
-$bPayDetails = PromisePay::Item()->getBPayDetails('item_id');
+$bPayDetails = PromisePay::Item()->getBPayDetails('ITEM_ID');
 ```
 
 
@@ -197,7 +203,7 @@ $userData = array(
     'zip'           => '90210',
     'country'       => 'AUS'
 );
-$updateUser = PromisePay::User()->update($createUser['id'], $userData);
+$updateUser = PromisePay::User()->update('USER_ID', $userData);
 ```
 #####Get a user's card accounts
 ```php
@@ -298,7 +304,7 @@ $getList = PromisePay::CardAccount()->getUser('CARD_ACCOUNT_ID');
 
 ```php
 $bankAccountData = array(
-    "user_id"        => $this->userId,
+    "user_id"        => 'USER_ID',
     "active"         => 'true',
     "bank_name"      => 'bank for test',
     "account_name"   => 'test acc',
@@ -328,7 +334,7 @@ $getUser = PromisePay::BankAccount()->getUser('BANK_ACCOUNT_ID');
 #####Create a PayPal account
 ```php
 $payPalData = array(
-    'user_id'      => $this->userId,
+    'user_id'      => 'USER_ID',
     'paypal_email' => 'test@paypalname.com'
 );
 $createPayPalAccount = PromisePay::PayPalAccount()->create($payPalData);
@@ -351,7 +357,7 @@ $getUser = PromisePay::PayPalAccount()->getUser('PAYPAL_ACCOUNT_ID');
 #####Create a company
 ```php
 $companyInfo = array(
-    'user_id'    => $this->userId,
+    'user_id'    => 'USER_ID',
     'legal_name' => 'Test edit company',
     'name'       => 'test company name edit',
     'country'    => 'AUS'
@@ -403,7 +409,7 @@ $getFeeById = PromisePay::Fee()->get('FEE_ID');
 $feeData = array(
     'amount'      => 1000,
     'name'        => 'fee test',
-    'fee_type_id' => (string) $this->enum->Fixed,
+    'fee_type_id' => '1',
     'cap'         => '1',
     'max'         => '3',
     'min'         => '2',

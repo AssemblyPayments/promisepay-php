@@ -54,6 +54,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
      * @expectedException PromisePay\Exception\Argument
      */
     public function testListItemsNegativeParams() {
+        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
         PromisePay::Item()->getList(-10, -20);
     }
     
@@ -61,6 +62,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
      * @expectedException PromisePay\Exception\Argument
      */
     public function testListItemsTooHighLimit() {
+        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
         PromisePay::Item()->getList(201);
     }
     
@@ -170,6 +172,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testListTransactionsForItem() {
+        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
+        
         // Create the item
         $createItem = PromisePay::Item()->create($this->itemData);
         
@@ -202,6 +206,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testListFeesForItem() {
+        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
+        
         // Create a fee
         $createFee = PromisePay::Fee()->create($this->feeData);
         
@@ -223,6 +229,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testGetBuyerForItem() {
+        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
+        
         // Create an item
         $createItem = PromisePay::Item()->create($this->itemData);
         
@@ -237,6 +245,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
     
     
     public function testGetSellerForItem() {
+        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
+        
         // Create an item
         $createItem = PromisePay::Item()->create($this->itemData);
         
@@ -252,6 +262,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
     
     
     public function testGetWireDetailsForItem() {
+        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
+        
         // Create an item
         $createItem = PromisePay::Item()->create($this->itemData);
         
@@ -263,6 +275,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
     }    
     
     public function testGetBpayDetailsForItem() {
+        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
+        
         // Create an item
         $createItem = PromisePay::Item()->create($this->itemData);
         

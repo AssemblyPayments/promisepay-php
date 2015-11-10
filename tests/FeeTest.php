@@ -56,6 +56,7 @@ class FeeTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testList() {
+        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
         $this->feeData['name'] = 'Fee Test Fee Test 123456';
         
         $createFee = PromisePay::Fee()->create($this->feeData);

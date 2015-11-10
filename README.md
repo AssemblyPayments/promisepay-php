@@ -6,6 +6,8 @@
 [![Total Downloads](https://poser.pugx.org/promisepay/promisepay-php/downloads)](https://packagist.org/packages/promisepay/promisepay-php)
  [![Code Climate](https://codeclimate.com/github/PromisePay/promisepay-php/badges/gpa.svg)](https://codeclimate.com/github/PromisePay/promisepay-php)
 
+ Note: The api only responds to the models which are included with the php package.
+
 #1. Installation
 
 ###Composer
@@ -23,18 +25,18 @@ You can include this package via Composer.
 Install the package.
 
 	composer install
-	
-Require the package.
+
+Require the package in the controller where you'll be using it.
 
 ```php
-require init.php
+use PromisePay;
 ```
 
 ###Manual Installation
-Download the latest release from GitHub, then include the **init.php** file - see below.
+Download the latest release from GitHub, then require the package in the relevant controller.
 
 ```php
-require init.php
+use PromisePay;
 ```
 
 ### Prerequisites
@@ -48,7 +50,7 @@ Before interacting with PromisePay API, you need to generate an API token. See [
 
 Once you have recorded your API token, configure the PHP package - see below.
 
-Open the file **SDK_Config.php** and replace the existing credentials with the following:
+Open the file **vendor/promisepay/promisepay-php/libs/promisepay-credentials.xml** and replace the existing credentials with your account information:
 
 ```php
 define(__NAMESPACE__ . '\API_LOGIN', 'YOUR EMAIL ADDRESS');

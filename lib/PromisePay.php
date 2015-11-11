@@ -92,41 +92,7 @@ class PromisePay {
         // check for errors
         $request_status = json_decode($response->raw_body);
         
-        if (isset($request_status->errors)) {
-            // check if API authorization was successful
-            if (isset($request_status->errors->API_key)) {
-                throw new Exception\Unauthorized("Exception thrown regarding API_key: " . serialize($request_status->errors));
-            } else {
-                throw new Exception\Unauthorized("Exception thrown regarding unauthorized data access: " . serialize($request_status->errors));
-            }
-        }
-        
         return $response;
     }
-
-    public static function checkIdNotNull($id) {
-        if ($id == null) { // assumes unusable data (nulls, empty arrays, empty strings)
-            Logger::logging('Fatal error: Id is empty');
-            throw new Exception\Argument('id is empty');
-        }
-    }
-
-    public static function paramsListCorrect($limit, $offset) {
-        if (!is_int($limit) || !is_int($offset)) {
-            Logger::logging('Fatal error: Limit and offset value should be integers!');
-            throw new Exception\Argument('Limit and offset value should be integers!');
-        }
-        
-        if ($limit < 0 || $offset < 0 ) {
-            Logger::logging('Fatal error: limit and offset values should be nonnegative!');
-            throw new Exception\Argument('Limit and offset values should be nonnegative!');
-        }
-
-        if ($limit > self::ENTITY_LIST_LIMIT) {
-            Logger::logging('Fatal error: Max value for limit parameter!');
-            throw new Exception\Argument('Max value for limit parameter');
-        }
-    }
-
-
+    
 }

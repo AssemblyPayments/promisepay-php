@@ -4,36 +4,35 @@ use PromisePay\PromisePay;
 
 class TransactionTest extends \PHPUnit_Framework_TestCase {
     
+    protected $transactionId;
+    
     public function setUp() {
-        
+        $this->transactionId = 'b916bd3e-973e-4274-9b10-1ef1db2b855c';
     }
     
     public function testGetListOfTransactions() {
-        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
         $getList = PromisePay::Transaction()->getList();
         
-        //var_dump($getList);
+        $this->assertTrue(is_array($getList));
     }
     
     public function testGetById() {
-        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
-        //$getTransaction = PromisePay::Transaction()->get('64e163b2-69db-40eb-9df4-94c1ce8abb71');
+        $getTransaction = PromisePay::Transaction()->get($this->transactionId);
         
-        /*
-        var_dump($getTransaction);
-        
-        Exception thrown regarding unauthorized data access: O:8:"stdClass":1:{s:14:"not_authorized";a:1:{i:0;s:21:"to access that record";}}
-        */
+        $this->assertTrue(is_array($getTransaction));
+        $this->assertEquals($this->transactionId, $getTransaction['id']);
     }
     
-    public function testGetUser() {
-        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
-        // which ID to use?
+    public function testGetUserRelatedToTransaction() {
+        $getUser = PromisePay::Transaction()->getUser($this->transactionId);
+        
+        $this->assertTrue(is_array($getUser));
     }
     
     public function testGetFee() {
-        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
-        // which ID to use?
+        $getFee = PromisePay::Transaction()->getFee($this->transactionId);
+        
+        $this->assertTrue(is_array($getFee));
     }
     
 }

@@ -48,6 +48,8 @@ Before interacting with PromisePay API, you need to generate an API token. See [
 
 Once you have recorded your API token, configure the PHP package - see below.
 
+**Step 1.**
+
 Open the file **SDK_Config.php** and replace the existing credentials with the following:
 
 ```php
@@ -63,6 +65,19 @@ define(__NAMESPACE__ . '\API_PASSWORD', 'YOUR API PASSWORD');
 define(__NAMESPACE__ . '\API_URL', 'TEST OR PRODUCTION ENVIRONMENT URL');
 
 ```
+
+**Step 2.**
+
+Open the file **PromisePay.php** inside *libs* folder, search for a *SDK_CONFIG_LOCATION* constant near the top, and enter the path for the aforementioned **SDK_Config.php** file.
+
+The following example demonstrates how to use the default SDK_Config.php file:
+
+```php
+define(__NAMESPACE__ . '\SDK_CONFIG_LOCATION', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'SDK_Config.php');
+```
+
+*Notice:* it is recommended to use the Config file outside of the main PromisePay folder, so it's not overwritten when updating via Composer.
+
 
 #3. Examples
 ##Tokens

@@ -49,7 +49,7 @@ class FeeTest extends \PHPUnit_Framework_TestCase {
         
         $getList = PromisePay::Fee()->getList(200);
         
-        var_dump($createFee, $getList);
+        //var_dump($createFee, $getList);
         $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
     }
 

@@ -213,7 +213,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         // Get list of fees
         $itemListOfFees = PromisePay::Item()->getListOfFees($createItem['id']);
         
-        var_dump($itemListOfFees, $createItem);
+        //var_dump($itemListOfFees, $createItem);
         $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
     }
     

@@ -6,27 +6,10 @@ use PromisePay\Exception;
 /**
  * Class Configuration
  *
- * @param string|null $customConfigFile optional For custom SDK Config file path.
+ * @param string|null $configurationFile optional For custom SDK Config file path.
  * @package PromisePay
  */
-class Configuration
-{
-    /**
-     * Private read-only variable.
-     * SDK Config filename. Only filename, not path. File must be in package's root folder.
-     *
-     * @var string $sdkConfigFileName
-     */
-    private $sdkConfigFileName = 'SDK_Config.php';
-    
-    /**
-     * Private variable
-     * Read-only when accessed outside this class.
-     * Tracks absolute path and filename of SDK Config file being used.
-     * 
-     * @var string $sdkConfigFileUsed
-     */
-    private $sdkConfigFileUsed;
+class Configuration {
     
     /**
      * Private read-only variable
@@ -40,44 +23,26 @@ class Configuration
      * Construct
      * Loads appropriate SDK Config file.
      *
-     * @param string|null $customConfigFile Optional config file PATH to use instead of default one
+     * @param string|null $configurationFile Optional config file PATH to use instead of default one
      * @throws Exception\NotFound
      * @throws Exception\Credentials
      */
-    public function __construct($customConfigFile = null) 
-    {
-        // TODO: check PHP version (req: >= 5.3.0)
-        //-----------------------------------------
+    public function __construct($configurationFile) {
+        
+        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+            die("Fatal error: The minimum version of PHP needed for this package is 5.3.0. Exiting...");
+        }
         
         // if default timezone hasn't been set, do it here
         if (!ini_get('date.timezone')) {
             date_default_timezone_set('UTC');
         }
         
-        // Check if custom file should be used
-        if (!is_null($customConfigFile)) 
-        {
-            if (!file_exists($customConfigFile)) 
-            {
-                throw new Exception\NotFound("User supplied config file $customConfigFile not found (don't forget to supply full path, not just filename).");
-            }
-            
-            $this->sdkConfigFileUsed = $customConfigFile;
-        } 
-        else 
-        {
-            $project_path = dirname(__DIR__);
-            $configFilePath  = $project_path . DIRECTORY_SEPARATOR . $this->sdkConfigFileName;
-            
-            if (!file_exists($configFilePath)) 
-            {
-                throw new Exception\NotFound("SDK Config file {$this->sdkConfigFileName} not found in $project_path");
-            }
-            
-            $this->sdkConfigFileUsed = $configFilePath;
+        if (!file_exists($configurationFile)) {
+            throw new Exception\NotFound("User supplied config file $configurationFile not found (don't forget to supply full path, not just filename).");
         }
         
-        require_once($this->sdkConfigFileUsed);
+        require_once($configurationFile);
         
         // Check if the config file is valid in order to avoid unexpected results
         if (!defined(__NAMESPACE__ . '\API_LOGIN')) 

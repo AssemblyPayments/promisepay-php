@@ -5,6 +5,18 @@ use Httpful\Request;
 use PromisePay\Exception;
 use PromisePay\Log\Logger;
 
+/*
+    SDK Config file location setup.
+    
+    A recommended way of setting it up is thus:
+    
+    dirname(__DIR__) . DIRECTORY_SEPARATOR . 'SDK_Config.php'
+*/
+
+define(__NAMESPACE__ . '\SDK_CONFIG_LOCATION', '');
+
+define(__NAMESPACE__ . '\SDK_CONFIG_LOCATION_LINE', (__LINE__ - 2));
+
 /**
  * Class PromisePay
  *
@@ -25,11 +37,20 @@ class PromisePay {
      */
     public function __construct() {
         if (!defined(__NAMESPACE__ . '\API_LOGIN')) {
-            new Configuration;
-        }
-        
-        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
-            die("Fatal error: The minimum version of PHP needed for this package is 5.3.0. Exiting...");
+            
+            if (!empty(constant(__NAMESPACE__ . '\SDK_CONFIG_LOCATION')))
+            {
+                new Configuration(constant(__NAMESPACE__ . '\SDK_CONFIG_LOCATION'));
+            }
+            elseif (defined(__NAMESPACE__ . '\Tests\PHPUNIT_ENVIRONMENT'))
+            {
+                new Configuration(constant(__NAMESPACE__ . '\Tests\PHPUNIT_ENVIRONMENT'));
+            }
+            else
+            {
+                die("Fatal error: Looks like you forgot to specify your SDK Config file location. You can do that in file " . __FILE__ . ", at line " . constant(__NAMESPACE__ . '\SDK_CONFIG_LOCATION_LINE') . PHP_EOL);
+            }
+            
         }
     }
     

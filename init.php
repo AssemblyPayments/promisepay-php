@@ -41,4 +41,4 @@ require(dirname(__FILE__) . '/lib/Vendors/Httpful/Http.php');
 require(dirname(__FILE__) . '/lib/Vendors/Httpful/Request.php');
 
 // Invoke Configuration class
-new Configuration;
+new PromisePay;

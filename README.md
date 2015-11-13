@@ -17,7 +17,7 @@ You can include this package via Composer.
 ```json
 {
   "require": {
-    "promisepay/promisepay-php": "1.*"
+    "promisepay/promisepay-php": "2.*"
   }
 }
 ```

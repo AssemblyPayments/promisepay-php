@@ -51,7 +51,7 @@ Before interacting with PromisePay API, you need to generate an API token. See [
 Afterwards, you need to declare environment, login (your email address) and password (token), thus:
 
 ```php
-PromisePay::Configuration()->environment('prelive');
+PromisePay::Configuration()->environment('prelive'); // Use 'production' for the production environment.
 PromisePay::Configuration()->login('your_email_address');
 PromisePay::Configuration()->password('your_token');
 ```

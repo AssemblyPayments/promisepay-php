@@ -28,19 +28,16 @@ class TokenTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testRequestToken() {
-        $this->markTestSkipped(__METHOD__ . ' skipped' . PHP_EOL);
-        
         $requestToken = PromisePay::Token()->requestToken();
         
-        var_dump($requestToken);
+        $this->assertEquals($requestToken['errors']['token'][0], 'already exists'); // since the token for test account has already been created
     }
 
     public function testRequestSessionToken() {
-        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
-        
         $requestSessionToken = PromisePay::Token()->requestSessionToken($this->tokenData);
         
-        var_dump($requestSessionToken);
+        //var_dump($requestSessionToken);
+        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
     }
     
 }

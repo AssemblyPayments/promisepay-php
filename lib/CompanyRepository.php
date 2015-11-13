@@ -20,7 +20,7 @@ class CompanyRepository {
      * @param int $offset
      * @return array
      */
-    public static function getList($params) {
+    public static function getList($params = null) {
         $response = PromisePay::RestClient('get', 'companies/', $params);
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         

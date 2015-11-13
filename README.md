@@ -48,23 +48,14 @@ use PromisePay;
 #2. Configuration
 Before interacting with PromisePay API, you need to generate an API token. See [http://docs.promisepay.com/v2.2/docs/request_token](http://docs.promisepay.com/v2.2/docs/request_token) for more information.
 
-Once you have recorded your API token, configure the PHP package - see below.
-
-Open the file **vendor/promisepay/promisepay-php/libs/promisepay-credentials.xml** and replace the existing credentials with your account information:
+Afterwards, you need to declare environment, login (your email address) and password (token), thus:
 
 ```php
-define(__NAMESPACE__ . '\API_LOGIN', 'YOUR EMAIL ADDRESS');
-define(__NAMESPACE__ . '\API_PASSWORD', 'YOUR API PASSWORD');
-
-/*
- * SUPPORTED ENVIRONMENT VALUES
- *
- * Test environment:        https://test.api.promisepay.com/
- * Production environment:  https://secure.api.promisepay.com/
-*/
-define(__NAMESPACE__ . '\API_URL', 'TEST OR PRODUCTION ENVIRONMENT URL');
-
+PromisePay::Configuration()->environment('prelive');
+PromisePay::Configuration()->login('your_email_address');
+PromisePay::Configuration()->password('your_token');
 ```
+
 
 #3. Examples
 ##Tokens

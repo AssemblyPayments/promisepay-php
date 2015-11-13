@@ -24,7 +24,7 @@ class UserRepository
         return $jsonDecodedResponse['users'];
     }
 
-    public static function getList($params)
+    public static function getList($params = null)
     {
         $response = PromisePay::RestClient('get', 'users/', $params);
         $jsonDecodedResponse = json_decode($response->raw_body, true);

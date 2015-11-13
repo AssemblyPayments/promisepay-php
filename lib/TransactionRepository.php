@@ -6,12 +6,12 @@ use PromisePay\Log;
 use PromisePay\PromisePay;
 
 class TransactionRepository {
-    public static function getList($params)
+    public static function getList($params = null)
     {
         $response = PromisePay::RestClient('get', 'transactions/', $params);
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
-        return $jsonDecodedResponse;
+        return $jsonDecodedResponse['transactions'];
     }
 
     public static function get($id)
@@ -19,7 +19,7 @@ class TransactionRepository {
         $response = PromisePay::RestClient('get', 'transactions/' . $id);
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
-        return $jsonDecodedResponse;
+        return $jsonDecodedResponse['transactions'];
     }
 
     public static function getUser($id)
@@ -27,7 +27,7 @@ class TransactionRepository {
         $response = PromisePay::RestClient('get', 'transactions/' . $id . '/users');
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
-        return $jsonDecodedResponse;
+        return $jsonDecodedResponse['users'];
     }
 
     public static function getFee($id)
@@ -35,6 +35,6 @@ class TransactionRepository {
         $response = PromisePay::RestClient('get', 'transactions/' . $id . '/fees');
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
-        return $jsonDecodedResponse;
+        return $jsonDecodedResponse['fees'];
     }
 }

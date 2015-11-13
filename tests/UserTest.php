@@ -77,97 +77,12 @@ class UserTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($this->userData['first_name'] . ' ' . $this->userData['last_name'], $getUser['full_name']);
     }
     
-    /**
-     * @expectedException PromisePay\Exception\Validation
-     */
-    public function testUserCreateMissedId() {
-        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
-        // Isolate the user data
-        $data = $this->userData;
-        
-        // Change some params
-        $data['id'] = '';
-        
-        // Fire (and expect an exception)
-        PromisePay::User()->create($data);
-    }
-
-    /**
-     * @expectedException PromisePay\Exception\Validation
-     */
-    public function testUserCreateMissedFirstName() {
-        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
-        // Isolate the user data
-        $data = $this->userData;
-        
-        // Change some params
-        $data['first_name'] = '';
-        
-        // Fire (and expect an exception)
-        PromisePay::User()->create($data);
-    }
-
-    /**
-     * @expectedException PromisePay\Exception\Validation
-     */
-    public function testUserCreateWrongCountryCode() {
-        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
-        // Isolate the user data
-        $data = $this->userData;
-        
-        // Change some params
-        $data['country'] = 'WRONGCODE';
-        
-        // Fire (and expect an exception)
-        PromisePay::User()->create($data);
-    }
-
-    /**
-     * @expectedException PromisePay\Exception\Validation
-     */
-    public function testUserCreateInvalidEmail() {
-        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
-        // Isolate the user data
-        $data = $this->userData;
-        
-        // Change some params
-        $data['email'] = '@promisepay.com';
-        
-        // Fire (and expect an exception)
-        PromisePay::User()->create($data);
-    }
-    
     public function testGetListOfUsers() {
-        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
         $usersList = PromisePay::User()->getList();
         
         $this->assertNotNull($usersList);
         $this->assertTrue(count($usersList) > 0);
         $this->assertTrue(array_key_exists('full_name', reset($usersList)));
-    }
-    
-    /**
-     * @expectedException PromisePay\Exception\Argument
-     */
-    public function testGetListOfUsersNegativeParams() {
-        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
-        PromisePay::User()->getList(-10, -20);
-    }
-    
-    /**
-     * @expectedException PromisePay\Exception\Argument
-     */
-    public function testGetListOfUsersOverLimit() {
-        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
-        PromisePay::User()->getList(-201);
-    }
-    
-    /**
-     * @expectedException PromisePay\Exception\Argument
-     */
-    public function testGetUserMissedId() {
-        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
-        PromisePay::User()->getList("");
     }
     
     public function testEditUser() {
@@ -180,20 +95,6 @@ class UserTest extends \PHPUnit_Framework_TestCase {
         $updateUser = PromisePay::User()->update($createUser['id'], $userData);
         
         $this->assertEquals($userData['first_name'], $updateUser['first_name']);
-    }
-    
-    /**
-     * @expectedException PromisePay\Exception\Validation
-     */
-    public function testEditUserMissedId() {
-        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
-        // First, create the user
-        $createUser = PromisePay::User()->create($this->userData);
-        
-        $userData = $this->userData;
-        $userData['id'] = "";
-        
-        PromisePay::User()->update($createUser['id'], $userData);
     }
     
     public function testListUserItems() {
@@ -285,8 +186,6 @@ class UserTest extends \PHPUnit_Framework_TestCase {
         );
         
         $setDisbursementAccount = PromisePay::User()->setDisbursementAccount($UID, $setDisbursementAccountRequestParams);
-        
-        $this->markTestIncomplete();
     }
     
 }

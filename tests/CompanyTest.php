@@ -18,8 +18,6 @@ class CompanyTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testListOfCompanies() {
-        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
-        
         $companiesList = PromisePay::Company()->getList();
         
         $this->assertNotEmpty($companiesList);

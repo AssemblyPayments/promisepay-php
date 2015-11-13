@@ -38,7 +38,15 @@ class PromisePay {
     public function __construct() {
         if (!defined(__NAMESPACE__ . '\API_LOGIN')) {
             
-            if (!empty(constant(__NAMESPACE__ . '\SDK_CONFIG_LOCATION')))
+            /*
+                From PHP.net:
+                
+                "Prior to PHP 5.5, empty() only supports variables; anything else will result in a parse error."
+            */
+            
+            $sdk_config_location = constant(__NAMESPACE__ . '\SDK_CONFIG_LOCATION');
+            
+            if (!empty($sdk_config_location))
             {
                 new Configuration(constant(__NAMESPACE__ . '\SDK_CONFIG_LOCATION'));
             }
@@ -50,6 +58,8 @@ class PromisePay {
             {
                 die("Fatal error: Looks like you forgot to specify your SDK Config file location. You can do that in file " . __FILE__ . ", at line " . constant(__NAMESPACE__ . '\SDK_CONFIG_LOCATION_LINE') . PHP_EOL);
             }
+            
+            unset($sdk_config_location);
             
         }
     }

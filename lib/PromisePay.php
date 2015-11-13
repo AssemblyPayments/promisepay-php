@@ -5,18 +5,6 @@ use Httpful\Request;
 use PromisePay\Exception;
 use PromisePay\Log\Logger;
 
-/*
-    SDK Config file location setup.
-    
-    A recommended way of setting it up is thus:
-    
-    dirname(__DIR__) . DIRECTORY_SEPARATOR . 'SDK_Config.php'
-*/
-
-define(__NAMESPACE__ . '\SDK_CONFIG_LOCATION', '');
-
-define(__NAMESPACE__ . '\SDK_CONFIG_LOCATION_LINE', (__LINE__ - 2));
-
 /**
  * Class PromisePay
  *
@@ -29,40 +17,6 @@ class PromisePay {
      * @const int ENTITY_LIST_LIMIT
      */
     const ENTITY_LIST_LIMIT = 200;
-    
-    /**
-     * Constructor
-     * Makes sure Configuration class has been invoked by
-     * testing for presence of API_LOGIN constant.
-     */
-    public function __construct() {
-        if (!defined(__NAMESPACE__ . '\API_LOGIN')) {
-            
-            /*
-                From PHP.net:
-                
-                "Prior to PHP 5.5, empty() only supports variables; anything else will result in a parse error."
-            */
-            
-            $sdk_config_location = constant(__NAMESPACE__ . '\SDK_CONFIG_LOCATION');
-            
-            if (!empty($sdk_config_location))
-            {
-                new Configuration(constant(__NAMESPACE__ . '\SDK_CONFIG_LOCATION'));
-            }
-            elseif (defined(__NAMESPACE__ . '\Tests\PHPUNIT_ENVIRONMENT'))
-            {
-                new Configuration(constant(__NAMESPACE__ . '\Tests\PHPUNIT_ENVIRONMENT'));
-            }
-            else
-            {
-                die("Fatal error: Looks like you forgot to specify your SDK Config file location. You can do that in file " . __FILE__ . ", at line " . constant(__NAMESPACE__ . '\SDK_CONFIG_LOCATION_LINE') . PHP_EOL);
-            }
-            
-            unset($sdk_config_location);
-            
-        }
-    }
     
     /**
      * Static method invoker
@@ -91,6 +45,11 @@ class PromisePay {
      * @param string $mime optional Set specific MIME type. Supported list can be seen here: http://phphttpclient.com/docs/class-Httpful.Mime.html
      */
     public static function RestClient($method, $entity, $payload = null, $mime = null) {
+        // Check whether critical constants are defined.
+        if (!defined(__NAMESPACE__ . '\API_URL')) die("Fatal error: API_URL constant missing. Check if environment has been set.");
+        if (!defined(__NAMESPACE__ . '\API_LOGIN')) die("Fatal error: API_LOGIN constant missing.");
+        if (!defined(__NAMESPACE__ . '\API_PASSWORD')) die("Fatal error: API_PASSWORD constant missing.");
+        
         if (!is_null($payload)) {
             if (is_array($payload) || is_object($payload)) {
                 $payload = http_build_query($payload);

@@ -1,11 +1,13 @@
 <?php
 namespace PromisePay;
 
-// Configuration
-require(dirname(__FILE__) . '/lib/Configuration.php');
-
-// Repos
+// Main Class
 require(dirname(__FILE__) . '/lib/PromisePay.php');
+
+// Configuration handler
+require(dirname(__FILE__) . '/lib/ConfigurationRepository.php');
+
+// Repositories
 require(dirname(__FILE__) . '/lib/AddressRepository.php');
 require(dirname(__FILE__) . '/lib/BankAccountRepository.php');
 require(dirname(__FILE__) . '/lib/CardAccountRepository.php');
@@ -21,7 +23,7 @@ require(dirname(__FILE__) . '/lib/UserRepository.php');
 require(dirname(__FILE__) . '/lib/Enum/FeeType.php');
 require(dirname(__FILE__) . '/lib/Enum/PaymentType.php');
 
-// Exception
+// Exceptions
 require(dirname(__FILE__) . '/lib/Exception/Base.php');
 require(dirname(__FILE__) . '/lib/Exception/Api.php');
 require(dirname(__FILE__) . '/lib/Exception/ApiUnsupportedRequestMethod.php');
@@ -40,5 +42,5 @@ require(dirname(__FILE__) . '/lib/Vendors/Httpful/Bootstrap.php');
 require(dirname(__FILE__) . '/lib/Vendors/Httpful/Http.php');
 require(dirname(__FILE__) . '/lib/Vendors/Httpful/Request.php');
 
-// Invoke Configuration class
+// Instantiate main class so all methods can be statically called
 new PromisePay;

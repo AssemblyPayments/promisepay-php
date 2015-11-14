@@ -80,9 +80,53 @@ class PromisePay {
         }
         
         // check for errors
-        $request_status = json_decode($response->raw_body);
+        
+        if ($response->hasErrors())
+        {
+            $errors = static::buildErrorMessage($response);
+
+            switch ($response->code) {
+                 case 401:
+                     throw new Exception\Unauthorized($errors);
+                     break;
+                case 404:
+                     throw new Exception\NotFound($errors);                    
+                 default:                         
+                     throw new Exception\Api($errors);
+                     break;
+             }
+        }   
         
         return $response;
+    }
+
+    private static function buildErrorMessage($response)
+    {
+        $jsonReponse = json_decode($response->raw_body);
+        $message = '';
+        if (isset($jsonReponse->message)) 
+        {
+            $message = $jsonReponse->message;
+        }
+
+        if (isset($jsonReponse->errors))
+        {
+            foreach($jsonReponse->errors as $attribute => $content)
+            {
+                if (is_array($content))
+                {
+                    $content = implode(" ", $content);
+                }
+                if (is_object($content))
+                {
+                    $content = json_encode($content);
+                }
+
+                $message .= " {$attribute}: {$content} ";
+            }
+        }
+
+        return $message ? $response->code ." error: " . $message : NULL;
     }
     
 }

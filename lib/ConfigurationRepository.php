@@ -46,7 +46,7 @@ class ConfigurationRepository {
      */
     public static function environment($environmentType) {
         if (!array_key_exists($environmentType, self::$permittedApiUrls)) {
-            die("Fatal error: Invalid API Environment type. Supported values are: prelive(sandboxed), live.");
+            die("Fatal error: Invalid API Environment type. Supported values are: prelive, production.");
         }
         
         define(__NAMESPACE__ . '\API_URL', self::$permittedApiUrls[$environmentType]);

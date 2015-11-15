@@ -17,7 +17,7 @@ class ConfigurationRepository {
      * 
      * @var array $permittedApiUrls
      */
-    private static $permittedApiUrls = array('prelive' => 'https://test.api.promisepay.com/', 'live' => 'https://secure.api.promisepay.com/');
+    private static $permittedApiUrls = array('prelive' => 'https://test.api.promisepay.com/', 'production' => 'https://secure.api.promisepay.com/');
     
     /**
      * Construct

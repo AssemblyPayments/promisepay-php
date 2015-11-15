@@ -1,10 +1,12 @@
 #PHP SDK - PromisePay API
 
-[![Join the chat at https://gitter.im/NinoSkopac/promisepay-php](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/NinoSkopac/promisepay-php?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the chat at https://gitter.im/PromisePay/promisepay-php](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/NinoSkopac/promisepay-php?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[![Build Status](https://travis-ci.org/NinoSkopac/promisepay-php.svg)](https://travis-ci.org/NinoSkopac/promisepay-php) [![Latest Stable Version](https://poser.pugx.org/promisepay/promisepay-php/v/stable)](https://packagist.org/packages/promisepay/promisepay-php)
+[![Build Status](https://travis-ci.org/PromisePay/promisepay-php.svg)](https://travis-ci.org/NinoSkopac/promisepay-php) [![Latest Stable Version](https://poser.pugx.org/promisepay/promisepay-php/v/stable)](https://packagist.org/packages/promisepay/promisepay-php)
 [![Total Downloads](https://poser.pugx.org/promisepay/promisepay-php/downloads)](https://packagist.org/packages/promisepay/promisepay-php)
- [![Code Climate](https://codeclimate.com/github/PromisePay/promisepay-php/badges/gpa.svg)](https://codeclimate.com/github/PromisePay/promisepay-php)
+[![Code Climate](https://codeclimate.com/github/PromisePay/promisepay-php/badges/gpa.svg)](https://codeclimate.com/github/PromisePay/promisepay-php)
+
+ Note: The api only responds to the models which are included with the php package.
 
 #1. Installation
 
@@ -15,7 +17,7 @@ You can include this package via Composer.
 ```json
 {
   "require": {
-    "promisepay/promisepay-php": "1.*"
+    "promisepay/promisepay-php": "2.*"
   }
 }
 ```
@@ -23,18 +25,18 @@ You can include this package via Composer.
 Install the package.
 
 	composer install
-	
-Require the package.
+
+Require the package in the controller where you'll be using it.
 
 ```php
-require init.php
+use PromisePay;
 ```
 
 ###Manual Installation
-Download the latest release from GitHub, then include the **init.php** file - see below.
+Download the latest release from GitHub, then require the package in the relevant controller.
 
 ```php
-require init.php
+use PromisePay;
 ```
 
 ### Prerequisites
@@ -49,7 +51,7 @@ Before interacting with PromisePay API, you need to generate an API token. See [
 Afterwards, you need to declare environment, login (your email address) and password (token), thus:
 
 ```php
-PromisePay::Configuration()->environment('prelive');
+PromisePay::Configuration()->environment('prelive'); // Use 'production' for the production environment.
 PromisePay::Configuration()->login('your_email_address');
 PromisePay::Configuration()->password('your_token');
 ```

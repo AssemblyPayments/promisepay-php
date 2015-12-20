@@ -126,9 +126,9 @@ $item = PromisePay::Item()->get('ITEM_ID');
 #####Get a list of items
 ```php
 $items = PromisePay::Item()->getList(array(
-            'limit' => 20,
-            'offset' => 0
-        ));
+	'limit' => 20,
+	'offset' => 0
+));
 ```
 #####Update an item
 ```php
@@ -209,9 +209,9 @@ $user = PromisePay::User()->get('USER_ID');
 #####Get a list of users
 ```php
 $users = PromisePay::User()->getList(array(
-            'limit' => 20,
-            'offset' => 0
-        ));
+	'limit' => 20,
+	'offset' => 0
+));
 ```
 #####Update a user
 ```php
@@ -400,9 +400,9 @@ $company = PromisePay::Company()->get('COMPANY_ID');
 #####Get a list of companies
 ```php
 $companys = PromisePay::Company()->getList(array(
-            'limit' => 20,
-            'offset' => 0
-        ));
+	'limit' => 20,
+	'offset' => 0
+));
 ```
 
 #####Update a company
@@ -427,9 +427,9 @@ $company = PromisePay::Company()->update('COMPANY_ID', array(
 #####Get a list of fees
 ```php
 $fees = PromisePay::Fee()->getList(array(
-            'limit' => 20,
-            'offset' => 0
-        ));
+	'limit' => 20,
+	'offset' => 0
+));
 ```
 #####Get a fee
 ```php
@@ -452,9 +452,9 @@ $fee = PromisePay::Fee()->create(array(
 #####Get a list of transactions
 ```php
 $transactions = PromisePay::Transaction()->getList(array(
-            'limit' => 20,
-            'offset' => 0
-        ));
+	'limit' => 20,
+	'offset' => 0
+));
 ```
 #####Get a transaction
 ```php

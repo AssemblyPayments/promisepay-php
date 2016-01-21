@@ -45,6 +45,14 @@ class UserRepository
         $response = PromisePay::RestClient('post', '/users/' . $id . '/mobile_pin');
         return json_decode($response->raw_body, true);
     }
+    
+    public static function getCount() {
+      $params = ['limit' => 0, 'offset' => 0];
+      $response = PromisePay::RestClient('get', 'users/', $params);
+      $jsonDecodedResponse = json_decode($response->raw_body, true);
+
+      return $jsonDecodedResponse['meta']['total'];
+    }
 
     public static function getListOfItems($id)
     {

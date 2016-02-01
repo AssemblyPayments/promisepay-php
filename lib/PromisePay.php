@@ -2,13 +2,25 @@
 namespace PromisePay;
 
 use Httpful\Request;
+use Httpful\Response;
 use PromisePay\Exception;
-use PromisePay\Log\Logger;
 
 /**
  * Class PromisePay
  *
  * @package PromisePay
+ *
+ * @method static AddressRepository Address()
+ * @method static BankAccountRepository BankAccount()
+ * @method static CardAccountRepository CardAccount()
+ * @method static CompanyRepository Company()
+ * @method static ConfigurationRepository Configuration()
+ * @method static FeeRepository Fee()
+ * @method static ItemRepository Item()
+ * @method static PayPalAccountRepository PayPalAccount()
+ * @method static TokenRepository Token()
+ * @method static TransactionRepository Transaction()
+ * @method static UserRepository User()
  */
 class PromisePay {
     
@@ -17,13 +29,14 @@ class PromisePay {
      * @const int ENTITY_LIST_LIMIT
      */
     const ENTITY_LIST_LIMIT = 200;
-    
+
     /**
      * Static method invoker
      *
      * @param string $neededClassName
-     * @param mixed $passableArgs
+     * @param mixed  $autoPassedArgs
      * @return object
+     * @throws Exception\NotFound
      */
     public static function __callStatic($neededClassName, $autoPassedArgs) {
         $neededClassName = __NAMESPACE__ . '\\' . $neededClassName . 'Repository';
@@ -43,6 +56,8 @@ class PromisePay {
      * @param string $entity required Endpoint name
      * @param string $payload optional URL encoded data query
      * @param string $mime optional Set specific MIME type. Supported list can be seen here: http://phphttpclient.com/docs/class-Httpful.Mime.html
+     * @return Response
+     * @throws Exception\Base
      */
     public static function RestClient($method, $entity, $payload = null, $mime = null) {
         // Check whether critical constants are defined.
@@ -98,20 +113,24 @@ class PromisePay {
         
         return $response;
     }
-    
+
+    /**
+     * @param $response
+     * @return null|string
+     */
     private static function buildErrorMessage($response)
     {
-        $jsonReponse = json_decode($response->raw_body);
+        $jsonResponse = json_decode($response->raw_body);
         $message = '';
         
-        if (isset($jsonReponse->message)) 
+        if (isset($jsonResponse->message))
         {
-            $message = $jsonReponse->message;
+            $message = $jsonResponse->message;
         }
         
-        if (isset($jsonReponse->errors))
+        if (isset($jsonResponse->errors))
         {
-            foreach($jsonReponse->errors as $attribute => $content)
+            foreach($jsonResponse->errors as $attribute => $content)
             {
                 if (is_array($content))
                 {

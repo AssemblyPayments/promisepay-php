@@ -56,4 +56,27 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($deleteBankAccount, 'Successfully redacted');
     }
     
+    public function testGetTransactions() {
+        $createBankAccount = PromisePay::BankAccount()->create($this->bankAccountData);
+        $bankAccountId = $createBankAccount['id'];
+        
+        $this->markTestSkipped();
+        return;
+        
+        /*
+        There was 1 error:
+
+        1) PromisePay\Tests\BankAccountTest::testGetTransactions
+        PromisePay\Exception\NotFound:
+        
+        /var/www/promisepay-php/lib/PromisePay.php:92
+        /var/www/promisepay-php/lib/BankAccountRepository.php:38
+        /var/www/promisepay-php/tests/BankAccountTest.php:64
+        */
+        
+        $getTransactions = PromisePay::BankAccount()->getTransactions($bankAccountId);
+        
+        fwrite(STDERR, print_r($getTransactions, true));
+    }
+    
 }

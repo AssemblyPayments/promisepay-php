@@ -74,5 +74,12 @@ class PayPalAccountRepository {
         
         return $jsonDecodedResponse['users'];
     }
+    
+    public static function getTransactions($id) {
+        $response = PromisePay::RestClient('get','/paypal_accounts/' . $id . '/transactions');
+        $jsonDecodedResponse = json_decode($response, true);
+        
+        return $jsonDecodedResponse['transactions'];
+    }
 
 }

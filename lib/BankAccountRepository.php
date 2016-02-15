@@ -33,4 +33,11 @@ class BankAccountRepository {
         
         return $jsonDecodedResponse['users'];
     }
+    
+    public static function getTransactions($id) {
+        $response = PromisePay::RestClient('get','bank_accounts/' . $id . '/transactions');
+        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        
+        return $jsonDecodedResponse['transactions'];
+    }
 }

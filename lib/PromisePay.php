@@ -89,8 +89,8 @@ class PromisePay {
                     throw new Exception\Unauthorized($errors);
                     break;
                 case 404:
-                    throw new Exception\NotFound($errors);                    
-                default:                         
+                    throw new Exception\NotFound($errors);
+                default:
                     throw new Exception\Api($errors);
                     break;
             }

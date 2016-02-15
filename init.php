@@ -18,6 +18,8 @@ require(dirname(__FILE__) . '/lib/PayPalAccountRepository.php');
 require(dirname(__FILE__) . '/lib/TokenRepository.php');
 require(dirname(__FILE__) . '/lib/TransactionRepository.php');
 require(dirname(__FILE__) . '/lib/UserRepository.php');
+require(dirname(__FILE__) . '/lib/DisbursementRepository.php');
+require(dirname(__FILE__) . '/lib/WalletAccountsRepository.php');
 
 // Enums
 require(dirname(__FILE__) . '/lib/Enum/FeeType.php');

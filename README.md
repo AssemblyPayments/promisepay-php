@@ -248,7 +248,7 @@ $items = PromisePay::User()->getListOfItems('USER_ID');
 ```
 #####Set a user's disbursement account
 ```php
-$account = PromisePay::User()->getListOfBankAccounts('USER_ID');
+$account = PromisePay::User()->setDisbursementAccount('ACCOUNT_ID');
 ```
 
 ##Item Actions

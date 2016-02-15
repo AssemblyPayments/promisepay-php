@@ -12,12 +12,13 @@ class WalletAccountsTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testGetById() {
+        /*
         $this->markTestIncomplete(
           'This test has not been implemented yet.'
         );
-        
+        */
         $get = PromisePay::WalletAccounts()->get($this->userId);
         
-        fwrite(STDERR, print_r($myDebugVar, true));
+        fwrite(STDERR, print_r($get, true));
     }
 }

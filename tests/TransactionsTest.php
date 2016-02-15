@@ -12,8 +12,16 @@ class TransactionsTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testGet() {
+        
     }
     
     public function testGetById() {
+        /*
+        $getTransactions = PromisePay::Transactions()->getById($this->userId);
+        
+        fwrite(STDERR, print_r($getTransactions, true));
+        */
     }
+    
+    
 }

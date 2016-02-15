@@ -3,7 +3,7 @@ namespace PromisePay\Tests;
 
 use PromisePay\PromisePay;
 
-class FeeTest extends \PHPUnit_Framework_TestCase {
+class WalletAccountsTest extends \PHPUnit_Framework_TestCase {
     
     protected $userId;
     
@@ -14,6 +14,6 @@ class FeeTest extends \PHPUnit_Framework_TestCase {
     public function testGet() {
         $get = PromisePay::WalletAccounts()->get($this->userId);
         
-        fwrite(STDERR, print_r($myDebugVar, TRUE));
+        fwrite(STDERR, print_r($myDebugVar, true));
     }
 }

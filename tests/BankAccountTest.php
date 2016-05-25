@@ -7,17 +7,18 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase {
     protected $userId, $bankAccountData;
     
     public function setUp() {
-        $this->userId = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';
+        $this->userId = '5830def0-ffe8-11e5-86aa-5e5517507c66';
+        
         $this->bankAccountData = array(
-            "user_id"        => $this->userId,
-            "active"         => 'true',
-            "bank_name"      => 'bank for test',
-            "account_name"   => 'test acc',
-            "routing_number" => '12344455512',
-            "account_number" => '123334242134',
-            "account_type"   => 'savings',
-            "holder_type"    => 'personal',
-            "country"        => 'USA',
+            "user_id"         => $this->userId,
+            "bank_name"       => 'Bank of Australia',
+            "account_name"    => 'Samuel Seller',
+            "routing_number"  => '123123',
+            "account_number"  => '12341234',
+            "account_type"    => 'checking',
+            "holder_type"     => 'personal',
+            "country"         => 'AUS',
+            "payout_currency" => 'AUD'
         );
     }
     

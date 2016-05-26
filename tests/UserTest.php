@@ -41,7 +41,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
             "active"         => 'true',
             "bank_name"      => 'Bank of America',
             "account_name"   => 'John Doe',
-            "routing_number" => '12344455512',
+            "routing_number" => '122235821',
             "account_number" => '123334242134',
             "account_type"   => 'savings',
             "holder_type"    => 'personal',

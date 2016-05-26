@@ -5,7 +5,6 @@ use PromisePay\Exception;
 use PromisePay\Log;
 
 class FeeRepository {
-    
     public static function getList($params) {
         $response = PromisePay::RestClient('get', 'fees/', $params);
         $jsonDecodedResponse = json_decode($response, true);

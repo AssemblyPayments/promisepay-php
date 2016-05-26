@@ -16,9 +16,14 @@ class PromisePay {
     protected static $meta;
     protected static $links;
     
-    public static function getDecodedResponse($fieldName) {
-        if (!is_string($fieldName)) {
-            throw new \InvalidArgumentException();
+    public static function getDecodedResponse($indexName) {
+        if (!is_string($indexName)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Argument for %s should be a string.',
+                    __METHOD__
+                )
+            );
         }
         
         return self::$jsonResponse[$fieldName];

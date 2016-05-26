@@ -12,7 +12,7 @@ class TransactionRepository {
         
         return $jsonDecodedResponse['transactions'];
     }
-
+    
     public static function get($id) {
         $response = PromisePay::RestClient('get', 'transactions/' . $id);
         $jsonDecodedResponse = json_decode($response->raw_body, true);

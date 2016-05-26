@@ -28,7 +28,7 @@ class BankAccountRepository {
     }
     
     public static function redact($id) {
-        return static::delete($id);
+        return self::delete($id);
     }
 
     public static function getUser($id) {

@@ -77,29 +77,5 @@ class CardAccountTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertEquals($this->cardAccountData['full_name'], $getList['full_name']);
     }
-    
-    public function testGetTransactions() {
-        $createAccount = PromisePay::CardAccount()->create($this->cardAccountData);
-        
-        $accountId = $createAccount['id'];
-        
-        $this->markTestSkipped();
-        return;
-        
-        /*
-        There was 1 error:
-
-        1) PromisePay\Tests\CardAccountTest::testGetTransactions
-        PromisePay\Exception\NotFound:
-        
-        /var/www/promisepay-php/lib/PromisePay.php:92
-        /var/www/promisepay-php/lib/CardAccountRepository.php:38
-        /var/www/promisepay-php/tests/CardAccountTest.php:86
-        */
-        
-        $getTransactions = PromisePay::CardAccount()->getTransactions($accountId);
-        
-        fwrite(STDERR, print_r($getTransactions, true));
-    }
 
 }

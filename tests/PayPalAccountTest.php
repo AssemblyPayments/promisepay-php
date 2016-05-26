@@ -58,15 +58,4 @@ class PayPalAccountTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($deletePayPalAccount, 'Successfully redacted');
     }
     
-    public function testGetTransactions() {
-        $createPayPalAccount = PromisePay::PayPalAccount()->create($this->payPalData);
-        
-        $payPalAccountId = $createPayPalAccount['id'];
-        
-        $this->markTestSkipped();
-        return;
-        
-        $getTransactions = PromisePay::PayPalAccount()->getTransactions($payPalAccountId);
-    }
-    
 }

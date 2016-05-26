@@ -254,7 +254,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertTrue(is_array($wireDetails['wire_details']));
         $this->assertEquals($wireDetails['wire_details']['amount'], '$10.00'); // 1000 cents = $10
-    }    
+    }
     
     public function testGetBpayDetailsForItem() {
         $makePayment = $this->makePayment();

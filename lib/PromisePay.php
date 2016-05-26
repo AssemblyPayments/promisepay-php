@@ -11,6 +11,30 @@ use PromisePay\Log\Logger;
  * @package PromisePay
  */
 class PromisePay {
+    protected static $jsonResponse;
+    protected static $rawResponse;
+    protected static $meta;
+    protected static $links;
+    
+    public static function getDecodedResponse($fieldName) {
+        if (!is_string($fieldName)) {
+            throw new \InvalidArgumentException();
+        }
+        
+        return self::$jsonResponse[$fieldName];
+    }
+    
+    public static function getRawResponse() {
+        return self::$rawResponse;
+    }
+    
+    public static function getMeta() {
+        return self::$meta;
+    }
+    
+    public static function getLinks() {
+        return self::$links;
+    }
     
     /**
      * Constant 
@@ -93,7 +117,28 @@ class PromisePay {
                     throw new Exception\Api($errors);
                     break;
             }
-        }   
+        }
+        
+        self::$rawResponse = $response;
+        
+        $data = json_decode($response, true);
+        
+        if ($data) {
+            self::$jsonResponse = $data;
+            
+            if (isset($data['meta'])) {
+                self::$meta = $data['meta'];
+            }
+            
+            if (isset($data['links'])) {
+                self::$links = $data['links'];
+            }
+        } else {
+            throw new Exception\MalformedResponse(
+                'json_decode() failed decoding response.
+                You can see raw response by using PromisePay::getRawResponse().'
+            );
+        }
         
         return $response;
     }

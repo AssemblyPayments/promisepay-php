@@ -36,6 +36,7 @@ require(dirname(__FILE__) . '/lib/Exception/Misconfiguration.php');
 require(dirname(__FILE__) . '/lib/Exception/NotFound.php');
 require(dirname(__FILE__) . '/lib/Exception/Unauthorized.php');
 require(dirname(__FILE__) . '/lib/Exception/Validation.php');
+require(__DIR__ . '/lib/Exception/MalformedResponse.php');
 
 // Custom Logger
 require(dirname(__FILE__) . '/lib/Log/Logger.php');

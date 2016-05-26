@@ -33,7 +33,6 @@ class PromisePay {
         } else {
             throw new Exception\NotFound("Class $neededClassName not found");
         }
-        
     }
 
     /**

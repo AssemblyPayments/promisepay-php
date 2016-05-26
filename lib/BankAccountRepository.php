@@ -26,18 +26,27 @@ class BankAccountRepository {
         
         return $jsonDecodedResponse['bank_account'];
     }
+    
+    public static function redact($id) {
+        return static::delete($id);
+    }
 
     public static function getUser($id) {
-        $response = PromisePay::RestClient('get','bank_accounts/' . $id . '/users');
+        $response = PromisePay::RestClient('get', 'bank_accounts/' . $id . '/users');
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
         return $jsonDecodedResponse['users'];
     }
     
-    public static function getTransactions($id) {
-        $response = PromisePay::RestClient('get','bank_accounts/' . $id . '/transactions');
+    public static function validateRoutingNumber($number) {
+        $response = PromisePay::RestClient(
+            'get',
+            'tools/routing_number',
+            ['routing_number' => $number]
+        );
+        
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
-        return $jsonDecodedResponse['transactions'];
+        return $jsonDecodedResponse['routing_number'];
     }
 }

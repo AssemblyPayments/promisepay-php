@@ -76,7 +76,7 @@ class ItemRepository
         $response = PromisePay::RestClient('get', 'items/' . $id . '/fees');
         $jsonDecodedResponse = json_decode($response, true);
 
-        return $jsonDecodedResponse;
+        return $jsonDecodedResponse['fees'];
     }
 
     public static function getBuyer($id)

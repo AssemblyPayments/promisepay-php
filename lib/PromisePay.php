@@ -26,7 +26,7 @@ class PromisePay {
             );
         }
         
-        return self::$jsonResponse[$fieldName];
+        return self::$jsonResponse[$indexName];
     }
     
     public static function getRawResponse() {

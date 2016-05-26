@@ -31,7 +31,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase {
      * @expectedException \PromisePay\Exception\Unauthorized
      */
     public function testRequestToken() {
-        $requestToken = PromisePay::Token()->requestToken();
+        PromisePay::Token()->requestToken();
     }
 
     public function testRequestSessionToken() {

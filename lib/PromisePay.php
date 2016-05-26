@@ -107,6 +107,8 @@ class PromisePay {
                 throw new Exception\ApiUnsupportedRequestMethod("Unsupported request method $method.");
         }
         
+        self::$rawResponse = $response;
+        
         // check for errors
         if ($response->hasErrors())
         {
@@ -123,8 +125,6 @@ class PromisePay {
                     break;
             }
         }
-        
-        self::$rawResponse = $response;
         
         $data = json_decode($response, true);
         

@@ -16,8 +16,8 @@ class PromisePay {
     protected static $meta;
     protected static $links;
     
-    public static function getDecodedResponse($indexName) {
-        if (!is_string($indexName)) {
+    public static function getDecodedResponse($indexName = null) {
+        if (!is_string($indexName) && $indexName !== null) {
             throw new \InvalidArgumentException(
                 sprintf(
                     'Argument for %s should be a string.',
@@ -26,7 +26,11 @@ class PromisePay {
             );
         }
         
-        return self::$jsonResponse[$indexName];
+        if ($indexName !== null) {
+            return self::$jsonResponse[$indexName];
+        } else {
+            return self::$jsonResponse;
+        }
     }
     
     public static function getRawResponse() {

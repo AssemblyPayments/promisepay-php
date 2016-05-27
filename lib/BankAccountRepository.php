@@ -42,7 +42,7 @@ class BankAccountRepository {
         $response = PromisePay::RestClient(
             'get',
             'tools/routing_number',
-            ['routing_number' => $number]
+            array('routing_number' => $number)
         );
         
         $jsonDecodedResponse = json_decode($response->raw_body, true);

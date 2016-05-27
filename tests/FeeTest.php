@@ -50,10 +50,10 @@ class FeeTest extends \PHPUnit_Framework_TestCase {
         $offset = 0;
         
         while (true) {
-            $getList = PromisePay::Fee()->getList([
+            $getList = PromisePay::Fee()->getList(array(
                 'limit' => $limit,
                 'offset' => $offset
-            ]);
+            ));
             
             foreach ($getList as $fee) {
                 if ($fee['id'] == $createFee['id']) {

@@ -12,9 +12,7 @@ use PromisePay\Log\Logger;
  */
 class PromisePay {
     protected static $jsonResponse;
-    protected static $rawResponse;
-    protected static $meta;
-    protected static $links;
+    protected static $debugData;
     
     public static function getDecodedResponse($indexName = null) {
         if (!is_string($indexName) && $indexName !== null) {
@@ -33,16 +31,60 @@ class PromisePay {
         }
     }
     
-    public static function getRawResponse() {
-        return self::$rawResponse;
+    public static function getDebugData() {
+        return self::$debugData;
     }
     
     public static function getMeta() {
-        return self::$meta;
+        $meta = self::getArrayValuesByKeyRecursive(
+            'meta',
+            self::$jsonResponse
+        );
+        
+        if ($meta !== false) {
+            return $meta;
+        }
+        
+        return false;
     }
     
     public static function getLinks() {
-        return self::$links;
+        $links = self::getArrayValuesByKeyRecursive(
+            'links',
+            self::$jsonResponse
+        );
+        
+        if ($links !== false) {
+            return $links;
+        }
+        
+        return false;
+    }
+    
+    public static function getArrayValuesByKeyRecursive($needle, array $array) {
+        if (!is_scalar($needle)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'First argument for %s should be a scalar value.',
+                    __METHOD__
+                )
+            );
+        }
+        
+        $iterator = new \RecursiveArrayIterator($array);
+        
+        $recursive = new \RecursiveIteratorIterator(
+            $iterator,
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
+        
+        foreach ($recursive as $key => $value) {
+            if ($key === $needle) {
+                return $value;
+            }
+        }
+        
+        return false;
     }
     
     /**
@@ -111,7 +153,7 @@ class PromisePay {
                 throw new Exception\ApiUnsupportedRequestMethod("Unsupported request method $method.");
         }
         
-        self::$rawResponse = $response;
+        self::$debugData = $response;
         
         // check for errors
         if ($response->hasErrors())
@@ -134,14 +176,6 @@ class PromisePay {
         
         if ($data) {
             self::$jsonResponse = $data;
-            
-            if (isset($data['meta'])) {
-                self::$meta = $data['meta'];
-            }
-            
-            if (isset($data['links'])) {
-                self::$links = $data['links'];
-            }
         } else {
             throw new Exception\MalformedResponse(
                 'json_decode() failed decoding response.

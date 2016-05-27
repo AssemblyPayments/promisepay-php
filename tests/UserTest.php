@@ -146,7 +146,6 @@ class UserTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($this->cardAccountData['full_name'], $userCardAccounts['card']['full_name']);
     }
     
-    
     public function testListUserPayPalAccountSuccess() {
         // First, create the user
         $createUser = PromisePay::User()->create($this->userData);
@@ -161,6 +160,13 @@ class UserTest extends \PHPUnit_Framework_TestCase {
         $userPayPalAccounts = PromisePay::User()->getListOfPayPalAccounts($createUser['id']);
         
         $this->assertEquals($this->payPalData['paypal_email'], $userPayPalAccounts['paypal']['email']);
+    }
+    
+    public function testGetWalletAccounts() {
+        $accounts = PromisePay::User()->getListOfWalletAccounts($this->buyerId);
+        
+        $this->assertTrue(is_array($accounts));
+        $this->assertNotEmpty($accounts['id']);
     }
     
     public function testSetDisbursementAccount() {

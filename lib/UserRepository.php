@@ -77,6 +77,12 @@ class UserRepository
 
         return $jsonDecodedResponse['paypal_accounts'];
     }
+    
+    public static function getListOfWalletAccounts($id) {
+        PromisePay::RestClient('get', 'users/' . $id . '/wallet_accounts');
+        
+        return PromisePay::getDecodedResponse('wallet_accounts');
+    }
 
     public static function setDisbursementAccount($id, $params)
     {

@@ -37,8 +37,6 @@ class TokenTest extends \PHPUnit_Framework_TestCase {
     public function testRequestSessionToken() {
         $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
         $requestSessionToken = PromisePay::Token()->requestSessionToken($this->tokenData);
-        
-        //var_dump($requestSessionToken);
     }
     
 }

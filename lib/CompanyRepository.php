@@ -12,19 +12,16 @@ use PromisePay\Log;
 class CompanyRepository {
     
     /**
-     * Accepts two params - amount of entities to list,
-     * and listing starting point (offset).
-     * Returns Company object.
+     * Gets a list of companies.
      *
-     * @param int $limit
-     * @param int $offset
+     * @param array|string $params
+     * 
      * @return array
      */
-    public static function getList($params = null) {
-        $response = PromisePay::RestClient('get', 'companies/', $params);
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
+    public static function getList($params = array('limit' => 200, 'offset' => 0)) {
+        PromisePay::RestClient('get', 'companies/', $params);
         
-        return $jsonDecodedResponse['companies'];
+        return PromisePay::getDecodedResponse('companies');
     }
 
     /**
@@ -32,42 +29,39 @@ class CompanyRepository {
      * Expects company ID parameter (in form of "ec9bf096-c505-4bef-87f6-18822b9dbf2c").
      *
      * @param string $id
+     *
      * @return array
      */
     public static function get($id) {
-        $response = PromisePay::RestClient('get', 'companies/' . $id);
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        PromisePay::RestClient('get', 'companies/' . $id);
         
-        return $jsonDecodedResponse['companies'];
+        return PromisePay::getDecodedResponse('companies');
     }
 
     /**
      * Creates a new company.
-     * Expects Company object and company id (in form of "ec9bf096-c505-4bef-87f6-18822b9dbf2c").
      *
-     * @param Company $company
-     * @param string $id
+     * @param array|string $params
+     *
      * @return array
      */
     public static function create($params) {
-        $response = PromisePay::RestClient('post', 'companies/', $params);
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        PromisePay::RestClient('post', 'companies/', $params);
         
-        return $jsonDecodedResponse['companies'];
+        return PromisePay::getDecodedResponse('companies');
     }
 
     /**
      * Update existing company.
-     * Expects Company object and company id (in form of "ec9bf096-c505-4bef-87f6-18822b9dbf2c").
      *
-     * @param Company $company
      * @param string $id
+     * @param array|string $params
+     *
      * @return array
      */
     public static function update($id, $params) {
-        $response = PromisePay::RestClient('patch', 'companies/' . $id, $params);
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        PromisePay::RestClient('patch', 'companies/' . $id, $params);
         
-        return $jsonDecodedResponse['companies'];
+        return PromisePay::getDecodedResponse('companies');
     }
 }

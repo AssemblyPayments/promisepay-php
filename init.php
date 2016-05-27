@@ -22,6 +22,7 @@ require(dirname(__FILE__) . '/lib/DisbursementRepository.php');
 require(dirname(__FILE__) . '/lib/WalletAccountsRepository.php');
 require(dirname(__FILE__) . '/lib/TransactionsRepository.php');
 require(__DIR__ . '/lib/ToolsRepository.php');
+require(__DIR__ . '/lib/BatchTransactionsRepository.php');
 
 // Enums
 require(dirname(__FILE__) . '/lib/Enum/FeeType.php');

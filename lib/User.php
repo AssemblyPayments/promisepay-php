@@ -7,74 +7,58 @@ use PromisePay\Log;
 
 class User {
     
-    public static function create($params)
-    {
-        $response = PromisePay::RestClient('post', 'users/', $params);
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
+    public static function create($params) {
+        PromisePay::RestClient('post', 'users/', $params);
 
-        return $jsonDecodedResponse['users'];
+        return PromisePay::getDecodedResponse('users');
     }
 
-    public static function get($id)
-    {
-        $response = PromisePay::RestClient('get', 'users/' . $id);
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
+    public static function get($id) {
+        PromisePay::RestClient('get', 'users/' . $id);
 
-        return $jsonDecodedResponse['users'];
+        return PromisePay::getDecodedResponse('users');
     }
 
-    public static function getList($params = null)
-    {
-        $response = PromisePay::RestClient('get', 'users/', $params);
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
+    public static function getList($params = null) {
+        PromisePay::RestClient('get', 'users/', $params);
 
-        return $jsonDecodedResponse['users'];
+        return PromisePay::getDecodedResponse('users');
     }
 
-    public static function update($id, $params)
-    {
-        $response = PromisePay::RestClient('patch', 'users/' . $id . "/", $params);
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
+    public static function update($id, $params) {
+        PromisePay::RestClient('patch', 'users/' . $id . "/", $params);
 
-        return $jsonDecodedResponse['users'];
+        return PromisePay::getDecodedResponse('users');
     }
 
-    public static function sendMobilePin($id)
-    {
-        $response = PromisePay::RestClient('post', '/users/' . $id . '/mobile_pin');
-        return json_decode($response->raw_body, true);
+    public static function sendMobilePin($id) {
+        PromisePay::RestClient('post', '/users/' . $id . '/mobile_pin');
+        
+        return PromisePay::getDecodedResponse();
     }
 
-    public static function getListOfItems($id)
-    {
-        $response = PromisePay::RestClient('get', 'users/' . $id . '/items');
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
+    public static function getListOfItems($id) {
+        PromisePay::RestClient('get', 'users/' . $id . '/items');
 
-        return $jsonDecodedResponse['items'];
+        return PromisePay::getDecodedResponse('items');
     }
 
-    public static function getListOfBankAccounts($id)
-    {
-        $response = PromisePay::RestClient('get', 'users/' . $id . '/bank_accounts');
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
+    public static function getListOfBankAccounts($id) {
+        PromisePay::RestClient('get', 'users/' . $id . '/bank_accounts');
 
-        return $jsonDecodedResponse['bank_accounts'];
+        return PromisePay::getDecodedResponse('bank_accounts');
     }
 
-    public static function getListOfCardAccounts($id)
-    {
-        $response = PromisePay::RestClient('get', 'users/' . $id . '/card_accounts');
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
+    public static function getListOfCardAccounts($id) {
+        PromisePay::RestClient('get', 'users/' . $id . '/card_accounts');
 
-        return $jsonDecodedResponse['card_accounts'];
+        return PromisePay::getDecodedResponse('card_accounts');
     }
 
-    public static function getListOfPayPalAccounts($id)
-    {
-        $response = PromisePay::RestClient('get', 'users/' . $id . '/paypal_accounts');
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
+    public static function getListOfPayPalAccounts($id) {
+        PromisePay::RestClient('get', 'users/' . $id . '/paypal_accounts');
 
-        return $jsonDecodedResponse['paypal_accounts'];
+        return PromisePay::getDecodedResponse('paypal_accounts');
     }
     
     public static function getListOfWalletAccounts($id) {
@@ -83,10 +67,10 @@ class User {
         return PromisePay::getDecodedResponse('wallet_accounts');
     }
 
-    public static function setDisbursementAccount($id, $params)
-    {
-        $response = PromisePay::RestClient('post', 'users/' . $id . '/disbursement_account', $params);
-        return json_decode($response->raw_body, true);
+    public static function setDisbursementAccount($id, $params) {
+        PromisePay::RestClient('post', 'users/' . $id . '/disbursement_account', $params);
+        
+        return PromisePay::getDecodedResponse();
     }
 
 }

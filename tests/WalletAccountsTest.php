@@ -5,7 +5,7 @@ use PromisePay\PromisePay;
 
 class WalletAccountsTest extends \PHPUnit_Framework_TestCase {
     
-    protected $GUID, $userData, $userId;
+    protected $GUID, $userData;
     
     public function setUp() {
         $this->GUID = GUID();
@@ -23,20 +23,27 @@ class WalletAccountsTest extends \PHPUnit_Framework_TestCase {
             'zip'           => '90210',
             'country'       => 'AUS'
         );
-        
-        $this->createUser();
     }
     
     protected function createUser() {
-        $createUser = PromisePay::User()->create($this->userData);
+        $user = PromisePay::User()->create($this->userData);
         
-        $this->assertEquals($this->userData['email'], $createUser['email']);
+        $this->assertEquals($this->userData['email'], $user['email']);
         
-        $this->userId = $createUser['id'];        
+        return $user;
     }
     
     /**
      * @group dev
+     */
+    public function testShow() {
+        $user = $this->createUser();
+        
+        $wallet = PromisePay::WalletAccounts()->show($user['id']);
+    }
+    
+    /**
+     * @group api_broken
      */
     public function testDeposit() {
         $depositAmount = 50; // 50 cents
@@ -69,3 +76,4 @@ class WalletAccountsTest extends \PHPUnit_Framework_TestCase {
         //$walletAccounts = PromisePay::WalletAccounts()->get($this->userId);
     }
 }
+

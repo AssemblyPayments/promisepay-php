@@ -479,6 +479,12 @@ $user = PromisePay::Transaction()->getUser('TRANSACTION_ID');
 $fee = PromisePay::Transaction()->getFee('TRANSACTION_ID');
 ```
 
+##Tools
+#####Health check
+```php
+$healthStatus = PromisePay::Tools()->health();
+```
+
 #4. Contributing
 	1. Fork it ( https://github.com/PromisePay/promisepay-php/fork )
 	2. Create your feature branch (`git checkout -b my-new-feature`)

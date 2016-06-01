@@ -5,9 +5,8 @@ use PromisePay\PromisePay;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class UserRepository
-{
-
+class User {
+    
     public static function create($params)
     {
         $response = PromisePay::RestClient('post', 'users/', $params);

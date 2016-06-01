@@ -9,7 +9,7 @@ use PromisePay\Log;
  *
  * @package PromisePay
  */
-class CompanyRepository {
+class Company {
     
     /**
      * Gets a list of companies.

@@ -9,7 +9,7 @@ use PromisePay\Exception;
  * @param string|null $configurationFile optional For custom SDK Config file path.
  * @package PromisePay
  */
-class ConfigurationRepository {
+class Configuration {
     
     /**
      * Private read-only variable
@@ -17,7 +17,10 @@ class ConfigurationRepository {
      * 
      * @var array $permittedApiUrls
      */
-    private static $permittedApiUrls = array('prelive' => 'https://test.api.promisepay.com/', 'production' => 'https://secure.api.promisepay.com/');
+    private static $permittedApiUrls = array(
+        'prelive' => 'https://test.api.promisepay.com/',
+        'production' => 'https://secure.api.promisepay.com/'
+    );
     
     /**
      * Construct
@@ -28,9 +31,8 @@ class ConfigurationRepository {
      * @throws Exception\Credentials
      */
     public function __construct() {
-        
-        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
-            die("Fatal error: The minimum version of PHP needed for this package is 5.3.0. Exiting...");
+        if (version_compare(PHP_VERSION, '5.3.3', '<')) {
+            die("Fatal error: The minimum version of PHP needed for this package is 5.3.0. Exiting.");
         }
         
         // if default timezone hasn't been set, do it here
@@ -44,7 +46,7 @@ class ConfigurationRepository {
      *
      * @param string $environmentType
      */
-    public static function environment($environmentType) {
+    public function environment($environmentType) {
         if (!array_key_exists($environmentType, self::$permittedApiUrls)) {
             die("Fatal error: Invalid API Environment type. Supported values are: prelive, production.");
         }
@@ -58,7 +60,7 @@ class ConfigurationRepository {
      *
      * @param string $emailAddress
      */
-    public static function login($emailAddress) {
+    public function login($emailAddress) {
         define(__NAMESPACE__ . '\API_LOGIN', $emailAddress);
     }
     
@@ -68,7 +70,7 @@ class ConfigurationRepository {
      *
      * @param string $token
      */
-    public static function password($token) {
+    public function password($token) {
         define(__NAMESPACE__ . '\API_PASSWORD', $token);
     }
     

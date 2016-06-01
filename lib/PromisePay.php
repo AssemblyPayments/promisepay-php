@@ -105,7 +105,7 @@ class PromisePay {
      * @return object
      */
     public static function __callStatic($neededClassName, $autoPassedArgs) {
-        $neededClassName = __NAMESPACE__ . '\\' . $neededClassName . 'Repository';
+        $neededClassName = __NAMESPACE__ . '\\' . $neededClassName;
         
         if (class_exists($neededClassName)) {
             return new $neededClassName;
@@ -124,14 +124,17 @@ class PromisePay {
      */
     public static function RestClient($method, $entity, $payload = null, $mime = null) {
         // Check whether critical constants are defined.
-        if (!defined(__NAMESPACE__ . '\API_URL')) die("Fatal error: API_URL constant missing. Check if environment has been set.");
-        if (!defined(__NAMESPACE__ . '\API_LOGIN')) die("Fatal error: API_LOGIN constant missing.");
-        if (!defined(__NAMESPACE__ . '\API_PASSWORD')) die("Fatal error: API_PASSWORD constant missing.");
+        if (!defined(__NAMESPACE__ . '\API_URL'))
+            die('Fatal error: API_URL constant missing. Check if environment has been set.');
         
-        if (!is_null($payload)) {
-            if (is_array($payload) || is_object($payload)) {
-                $payload = http_build_query($payload);
-            } // if the payload isn't array or object, leave it intact
+        if (!defined(__NAMESPACE__ . '\API_LOGIN'))
+            die('Fatal error: API_LOGIN constant missing.');
+        
+        if (!defined(__NAMESPACE__ . '\API_PASSWORD'))
+            die('Fatal error: API_PASSWORD constant missing.');
+        
+        if (!is_scalar($payload) && $payload !== null) {
+            $payload = http_build_query($payload);
         }
         
         $url = constant(__NAMESPACE__ . '\API_URL') . $entity . '?' . $payload;

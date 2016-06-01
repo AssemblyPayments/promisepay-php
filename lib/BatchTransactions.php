@@ -1,7 +1,7 @@
 <?php
 namespace PromisePay;
 
-class BatchTransactionsRepository {
+class BatchTransactions {
     
     public static function listTransactions($filters = array()) {
         PromisePay::RestClient('get', 'batch_transactions/', $filters);

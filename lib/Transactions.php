@@ -4,7 +4,7 @@ namespace PromisePay;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class TransactionsRepository {
+class Transactions {
     
     public static function get() {
         $response = PromisePay::RestClient('get', 'transactions/');

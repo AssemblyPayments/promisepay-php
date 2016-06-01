@@ -5,7 +5,8 @@ use PromisePay\Exception;
 use PromisePay\Log;
 use PromisePay\PromisePay;
 
-class TransactionRepository {
+class Transaction {
+    
     public static function getList($params = null) {
         $response = PromisePay::RestClient('get', 'transactions/', $params);
         $jsonDecodedResponse = json_decode($response->raw_body, true);

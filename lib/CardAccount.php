@@ -4,7 +4,7 @@ namespace PromisePay;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class CardAccountRepository {
+class CardAccount {
     
     public static function get($id) {
         $response = PromisePay::RestClient('get', 'card_accounts/' . $id);

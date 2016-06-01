@@ -4,7 +4,7 @@ namespace PromisePay;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class FeeRepository {
+class Fee {
     public static function create($params) {
         PromisePay::RestClient('post', 'fees/', $params);
         

@@ -4,7 +4,7 @@ namespace PromisePay;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class WalletAccountsRepository {
+class WalletAccounts {
     public static function get($id) {
         PromisePay::RestClient('get', 'wallet_accounts/' . $id);
         

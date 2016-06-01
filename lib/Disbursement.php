@@ -4,7 +4,7 @@ namespace PromisePay;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class DisbursementRepository {
+class Disbursement {
     
     public static function get() {
         $response = PromisePay::RestClient('get', 'disbursements/');

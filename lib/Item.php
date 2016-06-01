@@ -4,9 +4,8 @@ namespace PromisePay;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class ItemRepository
-{
-
+class Item {
+    
     public static function getList($params = null)
     {
         $response = PromisePay::RestClient('get', 'items/', $params);

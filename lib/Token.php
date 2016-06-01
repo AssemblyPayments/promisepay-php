@@ -5,7 +5,8 @@ use PromisePay\Exception;
 use PromisePay\Log;
 use PromisePay\PromisePay;
 
-class TokenRepository {
+class Token {
+    
     public static function generateCardToken($params) {
         PromisePay::RestClient('post', 'token_auths/', $params);
         
@@ -25,4 +26,5 @@ class TokenRepository {
         
         return $jsonDecodedResponse;
     }
+    
 }

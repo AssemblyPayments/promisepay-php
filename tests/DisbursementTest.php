@@ -12,6 +12,7 @@ class DisbursementTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testGet() {
+        $this->markTestSkipped();
         /*
         $get = PromisePay::Disbursement()->get();
         
@@ -20,6 +21,7 @@ class DisbursementTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testGetById() {
+        $this->markTestSkipped();
         /*
         $disbursement = PromisePay::Disbursement()->get($this->userId);
         

@@ -34,13 +34,6 @@ class TransactionsRepository {
         return $jsonDecodedResponse['fees'];
     }
     
-    public static function getDisbursements($id) {
-        $response = PromisePay::RestClient('get', 'transactions/' . $id . '/disbursements');
-        $jsonDecodedResponse = json_decode($response, true);
-        
-        return $jsonDecodedResponse['disbursements'];
-    }
-    
     public static function getWalletAccounts($id) {
         $response = PromisePay::RestClient('get', 'transactions/' . $id . '/wallet_accounts');
         $jsonDecodedResponse = json_decode($response, true);

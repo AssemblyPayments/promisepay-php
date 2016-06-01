@@ -1,5 +1,6 @@
 <?php
 namespace PromisePay\Tests;
+
 use PromisePay\PromisePay;
 
 class ItemTest extends \PHPUnit_Framework_TestCase {
@@ -81,7 +82,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         
         $cardAccountData = $this->cardAccountData;
         $cardAccountData['user_id'] = $this->buyerId;
-        
+
         // Create Buyer
         $createBuyer = PromisePay::User()->create($userData);
         

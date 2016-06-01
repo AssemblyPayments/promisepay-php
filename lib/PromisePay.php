@@ -25,7 +25,11 @@ class PromisePay {
         }
         
         if ($indexName !== null) {
-            return self::$jsonResponse[$indexName];
+            if (isset(self::$jsonResponse[$indexName])) {
+                return self::$jsonResponse[$indexName];
+            }
+            
+            return null;
         } else {
             return self::$jsonResponse;
         }

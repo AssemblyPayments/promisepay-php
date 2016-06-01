@@ -70,5 +70,11 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase {
         $validateRoutingNumber = PromisePay::BankAccount()->validateRoutingNumber(
             $this->bankAccountData['routing_number']
         );
+        
+        $this->assertTrue(is_array($validateRoutingNumber));
+        $this->assertEquals(
+            $validateRoutingNumber['routing_number'],
+            $this->bankAccountData['routing_number']
+        );
     }
 }

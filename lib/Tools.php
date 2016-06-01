@@ -3,7 +3,7 @@ namespace PromisePay;
 
 class Tools {
     
-    public static function health() {
+    public static function getHealth() {
         PromisePay::RestClient('get', 'status');
         
         return PromisePay::getDecodedResponse('status');

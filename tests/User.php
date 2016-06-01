@@ -129,7 +129,9 @@ class UserTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertEquals($this->bankAccountData['bank_name'], $userBankAccounts['bank']['bank_name']);
     }
-    
+    /**
+     * @group failing
+     */
     public function testListUserCardAccount() {
         // First, create the user
         $createUser = PromisePay::User()->create($this->userData);

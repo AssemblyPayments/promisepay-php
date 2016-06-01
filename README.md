@@ -358,6 +358,12 @@ $account = PromisePay::BankAccount()->delete('BANK_ACCOUNT_ID');
 ```php
 $user = PromisePay::BankAccount()->getUser('BANK_ACCOUNT_ID');
 ```
+#####Validate Routing Number
+```php
+$validateRoutingNumber = PromisePay::BankAccount()->validateRoutingNumber(
+    122235821
+);
+```
 
 ##PayPal Accounts
 #####Create a PayPal account

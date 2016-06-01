@@ -482,7 +482,7 @@ $fee = PromisePay::Transaction()->getFee('TRANSACTION_ID');
 ##Tools
 #####Health check
 ```php
-$healthStatus = PromisePay::Tools()->health();
+$healthStatus = PromisePay::Tools()->getHealth();
 ```
 
 #4. Contributing

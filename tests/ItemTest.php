@@ -290,5 +290,31 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($requestPayment['state'], 'payment_required');
     }
     
+    public function testRequestRefund() {
+        $paidItem = $this->makePayment();
+        
+        $requestRefund = PromisePay::Item()->requestRefund(
+            $paidItem['item']['id']
+        );
+        
+        $this->assertEquals($requestRefund['state'], 'refund_flagged');
+    }
+    
+    public function testDeclineRefund() {
+        $paidItem = $this->makePayment();
+        
+        $requestRefund = PromisePay::Item()->requestRefund(
+            $paidItem['item']['id']
+        );
+        
+        $this->assertEquals($requestRefund['state'], 'refund_flagged');
+        
+        $declineRefund = PromisePay::Item()->declineRefund(
+            $paidItem['item']['id']
+        );
+        
+        $this->assertNotEquals($declineRefund['state'], 'refund_flagged');
+    }
+    
     
 }

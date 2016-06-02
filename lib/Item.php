@@ -87,13 +87,13 @@ class Item extends PromisePay {
         return $this->getDecodedResponse('items');
     }
 
-    public function releasePayment($id, $params) {
+    public function releasePayment($id, $params = array()) {
         $this->RestClient('patch', 'items/' . $id . '/release_payment', $params);
         
         return $this->getDecodedResponse('items');
     }
 
-    public function requestRelease($id, $params) {
+    public function requestRelease($id, $params = array()) {
         $this->RestClient('patch', 'items/' . $id . '/request_release', $params);
         
         return $this->getDecodedResponse('items');
@@ -123,13 +123,13 @@ class Item extends PromisePay {
         return $this->getDecodedResponse('items');
     }
 
-    public function requestRefund($id, $params) {
+    public function requestRefund($id, $params = array()) {
         $this->RestClient('patch', 'items/' . $id . '/request_refund', $params);
         
         return $this->getDecodedResponse('items');
     }
 
-    public function refund($id, $params) {
+    public function refund($id, $params = array()) {
         $this->RestClient('patch', 'items/' . $id . '/refund', $params);
         
         return $this->getDecodedResponse('items');
@@ -138,7 +138,7 @@ class Item extends PromisePay {
     public function declineRefund($id) {
         $this->RestClient('patch', 'items/' . $id . '/decline_refund');
         
-        return $this->getDecodeResponse('items');
+        return $this->getDecodedResponse('items');
     }
     
 }

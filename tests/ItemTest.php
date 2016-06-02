@@ -326,6 +326,25 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertEquals($raiseDispute['state'], 'problem_flagged');
     }
+    /**
+     * @group dev
+     */
+    public function testRequestDisputeResolution() {
+        $paidItem = $this->makePayment();
+        
+        $raiseDispute = PromisePay::Item()->raiseDispute(
+            $paidItem['item']['id'],
+            $this->buyerId
+        );
+        
+        $this->assertEquals($raiseDispute['state'], 'problem_flagged');
+        
+        $requestDisputeResolution = PromisePay::Item()->requestDisputeResolution(
+            $paidItem['item']['id']
+        );
+        
+        $this->assertEquals($requestDisputeResolution['state'], 'problem_resolve_requested');
+    }
     
     
 }

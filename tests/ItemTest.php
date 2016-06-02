@@ -326,9 +326,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertEquals($raiseDispute['state'], 'problem_flagged');
     }
-    /**
-     * @group dev
-     */
+    
     public function testRequestDisputeResolution() {
         $paidItem = $this->makePayment();
         
@@ -346,5 +344,38 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($requestDisputeResolution['state'], 'problem_resolve_requested');
     }
     
+    public function testResolveDispute() {
+        $paidItem = $this->makePayment();
+        
+        $raiseDispute = PromisePay::Item()->raiseDispute(
+            $paidItem['item']['id'],
+            $this->buyerId
+        );
+        
+        $this->assertEquals($raiseDispute['state'], 'problem_flagged');
+        
+        $resolveDispute = PromisePay::Item()->resolveDispute(
+            $paidItem['item']['id']
+        );
+        
+        $this->assertNotEquals($resolveDispute['state'], 'problem_flagged');
+    }
+    
+    public function testEscalateDispute() {
+        $paidItem = $this->makePayment();
+        
+        $raiseDispute = PromisePay::Item()->raiseDispute(
+            $paidItem['item']['id'],
+            $this->buyerId
+        );
+        
+        $this->assertEquals($raiseDispute['state'], 'problem_flagged');
+        
+        $resolveDispute = PromisePay::Item()->escalateDispute(
+            $paidItem['item']['id']
+        );
+        
+        $this->assertEquals($resolveDispute['state'], 'problem_escalated');
+    }
     
 }

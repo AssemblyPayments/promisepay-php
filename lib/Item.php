@@ -157,4 +157,16 @@ class Item extends PromisePay {
         return $this->getDecodedResponse('items');
     }
     
+    public function resolveDispute($itemId) {
+        $this->RestClient('patch', 'items/' . $itemId . '/resolve_dispute');
+        
+        return $this->getDecodedResponse('items');
+    }
+    
+    public function escalateDispute($itemId) {
+        $this->RestClient('patch', 'items/' . $itemId . '/escalate_dispute');
+        
+        return $this->getDecodedResponse('items');
+    }
+    
 }

@@ -184,6 +184,59 @@ $bPayDetails = PromisePay::Item()->getBPayDetails('ITEM_ID');
 ```
 
 
+##Item Actions
+
+#####Make payment
+
+```php
+$item = PromisePay::Item()->makePayment('ITEM_ID', array(
+	'account_id' => 'BUYER_ACCOUNT_ID'
+));
+```
+#####Request payment
+```php
+$item = PromisePay::Item()->requestPayment('ITEM_ID');
+```
+#####Release payment
+```php
+$item = PromisePay::Item()->releasePayment('ITEM_ID');
+```
+#####Request release
+```php
+$item = PromisePay::Item()->requestRelease('ITEM_ID');
+```
+#####Cancel
+```php
+$item = PromisePay::Item()->cancelItem('ITEM_ID');
+```
+#####Acknowledge wire
+```php
+$item = PromisePay::Item()->acknowledgeWire('ITEM_ID');
+```
+#####Acknowledge PayPal
+```php
+$item = PromisePay::Item()->acknowledgePayPal('ITEM_ID');
+```
+#####Revert wire
+```php
+$item = PromisePay::Item()->revertWire('ITEM_ID');
+```
+#####Request refund
+```php
+$item = PromisePay::Item()->requestRefund('ITEM_ID', array(
+	'refund_amount' => 1000,
+	'refund_message' => 'Refund please.'
+));
+```
+#####Refund
+```php
+$item = PromisePay::Item()->refund('ITEM_ID', array(
+	'refund_amount' => 1000,
+	'refund_message' => 'Refund please.'
+));
+```
+
+
 ##Users
 
 #####Create a user
@@ -255,57 +308,6 @@ $accounts = PromisePay::User()->getListOfWalletAccounts('USER_ID');
 $account = PromisePay::User()->setDisbursementAccount('ACCOUNT_ID');
 ```
 
-##Item Actions
-
-#####Make payment
-
-```php
-$item = PromisePay::Item()->makePayment('ITEM_ID', array(
-	'account_id' => 'BUYER_ACCOUNT_ID'
-));
-```
-#####Request payment
-```php
-$item = PromisePay::Item()->requestPayment('ITEM_ID');
-```
-#####Release payment
-```php
-$item = PromisePay::Item()->releasePayment('ITEM_ID');
-```
-#####Request release
-```php
-$item = PromisePay::Item()->requestRelease('ITEM_ID');
-```
-#####Cancel
-```php
-$item = PromisePay::Item()->cancelItem('ITEM_ID');
-```
-#####Acknowledge wire
-```php
-$item = PromisePay::Item()->acknowledgeWire('ITEM_ID');
-```
-#####Acknowledge PayPal
-```php
-$item = PromisePay::Item()->acknowledgePayPal('ITEM_ID');
-```
-#####Revert wire
-```php
-$item = PromisePay::Item()->revertWire('ITEM_ID');
-```
-#####Request refund
-```php
-$item = PromisePay::Item()->requestRefund('ITEM_ID', array(
-	'refund_amount' => 1000,
-	'refund_message' => 'Refund please.'
-));
-```
-#####Refund
-```php
-$item = PromisePay::Item()->refund('ITEM_ID', array(
-	'refund_amount' => 1000,
-	'refund_message' => 'Refund please.'
-));
-```
 
 ##Card Accounts
 #####Create a card account

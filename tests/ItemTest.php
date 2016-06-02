@@ -204,8 +204,6 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         
         $listTransactions = PromisePay::Item()->getListOfTransactions($makePayment['item']['id']);
         
-        var_dump($listTransactions);
-        
         $this->assertEquals($this->cardAccountData['full_name'], $listTransactions[0]['user_name']);
     }
     

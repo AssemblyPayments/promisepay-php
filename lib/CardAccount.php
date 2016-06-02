@@ -4,7 +4,7 @@ namespace PromisePay;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class CardAccountRepository {
+class CardAccount {
     
     public static function get($id) {
         $response = PromisePay::RestClient('get', 'card_accounts/' . $id);
@@ -25,6 +25,10 @@ class CardAccountRepository {
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
         return $jsonDecodedResponse['card_account'];
+    }
+    
+    public static function redact($id) {
+        return self::delete($id);
     }
 
     public static function getUser($id) {

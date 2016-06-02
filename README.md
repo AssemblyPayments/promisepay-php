@@ -126,9 +126,9 @@ $item = PromisePay::Item()->get('ITEM_ID');
 #####Get a list of items
 ```php
 $items = PromisePay::Item()->getList(array(
-            'limit' => 20,
-            'offset' => 0
-        ));
+	'limit' => 20,
+	'offset' => 0
+));
 ```
 #####Update an item
 ```php
@@ -209,9 +209,9 @@ $user = PromisePay::User()->get('USER_ID');
 #####Get a list of users
 ```php
 $users = PromisePay::User()->getList(array(
-            'limit' => 20,
-            'offset' => 0
-        ));
+	'limit' => 20,
+	'offset' => 0
+));
 ```
 #####Update a user
 ```php
@@ -245,6 +245,10 @@ $accounts = PromisePay::User()->getListOfBankAccounts('USER_ID');
 #####Get a user's items
 ```php
 $items = PromisePay::User()->getListOfItems('USER_ID');
+```
+#####Show User Wallet Account
+```php
+$accounts = PromisePay::User()->getListOfWalletAccounts('USER_ID');
 ```
 #####Set a user's disbursement account
 ```php
@@ -358,6 +362,12 @@ $account = PromisePay::BankAccount()->delete('BANK_ACCOUNT_ID');
 ```php
 $user = PromisePay::BankAccount()->getUser('BANK_ACCOUNT_ID');
 ```
+#####Validate Routing Number
+```php
+$validateRoutingNumber = PromisePay::BankAccount()->validateRoutingNumber(
+    122235821
+);
+```
 
 ##PayPal Accounts
 #####Create a PayPal account
@@ -380,6 +390,44 @@ $account = PromisePay::PayPalAccount()->delete('PAYPAL_ACCOUNT_ID');
 $user = PromisePay::PayPalAccount()->getUser('PAYPAL_ACCOUNT_ID');
 ```
 
+##Direct Debit Authority
+
+#####Create Direct Debit Authority
+```php
+$directDebitAuthority = PromisePay::DirectDebitAuthority()->create(
+    array
+    (
+        'account_id' => 'ACCOUNT_ID',
+        'amount'     => 100
+    )
+);
+```
+
+#####List Direct Debit Authority
+```php
+$getList = PromisePay::DirectDebitAuthority()->getList(
+    array
+    (
+        'account_id' => 'BANK_ACCOUNT_ID'
+    )
+);
+```
+
+#####Show Direct Debit Authority
+```php
+$directDebitAuthority = PromisePay::DirectDebitAuthority()->show(
+    'DIRECT_DEBIT_AUTHORITY_ID'
+);
+```
+
+#####Delete Direct Debit Authority
+```php
+$deleteDirectDebitAuthority = PromisePay::DirectDebitAuthority()->delete(
+    'DIRECT_DEBIT_AUTHORITY_ID'
+);
+```
+
+
 ##Companies
 
 #####Create a company
@@ -400,9 +448,9 @@ $company = PromisePay::Company()->get('COMPANY_ID');
 #####Get a list of companies
 ```php
 $companys = PromisePay::Company()->getList(array(
-            'limit' => 20,
-            'offset' => 0
-        ));
+	'limit' => 20,
+	'offset' => 0
+));
 ```
 
 #####Update a company
@@ -427,9 +475,9 @@ $company = PromisePay::Company()->update('COMPANY_ID', array(
 #####Get a list of fees
 ```php
 $fees = PromisePay::Fee()->getList(array(
-            'limit' => 20,
-            'offset' => 0
-        ));
+	'limit' => 20,
+	'offset' => 0
+));
 ```
 #####Get a fee
 ```php
@@ -452,9 +500,9 @@ $fee = PromisePay::Fee()->create(array(
 #####Get a list of transactions
 ```php
 $transactions = PromisePay::Transaction()->getList(array(
-            'limit' => 20,
-            'offset' => 0
-        ));
+	'limit' => 20,
+	'offset' => 0
+));
 ```
 #####Get a transaction
 ```php
@@ -467,6 +515,12 @@ $user = PromisePay::Transaction()->getUser('TRANSACTION_ID');
 #####Get a transaction's fee
 ```php
 $fee = PromisePay::Transaction()->getFee('TRANSACTION_ID');
+```
+
+##Tools
+#####Health check
+```php
+$healthStatus = PromisePay::Tools()->getHealth();
 ```
 
 #4. Contributing

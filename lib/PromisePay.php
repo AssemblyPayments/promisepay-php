@@ -11,6 +11,85 @@ use PromisePay\Log\Logger;
  * @package PromisePay
  */
 class PromisePay {
+    protected static $jsonResponse;
+    protected static $debugData;
+    
+    public static function getDecodedResponse($indexName = null) {
+        if (!is_string($indexName) && $indexName !== null) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Argument for %s should be a string.',
+                    __METHOD__
+                )
+            );
+        }
+        
+        if ($indexName !== null) {
+            if (isset(self::$jsonResponse[$indexName])) {
+                return self::$jsonResponse[$indexName];
+            }
+            
+            return null;
+        } else {
+            return self::$jsonResponse;
+        }
+    }
+    
+    public static function getDebugData() {
+        return self::$debugData;
+    }
+    
+    public static function getMeta() {
+        $meta = self::getArrayValuesByKeyRecursive(
+            'meta',
+            self::$jsonResponse
+        );
+        
+        if ($meta !== false) {
+            return $meta;
+        }
+        
+        return false;
+    }
+    
+    public static function getLinks() {
+        $links = self::getArrayValuesByKeyRecursive(
+            'links',
+            self::$jsonResponse
+        );
+        
+        if ($links !== false) {
+            return $links;
+        }
+        
+        return false;
+    }
+    
+    public static function getArrayValuesByKeyRecursive($needle, array $array) {
+        if (!is_scalar($needle)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'First argument for %s should be a scalar value.',
+                    __METHOD__
+                )
+            );
+        }
+        
+        $iterator = new \RecursiveArrayIterator($array);
+        
+        $recursive = new \RecursiveIteratorIterator(
+            $iterator,
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
+        
+        foreach ($recursive as $key => $value) {
+            if ($key === $needle) {
+                return $value;
+            }
+        }
+        
+        return false;
+    }
     
     /**
      * Constant 
@@ -19,21 +98,21 @@ class PromisePay {
     const ENTITY_LIST_LIMIT = 200;
     
     /**
-     * Static method invoker
+     * Static method invoker.
      *
      * @param string $neededClassName
      * @param mixed $passableArgs
+     * @throws Exception\NotFound
      * @return object
      */
     public static function __callStatic($neededClassName, $autoPassedArgs) {
-        $neededClassName = __NAMESPACE__ . '\\' . $neededClassName . 'Repository';
+        $neededClassName = __NAMESPACE__ . '\\' . $neededClassName;
         
         if (class_exists($neededClassName)) {
             return new $neededClassName;
         } else {
             throw new Exception\NotFound("Class $neededClassName not found");
         }
-        
     }
 
     /**
@@ -46,14 +125,17 @@ class PromisePay {
      */
     public static function RestClient($method, $entity, $payload = null, $mime = null) {
         // Check whether critical constants are defined.
-        if (!defined(__NAMESPACE__ . '\API_URL')) die("Fatal error: API_URL constant missing. Check if environment has been set.");
-        if (!defined(__NAMESPACE__ . '\API_LOGIN')) die("Fatal error: API_LOGIN constant missing.");
-        if (!defined(__NAMESPACE__ . '\API_PASSWORD')) die("Fatal error: API_PASSWORD constant missing.");
+        if (!defined(__NAMESPACE__ . '\API_URL'))
+            die('Fatal error: API_URL constant missing. Check if environment has been set.');
         
-        if (!is_null($payload)) {
-            if (is_array($payload) || is_object($payload)) {
-                $payload = http_build_query($payload);
-            } // if the payload isn't array or object, leave it intact
+        if (!defined(__NAMESPACE__ . '\API_LOGIN'))
+            die('Fatal error: API_LOGIN constant missing.');
+        
+        if (!defined(__NAMESPACE__ . '\API_PASSWORD'))
+            die('Fatal error: API_PASSWORD constant missing.');
+        
+        if (!is_scalar($payload) && $payload !== null) {
+            $payload = http_build_query($payload);
         }
         
         $url = constant(__NAMESPACE__ . '\API_URL') . $entity . '?' . $payload;
@@ -79,6 +161,8 @@ class PromisePay {
                 throw new Exception\ApiUnsupportedRequestMethod("Unsupported request method $method.");
         }
         
+        self::$debugData = $response;
+        
         // check for errors
         if ($response->hasErrors())
         {
@@ -89,12 +173,18 @@ class PromisePay {
                     throw new Exception\Unauthorized($errors);
                     break;
                 case 404:
-                    throw new Exception\NotFound($errors);                    
-                default:                         
+                    throw new Exception\NotFound($errors);
+                default:
                     throw new Exception\Api($errors);
                     break;
             }
-        }   
+        }
+        
+        $data = json_decode($response, true);
+        
+        if ($data) {
+            self::$jsonResponse = $data;
+        }
         
         return $response;
     }

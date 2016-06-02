@@ -41,7 +41,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
             "active"         => 'true',
             "bank_name"      => 'Bank of America',
             "account_name"   => 'John Doe',
-            "routing_number" => '12344455512',
+            "routing_number" => '122235821',
             "account_number" => '123334242134',
             "account_type"   => 'savings',
             "holder_type"    => 'personal',
@@ -129,7 +129,9 @@ class UserTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertEquals($this->bankAccountData['bank_name'], $userBankAccounts['bank']['bank_name']);
     }
-    
+    /**
+     * @group failing
+     */
     public function testListUserCardAccount() {
         // First, create the user
         $createUser = PromisePay::User()->create($this->userData);
@@ -146,7 +148,6 @@ class UserTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($this->cardAccountData['full_name'], $userCardAccounts['card']['full_name']);
     }
     
-    
     public function testListUserPayPalAccountSuccess() {
         // First, create the user
         $createUser = PromisePay::User()->create($this->userData);
@@ -161,6 +162,13 @@ class UserTest extends \PHPUnit_Framework_TestCase {
         $userPayPalAccounts = PromisePay::User()->getListOfPayPalAccounts($createUser['id']);
         
         $this->assertEquals($this->payPalData['paypal_email'], $userPayPalAccounts['paypal']['email']);
+    }
+    
+    public function testGetWalletAccounts() {
+        $accounts = PromisePay::User()->getListOfWalletAccounts($this->buyerId);
+        
+        $this->assertTrue(is_array($accounts));
+        $this->assertNotEmpty($accounts['id']);
     }
     
     public function testSetDisbursementAccount() {

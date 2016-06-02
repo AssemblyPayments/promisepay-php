@@ -14,7 +14,7 @@ class PayPalAccountTest extends \PHPUnit_Framework_TestCase {
             'paypal_email' => 'test@paypalname.com'
         );
     }
-
+    
     public function testCreatePaypalAccount() {
         // Create a PayPal Account
         $createPayPalAccount = PromisePay::PayPalAccount()->create($this->payPalData);
@@ -38,7 +38,6 @@ class PayPalAccountTest extends \PHPUnit_Framework_TestCase {
         $this->assertNotNull($createPayPalAccount['created_at']);
     }
     
-    
     public function testGetUserForAccount() {
         // Create a PayPal Account
         $createPayPalAccount = PromisePay::PayPalAccount()->create($this->payPalData);
@@ -48,7 +47,6 @@ class PayPalAccountTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertEquals($this->userId, $getUser['id']);
     }
-    
     
     public function testDeletePayPalAccount() {
         // Create a PayPal Account

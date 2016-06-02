@@ -4,7 +4,7 @@ namespace PromisePay;
 use PromisePay\Exception;
 use PromisePay\Log;
 
-class BankAccountRepository {
+class BankAccount {
     
     public static function get($id) {
         $response = PromisePay::RestClient('get', 'bank_accounts/' . $id);
@@ -26,11 +26,27 @@ class BankAccountRepository {
         
         return $jsonDecodedResponse['bank_account'];
     }
+    
+    public static function redact($id) {
+        return self::delete($id);
+    }
 
     public static function getUser($id) {
-        $response = PromisePay::RestClient('get','bank_accounts/' . $id . '/users');
+        $response = PromisePay::RestClient('get', 'bank_accounts/' . $id . '/users');
         $jsonDecodedResponse = json_decode($response->raw_body, true);
         
         return $jsonDecodedResponse['users'];
+    }
+    
+    public static function validateRoutingNumber($number) {
+        $response = PromisePay::RestClient(
+            'get',
+            'tools/routing_number',
+            array('routing_number' => $number)
+        );
+        
+        $jsonDecodedResponse = json_decode($response->raw_body, true);
+        
+        return $jsonDecodedResponse['routing_number'];
     }
 }

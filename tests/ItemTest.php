@@ -1,5 +1,6 @@
 <?php
 namespace PromisePay\Tests;
+
 use PromisePay\PromisePay;
 
 class ItemTest extends \PHPUnit_Framework_TestCase {
@@ -48,11 +49,17 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         
         $this->cardAccountData = array(
            'user_id'      => $this->buyerId,
-           'full_name'    => 'UserCreateTest UserLastname',
+           'full_name'    => null,
            'number'       => '4111111111111111',
            "expiry_month" => '06',
            "expiry_year"  => '2020',
            "cvv"          => '123'
+        );
+        
+        $this->cardAccountData['full_name'] = sprintf(
+            '%s %s',
+            $this->userData['first_name'],
+            $this->userData['last_name']
         );
     }
     
@@ -75,7 +82,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         
         $cardAccountData = $this->cardAccountData;
         $cardAccountData['user_id'] = $this->buyerId;
-        
+
         // Create Buyer
         $createBuyer = PromisePay::User()->create($userData);
         
@@ -99,8 +106,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $makePayment = PromisePay::Item()->makePayment($createItem['id'], array('account_id' => $createBuyerCardAccount['id']));
         
         /*
-            item, buyer and seller keys contain data arrays that are not returned from API, but are generated in this test suite, and
-            are passed along with the API data in order to compare what we sent to API, and what it gave back.
+            item, buyer and seller keys contain data arrays that are not returned from API, 
+            but are generated in this test suite, and are passed along with the API data 
+            in order to compare what we sent to API, and what it gave back.
         */
         
         return array('payment' => $makePayment, 'item' => $createItem, 'buyer' => $buyerUserData, 'seller' => $sellerUserData);
@@ -182,7 +190,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         
         $listTransactions = PromisePay::Item()->getListOfTransactions($makePayment['item']['id']);
         
-        $this->assertEquals($this->cardAccountData['full_name'], $listTransactions[0]['from']);
+        $this->assertEquals($this->cardAccountData['full_name'], $listTransactions[0]['user_name']);
     }
     
     public function testGetStatusForItem() {
@@ -213,8 +221,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         // Get list of fees
         $itemListOfFees = PromisePay::Item()->getListOfFees($createItem['id']);
         
-        //var_dump($itemListOfFees, $createItem);
-        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
+        $this->assertNotEmpty($itemListOfFees[0]['fee_list']);
+        
+        $this->assertTrue(in_array($createFee['id'], $itemListOfFees[0]['fee_list']));
     }
     
     public function testGetBuyerForItem() {
@@ -246,7 +255,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertTrue(is_array($wireDetails['wire_details']));
         $this->assertEquals($wireDetails['wire_details']['amount'], '$10.00'); // 1000 cents = $10
-    }    
+    }
     
     public function testGetBpayDetailsForItem() {
         $makePayment = $this->makePayment();

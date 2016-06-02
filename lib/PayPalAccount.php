@@ -9,7 +9,7 @@ use PromisePay\Log;
  *
  * @package PromisePay
  */
-class PayPalAccountRepository {
+class PayPalAccount {
     /**
      * List a PayPal account on a marketplace.
      *
@@ -74,5 +74,4 @@ class PayPalAccountRepository {
         
         return $jsonDecodedResponse['users'];
     }
-
 }

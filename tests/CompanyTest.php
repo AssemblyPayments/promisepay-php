@@ -4,7 +4,7 @@ use PromisePay\PromisePay;
 
 class CompanyTest extends \PHPUnit_Framework_TestCase {
     
-    protected $instance, $userId, $companyId, $companyInfo;
+    protected $userId, $companyId, $companyInfo;
     
     public function setUp() {
         $this->userId = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';

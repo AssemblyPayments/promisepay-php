@@ -248,7 +248,7 @@ $items = PromisePay::User()->getListOfItems('USER_ID');
 ```
 #####Show User Wallet Account
 ```php
-$accounts = PromisePay::User()->getListOfWalletAccounts('ec9bf096-c505-4bef-87f6-18822b9dbf2c');
+$accounts = PromisePay::User()->getListOfWalletAccounts('USER_ID');
 ```
 #####Set a user's disbursement account
 ```php

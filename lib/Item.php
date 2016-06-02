@@ -141,4 +141,14 @@ class Item extends PromisePay {
         return $this->getDecodedResponse('items');
     }
     
+    public function raiseDispute($itemId, $userId) {
+        $params = array(
+            'user_id' => $userId
+        );
+        
+        $this->RestClient('patch', 'items/' . $itemId . '/raise_dispute', $params);
+        
+        return $this->getDecodedResponse('items');
+    }
+    
 }

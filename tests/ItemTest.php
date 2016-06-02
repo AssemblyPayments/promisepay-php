@@ -316,5 +316,16 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $this->assertNotEquals($declineRefund['state'], 'refund_flagged');
     }
     
+    public function testRaiseDispute() {
+        $paidItem = $this->makePayment();
+        
+        $raiseDispute = PromisePay::Item()->raiseDispute(
+            $paidItem['item']['id'],
+            $this->buyerId
+        );
+        
+        $this->assertEquals($raiseDispute['state'], 'problem_flagged');
+    }
+    
     
 }

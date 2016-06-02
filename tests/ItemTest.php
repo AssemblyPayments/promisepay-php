@@ -63,7 +63,65 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         );
     }
     
-    public function makePayment() {
+    protected function createRandomIds() {
+        $this->itemData['id'] = GUID();
+        $this->itemData['buyer_id'] = GUID();
+        $this->itemData['seller_id'] = GUID();
+    }
+    
+    protected function createBuyer() {
+        $this->userData['id'] = $this->itemData['buyer_id'];
+        $this->userData['email'] = $this->buyerId . '@google.com';
+        $this->userData['mobile'] = $this->buyerId . '123456';
+
+        return PromisePay::User()->create($this->userData);
+    }
+    
+    protected function createBuyerCardAccount() {
+        $this->cardAccountData['user_id'] = $this->userData['id'];
+        
+        return PromisePay::CardAccount()->create($cardAccountData);
+    }
+    
+    protected function createSeller() {
+        $this->userData['id'] = $this->sellerId;
+        $this->userData['email'] = $this->sellerId . '@google.com';
+        $this->userData['mobile'] = $this->sellerId . '12345';
+        $this->userData['first_name'] = 'Jane';
+        $this->userData['last_name'] = 'Jonesy';
+        
+        return PromisePay::User()->create($this->userData);
+    }
+    
+    protected function createItem() {
+        return PromisePay::Item()->create($this->itemData);
+    }
+    
+    protected function payForItem($itemId, $buyerCardAccountId) {
+        return PromisePay::Item()->makePayment(
+            $itemId,
+            array(
+                'account_id' => $buyerCardAccountId
+            )
+        );
+    }
+    
+    public function makePayment($dev = false) {
+        if ($dev) {
+            $this->createRandomIds();
+            
+            $seller = $this->createSeller();
+            $buyer = $this->createBuyer();
+            $buyerCard = $this->createBuyerCardAccount();
+            $item = $this->createItem();
+            
+            $payment = $this->payForItem($item['id'], $buyerCard['id']);
+            
+            return;
+        }
+            
+        
+        // ========================
         $this->buyerId = GUID();
         $this->sellerId = GUID();
         $this->GUID = GUID();
@@ -103,7 +161,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         // Create the item
         $createItem = PromisePay::Item()->create($itemData);
         
-        $makePayment = PromisePay::Item()->makePayment($createItem['id'], array('account_id' => $createBuyerCardAccount['id']));
+        $makePayment = PromisePay::Item()->makePayment(
+            $createItem['id'],
+            array('account_id' => $createBuyerCardAccount['id'])
+        );
         
         /*
             item, buyer and seller keys contain data arrays that are not returned from API, 
@@ -265,5 +326,53 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue(is_array($bPayDetails['bpay_details']));
         $this->assertEquals($bPayDetails['bpay_details']['amount'], '$10.00'); // 1000 cents = $10
     }
+    /**
+     * @group dev
+     */
+    public function testRequestPayment() {
+        $this->buyerId = GUID();
+        $this->sellerId = GUID();
+        $this->GUID = GUID();
+        
+        $itemData = $this->itemData;
+        $itemData['id'] = $this->GUID;
+        $itemData['buyer_id'] = $this->buyerId;
+        $itemData['seller_id'] = $this->sellerId;
+        
+        $userData = $this->userData;
+        $userData['id'] = $this->buyerId;
+        $userData['email'] = $this->buyerId . '@google.com';
+        $userData['mobile'] = $this->buyerId . '123456';
+        
+        $buyerUserData = $userData;
+        
+        $cardAccountData = $this->cardAccountData;
+        $cardAccountData['user_id'] = $this->buyerId;
+
+        // Create Buyer
+        $createBuyer = PromisePay::User()->create($userData);
+        
+        // Create Buyer Card Account
+        $createBuyerCardAccount = PromisePay::CardAccount()->create($cardAccountData);
+        
+        // Create Seller
+        $userData['id'] = $this->sellerId;
+        $userData['email'] = $this->sellerId . '@google.com';
+        $userData['mobile'] = $this->sellerId . '12345';
+        $userData['first_name'] = 'Jane';
+        $userData['last_name'] = 'Jonesy';
+        
+        $sellerUserData = $userData;
+        
+        $createSeller = PromisePay::User()->create($userData);
+        
+        // Create the item
+        $createItem = PromisePay::Item()->create($itemData);
+        
+        $requestPayment = PromisePay::Item()->requestPayment($createItem['id']);
+        
+        var_dump($requestPayment);
+    }
+    
     
 }

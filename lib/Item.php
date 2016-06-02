@@ -135,4 +135,10 @@ class Item extends PromisePay {
         return $this->getDecodedResponse('items');
     }
     
+    public function declineRefund($id) {
+        $this->RestClient('patch', 'items/' . $id . '/decline_refund');
+        
+        return $this->getDecodeResponse('items');
+    }
+    
 }

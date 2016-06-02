@@ -100,4 +100,56 @@ class DirectDebitAuthorityTest extends \PHPUnit_Framework_TestCase {
         }
     }
     
+    public function testShow() {
+        $bankAccount = $this->createBankAccount();
+        
+        $this->directDebitAuthorityData['account_id'] = $bankAccount['id'];
+        
+        $createDirectDebitAuthority = $this->createDirectDebitAuthority();
+        
+        $directDebitAuthority = PromisePay::DirectDebitAuthority()->show(
+            $createDirectDebitAuthority['id']
+        );
+        
+        $this->assertEquals(
+            $createDirectDebitAuthority['id'],
+            $directDebitAuthority['id']
+        );
+        
+        $this->assertEquals(
+            $createDirectDebitAuthority['amount'],
+            $directDebitAuthority['amount']
+        );
+    }
+    
+    /**
+     * @expectedException PromisePay\Exception\Api
+     */
+    public function testDeleteNonExistingAuthority() {
+        PromisePay::DirectDebitAuthority()->delete(GUID());
+    }
+    
+    public function testDelete() {
+        $bankAccount = $this->createBankAccount();
+        
+        $this->directDebitAuthorityData['account_id'] = $bankAccount['id'];
+        
+        $createDirectDebitAuthority = $this->createDirectDebitAuthority();
+        
+        $directDebitAuthority = PromisePay::DirectDebitAuthority()->show(
+            $createDirectDebitAuthority['id']
+        );
+        
+        $this->assertEquals(
+            $createDirectDebitAuthority['id'],
+            $directDebitAuthority['id']
+        );
+        
+        $deleteDirectDebitAuthority = PromisePay::DirectDebitAuthority()->delete(
+            $directDebitAuthority['id']
+        );
+        
+        $this->assertTrue($deleteDirectDebitAuthority);
+    }
+    
 }

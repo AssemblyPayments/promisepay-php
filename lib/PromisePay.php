@@ -184,11 +184,6 @@ class PromisePay {
         
         if ($data) {
             self::$jsonResponse = $data;
-        } else {
-            throw new Exception\MalformedResponse(
-                'json_decode() failed decoding response.
-                You can see raw response by using PromisePay::getRawResponse().'
-            );
         }
         
         return $response;

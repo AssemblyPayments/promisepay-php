@@ -152,4 +152,33 @@ class DirectDebitAuthorityTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue($deleteDirectDebitAuthority);
     }
     
+    protected function examples() {
+        // CREATE
+        $directDebitAuthority = PromisePay::DirectDebitAuthority()->create(
+            array
+            (
+                'account_id' => 'ACCOUNT_ID',
+                'amount'     => 100
+            )
+        );
+        
+        // GET LIST
+        $getList = PromisePay::DirectDebitAuthority()->getList(
+            array
+            (
+                'account_id' => 'BANK_ACCOUNT_ID'
+            )
+        );
+        
+        // SHOW 
+        $directDebitAuthority = PromisePay::DirectDebitAuthority()->show(
+            'DIRECT_DEBIT_AUTHORITY_ID'
+        );
+        
+        // DELETE
+        $deleteDirectDebitAuthority = PromisePay::DirectDebitAuthority()->delete(
+            'DIRECT_DEBIT_AUTHORITY_ID'
+        );
+    }
+    
 }

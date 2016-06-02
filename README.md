@@ -390,6 +390,44 @@ $account = PromisePay::PayPalAccount()->delete('PAYPAL_ACCOUNT_ID');
 $user = PromisePay::PayPalAccount()->getUser('PAYPAL_ACCOUNT_ID');
 ```
 
+##Direct Debit Authority
+
+#####Create Direct Debit Authority
+```php
+$directDebitAuthority = PromisePay::DirectDebitAuthority()->create(
+    array
+    (
+        'account_id' => 'ACCOUNT_ID',
+        'amount'     => 100
+    )
+);
+```
+
+#####List Direct Debit Authority
+```php
+$getList = PromisePay::DirectDebitAuthority()->getList(
+    array
+    (
+        'account_id' => 'BANK_ACCOUNT_ID'
+    )
+);
+```
+
+#####Show Direct Debit Authority
+```php
+$directDebitAuthority = PromisePay::DirectDebitAuthority()->show(
+    'DIRECT_DEBIT_AUTHORITY_ID'
+);
+```
+
+#####Delete Direct Debit Authority
+```php
+$deleteDirectDebitAuthority = PromisePay::DirectDebitAuthority()->delete(
+    'DIRECT_DEBIT_AUTHORITY_ID'
+);
+```
+
+
 ##Companies
 
 #####Create a company

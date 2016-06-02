@@ -14,7 +14,7 @@ spl_autoload_register(function ($class) {
     $file = __DIR__ . '/lib/' . trim(str_replace('\\', '/', $classPath), '/') . '.php';
     
     if (file_exists($file)) {
-        require_once $file;
+        require $file;
     } else {
         die(
             sprintf(
@@ -26,8 +26,6 @@ spl_autoload_register(function ($class) {
     }
 });
 
-require(__DIR__ . '/lib/Vendors/Httpful/Bootstrap.php');
-require(__DIR__ . '/lib/Vendors/Httpful/Http.php');
-require(__DIR__ . '/lib/Vendors/Httpful/Request.php');
-
-new PromisePay;
+require_once __DIR__ . '/lib/Vendors/Httpful/Bootstrap.php';
+require_once __DIR__ . '/lib/Vendors/Httpful/Http.php';
+require_once __DIR__ . '/lib/Vendors/Httpful/Request.php';

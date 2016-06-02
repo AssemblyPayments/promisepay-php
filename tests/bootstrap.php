@@ -11,7 +11,7 @@ ini_set('display_startup_errors', 1);
 require_once(__DIR__ . '/GUID.php');
 
 // Project files autoloader
-require_once(__DIR__ . '/../autoload.php');
+require __DIR__ . '/../autoload.php';
 
 // Setup testing environment
 PromisePay::Configuration()->environment('prelive');

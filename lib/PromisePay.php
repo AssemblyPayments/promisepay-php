@@ -98,10 +98,11 @@ class PromisePay {
     const ENTITY_LIST_LIMIT = 200;
     
     /**
-     * Static method invoker
+     * Static method invoker.
      *
      * @param string $neededClassName
      * @param mixed $passableArgs
+     * @throws Exception\NotFound
      * @return object
      */
     public static function __callStatic($neededClassName, $autoPassedArgs) {

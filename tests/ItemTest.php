@@ -378,6 +378,26 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($resolveDispute['state'], 'problem_escalated');
     }
     
+    public function testSendTaxInvoice() {
+        extract($this->makePayment());
+        
+        $sendTaxInvoice = PromisePay::Item()->sendTaxInvoice(
+            $item['id']
+        );
+        
+        $this->assertNotNull($sendTaxInvoice);
+    }
+    
+    public function testRequestTaxInvoice() {
+        extract($this->makePayment());
+        
+        $requestTaxInvoice = PromisePay::Item()->requestTaxInvoice(
+            $item['id']
+        );
+        
+        $this->assertNotNull($requestTaxInvoice);
+    }
+    
     public function readmeExamples() {
         $declineRefund = PromisePay::Item()->declineRefund(
             'ITEM_ID'

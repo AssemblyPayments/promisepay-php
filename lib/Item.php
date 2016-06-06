@@ -169,4 +169,16 @@ class Item extends PromisePay {
         return $this->getDecodedResponse('items');
     }
     
+    public function sendTaxInvoice($itemId) {
+        $this->restClient('patch', 'items/' . $itemId . '/send_tax_invoice');
+        
+        return $this->getDecodedResponse('items');
+    }
+    
+    public function requestTaxInvoice($itemId) {
+        $this->restClient('patch', 'items/' . $itemId . '/request_tax_invoice');
+        
+        return $this->getDecodedResponse('items');
+    }
+    
 }

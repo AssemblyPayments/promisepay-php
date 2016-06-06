@@ -1,52 +1,44 @@
 <?php
 namespace PromisePay;
 
-use PromisePay\Exception;
-use PromisePay\Log;
-
 class BankAccount {
     
-    public static function get($id) {
-        $response = PromisePay::RestClient('get', 'bank_accounts/' . $id);
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
+    public function get($id) {
+        PromisePay::RestClient('get', 'bank_accounts/' . $id);
         
-        return $jsonDecodedResponse['bank_accounts'];
+        return PromisePay::getDecodedResponse('bank_accounts');
     }
 
-    public static function create($params) {
-        $response = PromisePay::RestClient('post', 'bank_accounts/', $params);
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
+    public function create($params) {
+        PromisePay::RestClient('post', 'bank_accounts/', $params);
         
-        return $jsonDecodedResponse['bank_accounts'];
+        return PromisePay::getDecodedResponse('bank_accounts');
     }
 
-    public static function delete($id) {
-        $response = PromisePay::RestClient('delete', 'bank_accounts/' . $id);
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
+    public function delete($id) {
+        PromisePay::RestClient('delete', 'bank_accounts/' . $id);
         
-        return $jsonDecodedResponse['bank_account'];
+        return PromisePay::getDecodedResponse('bank_account');
     }
     
-    public static function redact($id) {
-        return self::delete($id);
+    public function redact($id) {
+        return $this->delete($id);
     }
 
-    public static function getUser($id) {
-        $response = PromisePay::RestClient('get', 'bank_accounts/' . $id . '/users');
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
+    public function getUser($id) {
+        PromisePay::RestClient('get', 'bank_accounts/' . $id . '/users');
         
-        return $jsonDecodedResponse['users'];
+        return PromisePay::getDecodedResponse('users');
     }
     
-    public static function validateRoutingNumber($number) {
-        $response = PromisePay::RestClient(
+    public function validateRoutingNumber($number) {
+        PromisePay::RestClient(
             'get',
             'tools/routing_number',
             array('routing_number' => $number)
         );
         
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
         
-        return $jsonDecodedResponse['routing_number'];
+        return PromisePay::getDecodedResponse('routing_number');
     }
 }

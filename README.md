@@ -367,7 +367,7 @@ $user = PromisePay::BankAccount()->getUser('BANK_ACCOUNT_ID');
 #####Validate Routing Number
 ```php
 $validateRoutingNumber = PromisePay::BankAccount()->validateRoutingNumber(
-    122235821
+    'ROUTING_NUMBER'
 );
 ```
 

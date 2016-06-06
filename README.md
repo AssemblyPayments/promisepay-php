@@ -266,6 +266,18 @@ $resolveDispute = PromisePay::Item()->escalateDispute(
     'ITEM_ID'
 );
 ```
+#####Request Tax Invoice
+```php
+$requestTaxInvoice = PromisePay::Item()->requestTaxInvoice(
+    'ITEM_ID'
+);
+```
+#####Send Tax Invoice
+```php
+$sendTaxInvoice = PromisePay::Item()->sendTaxInvoice(
+    'ITEM_ID'
+);
+```
 
 
 

@@ -381,7 +381,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
             $this->itemData['amount']
         );
     }
-    
+    /**
+     * @group dev
+     */
     public function testReleasePartialAmount() {
         extract($this->makePayment());
         
@@ -414,6 +416,28 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertNotNull($acknowledgeWireTransfer);
         $this->assertEquals($acknowledgeWireTransfer['state'], 'wire_pending');
+        
+        return $item;
+    }
+    
+    public function testRevertWireTransfer() {
+        $item = $this->testAcknowledgeWireTransfer();
+        
+        $revertWireTransfer = PromisePay::Item()->revertWire(
+            $item['id']
+        );
+        
+        $this->assertEquals($revertWireTransfer['state'], 'pending');
+    }
+    
+    public function testCancel() {
+        $item = $this->createItem();
+        
+        $cancel = PromisePay::Item()->cancelItem(
+            $item['id']
+        );
+        
+        $this->assertEquals($cancel['state'], 'cancelled');
     }
     
     public function testDeclineRefund() {

@@ -235,6 +235,38 @@ $item = PromisePay::Item()->refund('ITEM_ID', array(
 	'refund_message' => 'Refund please.'
 ));
 ```
+#####Decline refund
+```php
+$declineRefund = PromisePay::Item()->declineRefund(
+    'ITEM_ID'
+);
+```
+#####Raise Dispute
+```php
+$raiseDispute = PromisePay::Item()->raiseDispute(
+    'ITEM_ID',
+    'BUYER_ID'
+);
+```
+#####Request Dispute Resolution
+```php
+$requestDisputeResolution = PromisePay::Item()->requestDisputeResolution(
+    'ITEM_ID'
+);
+```
+#####Resolve Dispute
+```php
+$resolveDispute = PromisePay::Item()->resolveDispute(
+    'ITEM_ID'
+);
+```
+#####Escalate Dispute
+```php
+$resolveDispute = PromisePay::Item()->escalateDispute(
+    'ITEM_ID'
+);
+```
+
 
 
 ##Users

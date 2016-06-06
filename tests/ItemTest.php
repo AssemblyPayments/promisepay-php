@@ -419,6 +419,14 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $resolveDispute = PromisePay::Item()->escalateDispute(
             'ITEM_ID'
         );
+        
+        $sendTaxInvoice = PromisePay::Item()->sendTaxInvoice(
+            'ITEM_ID'
+        );
+        
+        $requestTaxInvoice = PromisePay::Item()->requestTaxInvoice(
+            'ITEM_ID'
+        );
     }
     
 }

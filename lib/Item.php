@@ -92,7 +92,7 @@ class Item extends PromisePay {
         
         return $this->getDecodedResponse('items');
     }
-
+    
     public function requestRelease($id, $params = array()) {
         $this->RestClient('patch', 'items/' . $id . '/request_release', $params);
         

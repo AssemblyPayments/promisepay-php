@@ -5,7 +5,13 @@ use PromisePay\PromisePay;
 
 class ItemTest extends \PHPUnit_Framework_TestCase {
     
-    protected $GUID, $buyerId, $sellerId, $itemData, $feeData, $userData, $cardAccountData;
+    protected $GUID,
+    $buyerId,
+    $sellerId,
+    $itemData,
+    $feeData,
+    $userData,
+    $cardAccountData;
     
     public function setUp() {
         $this->GUID = GUID();
@@ -332,6 +338,82 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($refundAmount, $refund['refund_amount']);
         $this->assertEquals($refundAmount, $refund['refunded_amount']);
         $this->assertEquals($refundMessage, $refund['refund_message']);
+    }
+    
+    public function testRequestFullRelease() {
+        extract($this->makePayment());
+        
+        $requestRelease = PromisePay::Item()->requestRelease(
+            $item['id']
+        );
+        
+        $this->assertNotNull($requestRelease);
+        $this->assertEquals($requestRelease['state'], 'work_completed');
+    }
+    
+    public function testRequestPartialRelease() {
+        extract($this->makePayment());
+        
+        $halfThePrice = round($this->itemData['amount'] / 2, 0);
+        
+        $requestRelease = PromisePay::Item()->requestRelease(
+            $item['id'],
+            array(
+                'release_amount' => $halfThePrice
+            )
+        );
+        
+        $this->assertNotNull($requestRelease);
+        $this->assertEquals($requestRelease['state'], 'work_completed');
+    }
+    
+    public function testReleasePayment() {
+        extract($this->makePayment());
+        
+        $releasePayment = PromisePay::Item()->releasePayment(
+            $item['id']
+        );
+        
+        $this->assertNotNull($releasePayment);
+        $this->assertEquals($releasePayment['state'], 'completed');
+        $this->assertEquals(
+            $releasePayment['pending_release_amount'],
+            $this->itemData['amount']
+        );
+    }
+    
+    public function testReleasePartialAmount() {
+        extract($this->makePayment());
+        
+        $halfThePrice = round($this->itemData['amount'] / 2, 0);
+        
+        $releasePayment = PromisePay::Item()->releasePayment(
+            $item['id'],
+            array(
+                'release_amount' => $halfThePrice
+            )
+        );
+        
+        $this->assertNotNull($releasePayment);
+        $this->assertEquals($releasePayment['state'], 'completed');
+        
+        $this->markTestIncomplete();
+        
+        $this->assertEquals(
+            $releasePayment['pending_release_amount'],
+            $halfThePrice
+        );
+    }
+    
+    public function testAcknowledgeWireTransfer() {
+        $item = $this->createItem();
+        
+        $acknowledgeWireTransfer = PromisePay::Item()->acknowledgeWire(
+            $item['id']
+        );
+        
+        $this->assertNotNull($acknowledgeWireTransfer);
+        $this->assertEquals($acknowledgeWireTransfer['state'], 'wire_pending');
     }
     
     public function testDeclineRefund() {

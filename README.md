@@ -225,7 +225,7 @@ $item = PromisePay::Item()->revertWire('ITEM_ID');
 ```php
 $item = PromisePay::Item()->requestRefund('ITEM_ID', array(
 	'refund_amount' => 1000,
-	'refund_message' => 'Refund please.'
+	'refund_message' => 'Item was dead on arrival.'
 ));
 ```
 #####Refund

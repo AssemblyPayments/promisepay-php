@@ -378,4 +378,27 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($resolveDispute['state'], 'problem_escalated');
     }
     
+    public function readmeExamples() {
+        $declineRefund = PromisePay::Item()->declineRefund(
+            'ITEM_ID'
+        );
+        
+        $raiseDispute = PromisePay::Item()->raiseDispute(
+            'ITEM_ID',
+            'BUYER_ID'
+        );
+        
+        $requestDisputeResolution = PromisePay::Item()->requestDisputeResolution(
+            'ITEM_ID'
+        );
+        
+        $resolveDispute = PromisePay::Item()->resolveDispute(
+            'ITEM_ID'
+        );
+        
+        $resolveDispute = PromisePay::Item()->escalateDispute(
+            'ITEM_ID'
+        );
+    }
+    
 }

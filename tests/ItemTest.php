@@ -300,6 +300,40 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($requestRefund['state'], 'refund_flagged');
     }
     
+    public function testFullRefund() {
+        extract($this->makePayment());
+        
+        $refund = PromisePay::Item()->refund(
+            $item['id']
+        );
+        
+        $this->assertNotNull($refund);
+        $this->assertEquals($refund['state'], 'refunded');
+        $this->assertEquals($this->itemData['amount'], $refund['refunded_amount']);
+    }
+    
+    public function testPartialWithMessage() {
+        extract($this->makePayment());
+        
+        // refund half the price
+        $refundAmount = round($this->itemData['amount'] / 2, 0); 
+        $refundMessage = 'Refunding half the price.';
+        
+        $refund = PromisePay::Item()->refund(
+            $item['id'],
+            array(
+                'refund_amount' => $refundAmount,
+                'refund_message' => $refundMessage
+            )
+        );
+        
+        $this->assertNotNull($refund);
+        $this->assertNotEquals($refund['state'], 'refunded');
+        $this->assertEquals($refundAmount, $refund['refund_amount']);
+        $this->assertEquals($refundAmount, $refund['refunded_amount']);
+        $this->assertEquals($refundMessage, $refund['refund_message']);
+    }
+    
     public function testDeclineRefund() {
         $paidItem = $this->makePayment();
         

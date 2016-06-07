@@ -190,7 +190,8 @@ class PromisePay {
         
         if (!empty($message)) {
             return sprintf(
-                'Response Code: %d%sError Message: %s%s',
+                '%sResponse Code: %d%sError Message: %s%s',
+                PHP_EOL,
                 isset($response->code) ? $response->code : 0,
                 PHP_EOL,
                 $message,

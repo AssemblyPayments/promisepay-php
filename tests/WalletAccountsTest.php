@@ -25,6 +25,14 @@ class WalletAccountsTest extends \PHPUnit_Framework_TestCase {
         );
     }
     
+    protected function regenUserData() {
+        $guid = GUID();
+        
+        $this->userData['id'] = $guid;
+        $this->userData['email'] = $guid . '@testing.com';
+        $this->userData['mobile'] = $guid . '00012';
+    }
+    
     protected function createUser() {
         $user = PromisePay::User()->create($this->userData);
         
@@ -68,15 +76,81 @@ class WalletAccountsTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($user['last_name'], $walletUser['last_name']);
     }
     /**
+     * @group failing
+     */
+    public function testDepositFunds_failing() {
+        // USING 1 USER, 2 BANK ACCOUNTS AND DIRECT DEBIT AUTHORITY
+        $this->markTestSkipped();
+        $user = $this->createUser();
+        
+        $bankReceiving = $this->createBankAccount($user['id']);
+        $bankSending = $this->createBankAccount($user['id']);
+        
+        $depositAmount = 1000;
+        
+        $bankSendingAuthority = PromisePay::DirectDebitAuthority()->create(
+            array(
+                'account_id' => $bankSending['id'],
+                'amount'     => $depositAmount
+            )
+        );
+        
+        var_dump($user);
+        
+        $deposit = PromisePay::WalletAccounts()->deposit(
+            $bankReceiving['id'],
+            array(
+                'account_id' => $bankSending['id'],
+                'amount'     => $depositAmount
+            )
+        );
+        
+        var_dump($deposit);
+    }
+    
+    protected function makePayment() {
+        require_once __DIR__ . '/ItemTest.php';
+        
+        $item = new ItemTest;
+        
+        $item->setUp();
+        
+        return $item->makePayment();
+    }
+    
+    /**
      * @group dev
      */
     public function testDepositFunds() {
-        $user = $this->createUser();
+        /*
+        extract($this->makePayment());
         
-        $bankOne = $this->createBankAccount($user['id']);
-        $bankTwo = $this->createBankAccount($user['id']);
+        $releasePayment = PromisePay::Item()->releasePayment(
+            $item['id']
+        );
         
-        var_dump($bankOne, $bankTwo);
+        $releasePaymentEndpoint = $releasePayment['links']['transactions'];
+        
+        PromisePay::RestClient('get', $releasePaymentEndpoint);
+        $transactions = PromisePay::getDecodedResponse();
+        */
+        
+        $depositFunds = PromisePay::WalletAccounts()->deposit(
+            
+        );
+    }
+    
+    /**
+     * @group withdraw
+     */
+    public function testWithdraw() {
+        extract($this->makePayment());
+        
+        var_dump($item);
+        
+        PromisePay::RestClient('get', $seller['links']['wallet_accounts']);
+        
+        var_dump(PromisePay::getDecodedResponse());
     }
 }
 

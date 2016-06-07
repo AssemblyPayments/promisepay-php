@@ -22,7 +22,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
             "id"              => $this->GUID,
             "name"            => 'Test Item #1',
             "amount"          => 1000,
-            "payment_type_id" => 1,
+            "payment_type"    => 1,
             "buyer_id"        => $this->buyerId,
             "seller_id"       => $this->sellerId,
             "description"     => 'Description'
@@ -61,6 +61,14 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
            "expiry_year"  => '2020',
            "cvv"          => '123'
         );
+    }
+    
+    public function __set($property, $value) {
+        if (isset($this->$property)) {
+            $this->$property = $value;
+        } else {
+            throw new \Exception("$property doesn't exist.");
+        }
     }
     
     protected function createRandomIds() {
@@ -133,14 +141,16 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
             'seller' => $seller
         );
     }
-    
+    /**
+     * @group first
+     */
     public function testCreateItem() {
         $createItem = PromisePay::Item()->create($this->itemData);
         
         $this->assertEquals($this->itemData['id'], $createItem['id']);
         $this->assertEquals($this->itemData['name'], $createItem['name']);
         $this->assertEquals($this->itemData['amount'], $createItem['amount']);
-        $this->assertEquals($this->itemData['payment_type_id'], $createItem['payment_type_id']);
+        $this->assertEquals($this->itemData['payment_type'], $createItem['payment_type_id']);
         $this->assertEquals($this->itemData['description'], $createItem['description']);
     }
     
@@ -381,29 +391,32 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
             $this->itemData['amount']
         );
     }
-    /**
-     * @group dev
-     */
+    
     public function testReleasePartialAmount() {
+        $this->itemData['payment_type'] = 3;
+        
         extract($this->makePayment());
         
         $halfThePrice = round($this->itemData['amount'] / 2, 0);
         
-        $releasePayment = PromisePay::Item()->releasePayment(
+        $releasePartialPayment = PromisePay::Item()->releasePayment(
             $item['id'],
             array(
                 'release_amount' => $halfThePrice
             )
         );
         
-        $this->assertNotNull($releasePayment);
-        $this->assertEquals($releasePayment['state'], 'completed');
-        
-        $this->markTestIncomplete();
+        $this->assertNotNull($releasePartialPayment);
+        $this->assertEquals($releasePartialPayment['state'], 'partial_paid');
         
         $this->assertEquals(
-            $releasePayment['pending_release_amount'],
+            $releasePartialPayment['pending_release_amount'],
             $halfThePrice
+        );
+        
+        $this->assertEquals(
+            $releasePartialPayment['total_outstanding'],
+            (int) $this->itemData['amount'] - (int) $halfThePrice
         );
     }
     

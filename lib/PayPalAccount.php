@@ -28,7 +28,9 @@ class PayPalAccount {
      * original one has been left for backward compatibility reasons.
      */
     public function getV2($id) {
-        return $this->get($id)['paypal_accounts'];
+        $result = $this->get($id);
+        
+        return $result['paypal_accounts'];
     }
     
     /**

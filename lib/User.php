@@ -69,6 +69,8 @@ class User {
     }
     
     public function setDisbursementAccountV2($id, $params) {
-        return $this->setDisbursementAccount($id, $params)['users'];
+        $result = $this->setDisbursementAccount($id, $params);
+        
+        return $result['users'];
     }
 }

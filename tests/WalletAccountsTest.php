@@ -121,7 +121,13 @@ class WalletAccountsTest extends \PHPUnit_Framework_TestCase {
             )
         );
         
-        var_dump($deposit);
+        $this->assertNotNull($deposit);
+        
+        $this->assertEquals($deposit['amount'], $depositAmount);
+        $this->assertEquals($deposit['currency'], $bankReceiving['currency']);
+        $this->assertEquals($deposit['to'], 'Bank Account');
+        $this->assertEquals($deposit['bank_name'], $bankReceiving['bank']['bank_name']);
+        $this->assertEquals($deposit['bank_account_number'], $bankReceiving['bank']['account_number']);
     }
     
     protected function makePayment() {
@@ -138,13 +144,9 @@ class WalletAccountsTest extends \PHPUnit_Framework_TestCase {
      * @group withdraw
      */
     public function testWithdraw() {
+        // WITHDRAW TO PAYPAL
         extract($this->makePayment());
         
-        var_dump($item);
-        
-        PromisePay::RestClient('get', $seller['links']['wallet_accounts']);
-        
-        var_dump(PromisePay::getDecodedResponse());
     }
 }
 

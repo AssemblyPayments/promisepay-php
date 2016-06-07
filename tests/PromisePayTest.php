@@ -2,7 +2,6 @@
 namespace PromisePay\Tests;
 
 use Promisepay\PromisePay;
-use Promisepay\Exception;
 
 class PromisePayTest extends \PHPUnit_Framework_TestCase {
     

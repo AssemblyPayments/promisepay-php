@@ -40,29 +40,17 @@ class PromisePay {
     }
     
     public static function getMeta() {
-        $meta = self::getArrayValuesByKeyRecursive(
+        return self::getArrayValuesByKeyRecursive(
             'meta',
             self::$jsonResponse
         );
-        
-        if ($meta !== false) {
-            return $meta;
-        }
-        
-        return false;
     }
     
     public static function getLinks() {
-        $links = self::getArrayValuesByKeyRecursive(
+        return self::getArrayValuesByKeyRecursive(
             'links',
             self::$jsonResponse
         );
-        
-        if ($links !== false) {
-            return $links;
-        }
-        
-        return false;
     }
     
     public static function getArrayValuesByKeyRecursive($needle, array $array) {
@@ -116,10 +104,10 @@ class PromisePay {
     }
 
     /**
-     * Interface for performing requests to PromisePay endpoints
+     * Method for performing requests to PromisePay endpoints.
      *
-     * @param string $method required One of the four supported requests methods (get, post, delete, patch)
-     * @param string $entity required Endpoint name
+     * @param string $method One of the four supported requests methods (get, post, delete, patch)
+     * @param string $entity Endpoint name
      * @param string $payload optional URL encoded data query
      * @param string $mime optional Set specific MIME type. Supported list can be seen here: http://phphttpclient.com/docs/class-Httpful.Mime.html
      */

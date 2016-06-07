@@ -1,5 +1,6 @@
 <?php
 namespace PromisePay\Tests;
+
 use PromisePay\PromisePay;
 
 class TransactionTest extends \PHPUnit_Framework_TestCase {

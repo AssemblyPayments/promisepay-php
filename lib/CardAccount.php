@@ -22,7 +22,7 @@ class CardAccount {
     }
     
     public function redact($id) {
-        return self::delete($id);
+        return $this->delete($id);
     }
 
     public function getUser($id) {

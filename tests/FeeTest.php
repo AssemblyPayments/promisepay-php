@@ -2,20 +2,20 @@
 namespace PromisePay\Tests;
 
 use PromisePay\PromisePay;
-use PromisePay\Enum\FeeType;
 
 class FeeTest extends \PHPUnit_Framework_TestCase {
     
-    protected $enum, $GUID, $feeData;
+    protected $enum,
+    $GUID,
+    $feeData;
     
     public function setUp() {
-        $this->enum = new FeeType;
         $this->GUID = GUID();
         
         $this->feeData = array(
             'amount'      => 1000,
             'name'        => 'DELIVERY FEE',
-            'fee_type_id' => (string) $this->enum->Fixed,
+            'fee_type_id' =>  1,
             'cap'         => '1',
             'max'         => '3',
             'min'         => '2',

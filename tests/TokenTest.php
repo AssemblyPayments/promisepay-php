@@ -1,5 +1,6 @@
 <?php
 namespace PromisePay\Tests;
+
 use PromisePay\PromisePay;
 
 class TokenTest extends \PHPUnit_Framework_TestCase {

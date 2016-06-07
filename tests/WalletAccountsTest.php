@@ -136,11 +136,10 @@ class WalletAccountsTest extends \PHPUnit_Framework_TestCase {
         );
     }
     
-    public function testWithdrawToPayPal() {
-        // WITHDRAW TO PAYPAL
+    public function testWithdrawalToPayPal() {
         extract($this->testDeposit());
         
-        $withdrawAmount = 100;
+        $withdrawalAmount = 100;
         
         $payPalAccount = PromisePay::PayPalAccount()->create(
             array(
@@ -149,27 +148,66 @@ class WalletAccountsTest extends \PHPUnit_Framework_TestCase {
             )
         );
         
-        $bankSendingAuthority = PromisePay::DirectDebitAuthority()->create(
+        $bankWithdrawingFromAuthority = PromisePay::DirectDebitAuthority()->create(
             array(
                 'account_id' => $bankReceiving['id'],
-                'amount'     => $withdrawAmount
+                'amount'     => $withdrawalAmount
             )
         );
         
-        $withdraw = PromisePay::WalletAccounts()->withdraw(
+        $withdrawal = PromisePay::WalletAccounts()->withdraw(
             $bankReceiving['id'],
             array(
                 'account_id' => $payPalAccount['id'],
-                'amount'     => $withdrawAmount
+                'amount'     => $withdrawalAmount
             )
         );
         
-        $this->assertNotNull($withdraw);
-        $this->assertEquals($withdraw['amount'], $withdrawAmount);
+        $this->assertNotNull($withdrawal);
+        $this->assertEquals($withdrawal['amount'], $withdrawalAmount);
         $this->assertEquals(
-            trim($withdraw['to']), // API currently returns "PayPal Disbursement "
+            trim($withdrawal['to']), // API currently returns "PayPal Disbursement "
             'PayPal Disbursement'
         );
-        $this->assertEquals($withdraw['paypal_email'], $user['email']);
+        $this->assertEquals($withdrawal['paypal_email'], $user['email']);
+    }
+    
+    public function testWithdrawToBankAccount() {
+        extract($this->testDeposit());
+        
+        $withdrawalAmount = 100;
+        
+        // in testDeposit(), money was being sent to receiving bank.
+        // now, we're going to withdraw that money to the bank that sent it.
+        $bankWithdrawingFrom = $bankReceiving;
+        $bankWithdrawingTo = $bankSending;
+        
+        $bankWithdrawingFromAuthority = PromisePay::DirectDebitAuthority()->create(
+            array(
+                'account_id' => $bankWithdrawingFrom['id'],
+                'amount'     => $withdrawalAmount
+            )
+        );
+        
+        
+        $withdrawal = PromisePay::WalletAccounts()->withdraw(
+            $bankWithdrawingTo['id'],
+            array(
+                'account_id' => $bankWithdrawingFrom['id'],
+                'amount'     => $withdrawalAmount
+            )
+        );
+        
+        $this->assertNotNull($withdrawal);
+        $this->assertEquals($withdrawal['amount'], $withdrawalAmount);
+        $this->assertEquals(
+            $withdrawal['to'],
+            'Bank Account'
+        );
+        
+        $this->assertEquals($withdrawal['bank_name'], $bankWithdrawingTo['bank']['bank_name']);
+        $this->assertEquals($withdrawal['bank_account_name'], $bankWithdrawingTo['bank']['account_name']);
+        $this->assertEquals($withdrawal['bank_account_number'], $bankWithdrawingTo['bank']['account_number']);
+        $this->assertEquals($withdrawal['bank_routing_number'], $bankWithdrawingTo['bank']['routing_number']);
     }
 }

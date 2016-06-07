@@ -362,19 +362,31 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testRequestPartialRelease() {
+        $this->itemData['payment_type'] = 3;
+        
         extract($this->makePayment());
         
         $halfThePrice = round($this->itemData['amount'] / 2, 0);
         
-        $requestRelease = PromisePay::Item()->requestRelease(
+        $requestPartialRelease = PromisePay::Item()->requestRelease(
             $item['id'],
             array(
                 'release_amount' => $halfThePrice
             )
         );
         
-        $this->assertNotNull($requestRelease);
-        $this->assertEquals($requestRelease['state'], 'work_completed');
+        $this->assertNotNull($requestPartialRelease);
+        $this->assertEquals($requestPartialRelease['state'], 'partial_completed');
+        
+        $this->assertEquals(
+            $requestPartialRelease['pending_release_amount'],
+            $halfThePrice
+        );
+        
+        $this->assertEquals(
+            $requestPartialRelease['total_outstanding'],
+            (int) $this->itemData['amount'] - (int) $halfThePrice
+        );
     }
     
     public function testReleasePayment() {

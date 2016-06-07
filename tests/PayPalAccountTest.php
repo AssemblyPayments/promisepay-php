@@ -1,5 +1,6 @@
 <?php
 namespace PromisePay\Tests;
+
 use PromisePay\PromisePay;
 
 class PayPalAccountTest extends \PHPUnit_Framework_TestCase {
@@ -30,12 +31,17 @@ class PayPalAccountTest extends \PHPUnit_Framework_TestCase {
         $createPayPalAccount = PromisePay::PayPalAccount()->create($this->payPalData);
         
         // Get the PayPal Account
-        $getPayPalAccount = PromisePay::PayPalAccount()->get($createPayPalAccount['id']);
+        $getPayPalAccount = PromisePay::PayPalAccount()->getV2($createPayPalAccount['id']);
         
         $this->assertTrue(array_key_exists('paypal', $createPayPalAccount));
         $this->assertTrue(is_array($createPayPalAccount['paypal']));
         $this->assertEquals($this->payPalData['paypal_email'], $createPayPalAccount['paypal']['email']);
         $this->assertNotNull($createPayPalAccount['created_at']);
+        
+        $this->assertEquals(
+            $createPayPalAccount['id'],
+            $getPayPalAccount['id']
+        );
     }
     
     public function testGetUserForAccount() {

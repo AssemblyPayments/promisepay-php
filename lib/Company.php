@@ -1,9 +1,6 @@
 <?php
 namespace PromisePay;
 
-use PromisePay\Exception;
-use PromisePay\Log;
-
 /**
  * Class CompanyRepository
  *
@@ -18,7 +15,7 @@ class Company {
      * 
      * @return array
      */
-    public static function getList($params = array('limit' => 200, 'offset' => 0)) {
+    public function getList($params = array('limit' => 200, 'offset' => 0)) {
         PromisePay::RestClient('get', 'companies/', $params);
         
         return PromisePay::getDecodedResponse('companies');
@@ -32,7 +29,7 @@ class Company {
      *
      * @return array
      */
-    public static function get($id) {
+    public function get($id) {
         PromisePay::RestClient('get', 'companies/' . $id);
         
         return PromisePay::getDecodedResponse('companies');
@@ -45,7 +42,7 @@ class Company {
      *
      * @return array
      */
-    public static function create($params) {
+    public function create($params) {
         PromisePay::RestClient('post', 'companies/', $params);
         
         return PromisePay::getDecodedResponse('companies');
@@ -59,7 +56,7 @@ class Company {
      *
      * @return array
      */
-    public static function update($id, $params) {
+    public function update($id, $params) {
         PromisePay::RestClient('patch', 'companies/' . $id, $params);
         
         return PromisePay::getDecodedResponse('companies');

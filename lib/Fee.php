@@ -5,20 +5,20 @@ use PromisePay\Exception;
 use PromisePay\Log;
 
 class Fee {
-    public static function create($params) {
+    public function create($params) {
         PromisePay::RestClient('post', 'fees/', $params);
         
         return PromisePay::getDecodedResponse('fees');
     }
     
-    public static function getList($params) {
+    public function getList($params) {
         PromisePay::RestClient('get', 'fees/', $params);
         
         return PromisePay::getDecodedResponse('fees');
     }
     
-    public static function get($id) {
-        $response = PromisePay::RestClient('get', 'fees/' . $id);
+    public function get($id) {
+        PromisePay::RestClient('get', 'fees/' . $id);
         
         return PromisePay::getDecodedResponse('fees');
     }

@@ -13,19 +13,13 @@ class DisbursementTest extends \PHPUnit_Framework_TestCase {
     
     public function testGet() {
         $this->markTestSkipped();
-        /*
-        $get = PromisePay::Disbursement()->get();
         
-        fwrite(STDERR, print_r($get, true));
-        */
+        $get = PromisePay::Disbursement()->get();
     }
     
     public function testGetById() {
         $this->markTestSkipped();
-        /*
-        $disbursement = PromisePay::Disbursement()->get($this->userId);
         
-        fwrite(STDERR, print_r($disbursement, true));
-        */
+        $disbursement = PromisePay::Disbursement()->get($this->userId);
     }
 }

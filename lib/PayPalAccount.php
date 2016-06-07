@@ -1,9 +1,6 @@
 <?php
 namespace PromisePay;
 
-use PromisePay\Exception;
-use PromisePay\Log;
-
 /**
  * Class PayPalAccountRepository
  *
@@ -15,31 +12,37 @@ class PayPalAccount {
      *
      * Quries API for PayPal account data.
      * Input ID is not numeric, but in format of "ec9bf096-c505-4bef-87f6-18822b9dbf2c".
-     * Returns PayPalAccount object containing account data from request response. 
      * 
      * @param string $id
-     * @return PayPalAccount object
+     * @return array
      */
-    public static function get($id) {
-        $response = PromisePay::RestClient('get', 'paypal_accounts/' . $id);
+    public function get($id) {
+        PromisePay::RestClient('get', 'paypal_accounts/' . $id);
         
-        return json_decode($response->raw_body, true);
+        return PromisePay::getDecodedResponse();
+    }
+    
+    /**
+     * Original get() method doesn't follow the established nomenclature
+     * of returning array offset at master key. This one does, and the
+     * original one has been left for backward compatibility reasons.
+     */
+    public function getV2($id) {
+        return $this->get($id)['paypal_accounts'];
     }
     
     /**
      * Creates a PayPal account for a user on a marketplace.
      *
      * Input accepts PayPalAccount object. 
-     * Returns new PayPalAccount object containing data from request response.
      *
      * @param PayPalAccount $paypal
-     * @return PayPalAccount 
+     * @return array 
      */
-    public static function create($params) {
-        $response = PromisePay::RestClient('post', 'paypal_accounts/', $params);
-        $jsonDecodedResponse = json_decode($response, true);
+    public function create($params) {
+        PromisePay::RestClient('post', 'paypal_accounts/', $params);
         
-        return $jsonDecodedResponse['paypal_accounts'];
+        return PromisePay::getDecodedResponse('paypal_accounts');
     }
     
     /**
@@ -47,31 +50,27 @@ class PayPalAccount {
      * Sets the account to in-active.
      *
      * Input ID is not numeric, but in format of "ec9bf096-c505-4bef-87f6-18822b9dbf2c".
-     * Returns REST request response object.
      *
      * @param string $id
-     * @return object
+     * @return array
      */
-    public static function delete($id) {
-        $response = PromisePay::RestClient('delete', 'paypal_accounts/' . $id);
-        $jsonDecodedResponse = json_decode($response, true);
+    public function delete($id) {
+        PromisePay::RestClient('delete', 'paypal_accounts/' . $id);
         
-        return $jsonDecodedResponse['paypal_account'];
+        return PromisePay::getDecodedResponse('paypal_account');
     }
     
     /**
      * Shows the user the PayPal account is associated with.
      *
      * Input ID is not numeric, but in format of "ec9bf096-c505-4bef-87f6-18822b9dbf2c".
-     * Returns User object containing user data.
      *
      * @param string $id
-     * @return User|null
+     * @return array
      */
-    public static function getUser($id) {
-        $response = PromisePay::RestClient('get','/paypal_accounts/' . $id . '/users');
-        $jsonDecodedResponse = json_decode($response, true);
+    public function getUser($id) {
+        PromisePay::RestClient('get','/paypal_accounts/' . $id . '/users');
         
-        return $jsonDecodedResponse['users'];
+        return PromisePay::getDecodedResponse('users');
     }
 }

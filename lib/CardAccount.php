@@ -1,40 +1,33 @@
 <?php
 namespace PromisePay;
 
-use PromisePay\Exception;
-use PromisePay\Log;
-
 class CardAccount {
     
-    public static function get($id) {
-        $response = PromisePay::RestClient('get', 'card_accounts/' . $id);
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
+    public function get($id) {
+        PromisePay::RestClient('get', 'card_accounts/' . $id);
         
-        return $jsonDecodedResponse['card_accounts'];
+        return PromisePay::getDecodedResponse('card_accounts');
     }
 
-    public static function create($params) {
-        $response = PromisePay::RestClient('post', 'card_accounts?', $params);
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
+    public function create($params) {
+        PromisePay::RestClient('post', 'card_accounts?', $params);
         
-        return $jsonDecodedResponse['card_accounts'];
+        return PromisePay::getDecodedResponse('card_accounts');
     }
 
-    public static function delete($id) {
-        $response = PromisePay::RestClient('delete', 'card_accounts/' . $id);
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
+    public function delete($id) {
+        PromisePay::RestClient('delete', 'card_accounts/' . $id);
         
-        return $jsonDecodedResponse['card_account'];
+        return PromisePay::getDecodedResponse('card_account');
     }
     
-    public static function redact($id) {
+    public function redact($id) {
         return self::delete($id);
     }
 
-    public static function getUser($id) {
-        $response = PromisePay::RestClient('get', 'card_accounts/' . $id . '/users');
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
+    public function getUser($id) {
+        PromisePay::RestClient('get', 'card_accounts/' . $id . '/users');
         
-        return $jsonDecodedResponse['users'];
+        return PromisePay::getDecodedResponse('users');
     }
 }

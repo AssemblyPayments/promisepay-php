@@ -1,10 +1,6 @@
 <?php
 namespace PromisePay;
 
-use Httpful\Request;
-use PromisePay\Exception;
-use PromisePay\Log\Logger;
-
 /**
  * Class PromisePay
  *
@@ -53,6 +49,156 @@ class PromisePay {
         );
     }
     
+    /**
+     * Static method invoker.
+     *
+     * @param string $neededClassName
+     * @param mixed $passableArgs
+     * @throws Exception\NotFound
+     * @return object
+     */
+    public static function __callStatic($neededClassName, $autoPassedArgs) {
+        $neededClassName = __NAMESPACE__ . '\\' . $neededClassName;
+        
+        if (class_exists($neededClassName)) {
+            return new $neededClassName;
+        } else {
+            throw new Exception\NotFound("Class $neededClassName not found");
+        }
+    }
+
+    /**
+     * Method for performing requests to PromisePay endpoints.
+     *
+     * @param string $method One of the four supported requests methods (get, post, delete, patch)
+     * @param string $entity Endpoint name
+     * @param string $payload optional URL encoded data query
+     * @param string $mime optional Set specific MIME type.
+     */
+    public static function RestClient($method, $entity, $payload = null, $mime = null) {
+        // Check whether critical constants are defined.
+        if (!defined(__NAMESPACE__ . '\API_URL'))
+            die('Fatal error: API_URL constant missing. Check if environment has been set.');
+        
+        if (!defined(__NAMESPACE__ . '\API_LOGIN'))
+            die('Fatal error: API_LOGIN constant missing.');
+        
+        if (!defined(__NAMESPACE__ . '\API_PASSWORD'))
+            die('Fatal error: API_PASSWORD constant missing.');
+        
+        if (!is_scalar($payload) && $payload !== null) {
+            $payload = http_build_query($payload);
+        }
+        
+        $url = constant(__NAMESPACE__ . '\API_URL') . $entity . '?' . $payload;
+        
+        switch ($method) {
+            case 'get':
+                $response = \Httpful\Request::get($url)
+                ->authenticateWith(
+                    constant(__NAMESPACE__ . '\API_LOGIN'),
+                    constant(__NAMESPACE__ . '\API_PASSWORD')
+                )->send();
+                
+                break;
+            case 'post':
+                $response = \Httpful\Request::post($url)
+                ->body($payload, $mime)
+                ->authenticateWith(
+                    constant(__NAMESPACE__ . '\API_LOGIN'),
+                    constant(__NAMESPACE__ . '\API_PASSWORD')
+                )->send();
+                
+                break;
+            case 'delete':
+                $response = \Httpful\Request::delete($url)
+                ->authenticateWith(
+                    constant(__NAMESPACE__ . '\API_LOGIN'),
+                    constant(__NAMESPACE__ . '\API_PASSWORD'))
+                ->send();
+                
+                break;
+            case 'patch':
+                $response = \Httpful\Request::patch($url)
+                ->body($payload, $mime)
+                ->authenticateWith(
+                    constant(__NAMESPACE__ . '\API_LOGIN'),
+                    constant(__NAMESPACE__ . '\API_PASSWORD'))
+                ->send();
+                
+                break;
+            default:
+                throw new Exception\ApiUnsupportedRequestMethod(
+                    sprintf(
+                        '%s is not a supported request method.',
+                        $method
+                    )
+                );
+        }
+        
+        self::$debugData = $response;
+        
+        // check for errors
+        if ($response->hasErrors()) {
+            $errors = static::buildErrorMessage($response);
+            
+            switch ($response->code) {
+                case 401:
+                    throw new Exception\Unauthorized($errors);
+                    
+                    break;
+                case 404:
+                    throw new Exception\NotFound($errors);
+                    
+                    break;
+                default:
+                    throw new Exception\Api($errors);
+            }
+        }
+        
+        $data = json_decode($response, true);
+        
+        if ($data) {
+            self::$jsonResponse = $data;
+        }
+        
+        return $response;
+    }
+    
+    protected static function buildErrorMessage($response) {
+        $jsonReponse = json_decode($response->raw_body);
+        
+        $message = isset($jsonReponse->message) ? $jsonReponse->message : null;
+        
+        if (isset($jsonReponse->errors)) {
+            foreach($jsonReponse->errors as $attribute => $content) {
+                if (is_array($content)) {
+                    $content = implode(" ", $content);
+                }
+                if (is_object($content)) {
+                    $content = json_encode($content);
+                }
+                
+                $message .= sprintf(
+                    '%s: %s%s',
+                    $attribute,
+                    $content,
+                    PHP_EOL
+                );
+            }
+        }
+        
+        if (!empty($message)) {
+            return sprintf(
+                'Response Code: %d%sError Message: %s%s',
+                isset($response->code) ? $response->code : 0,
+                PHP_EOL,
+                $message,
+                PHP_EOL
+            );
+        }
+    }
+    
     public static function getArrayValuesByKeyRecursive($needle, array $array) {
         if (!is_scalar($needle)) {
             throw new \InvalidArgumentException(
@@ -78,132 +224,4 @@ class PromisePay {
         
         return false;
     }
-    
-    /**
-     * Constant 
-     * @const int ENTITY_LIST_LIMIT
-     */
-    const ENTITY_LIST_LIMIT = 200;
-    
-    /**
-     * Static method invoker.
-     *
-     * @param string $neededClassName
-     * @param mixed $passableArgs
-     * @throws Exception\NotFound
-     * @return object
-     */
-    public static function __callStatic($neededClassName, $autoPassedArgs) {
-        $neededClassName = __NAMESPACE__ . '\\' . $neededClassName;
-        
-        if (class_exists($neededClassName)) {
-            return new $neededClassName;
-        } else {
-            throw new Exception\NotFound("Class $neededClassName not found");
-        }
-    }
-
-    /**
-     * Method for performing requests to PromisePay endpoints.
-     *
-     * @param string $method One of the four supported requests methods (get, post, delete, patch)
-     * @param string $entity Endpoint name
-     * @param string $payload optional URL encoded data query
-     * @param string $mime optional Set specific MIME type. Supported list can be seen here: http://phphttpclient.com/docs/class-Httpful.Mime.html
-     */
-    public static function RestClient($method, $entity, $payload = null, $mime = null) {
-        // Check whether critical constants are defined.
-        if (!defined(__NAMESPACE__ . '\API_URL'))
-            die('Fatal error: API_URL constant missing. Check if environment has been set.');
-        
-        if (!defined(__NAMESPACE__ . '\API_LOGIN'))
-            die('Fatal error: API_LOGIN constant missing.');
-        
-        if (!defined(__NAMESPACE__ . '\API_PASSWORD'))
-            die('Fatal error: API_PASSWORD constant missing.');
-        
-        if (!is_scalar($payload) && $payload !== null) {
-            $payload = http_build_query($payload);
-        }
-        
-        $url = constant(__NAMESPACE__ . '\API_URL') . $entity . '?' . $payload;
-        
-        switch ($method) {
-            case 'get':
-                $response = Request::get($url)->authenticateWith(constant(__NAMESPACE__ . '\API_LOGIN'), constant(__NAMESPACE__ . '\API_PASSWORD'))->send();
-                break;
-
-            case 'post':
-                $response = Request::post($url)->body($payload, $mime)->authenticateWith(constant(__NAMESPACE__ . '\API_LOGIN'), constant(__NAMESPACE__ . '\API_PASSWORD'))->send();
-                break;
-
-            case 'delete':
-                $response = Request::delete($url)->authenticateWith(constant(__NAMESPACE__ . '\API_LOGIN'), constant(__NAMESPACE__ . '\API_PASSWORD'))->send();
-                break;
-
-            case 'patch':
-                $response = Request::patch($url)->body($payload, $mime)->authenticateWith(constant(__NAMESPACE__ . '\API_LOGIN'), constant(__NAMESPACE__ . '\API_PASSWORD'))->send();
-                break;
-            
-            default:
-                throw new Exception\ApiUnsupportedRequestMethod("Unsupported request method $method.");
-        }
-        
-        self::$debugData = $response;
-        
-        // check for errors
-        if ($response->hasErrors())
-        {
-            $errors = static::buildErrorMessage($response);
-            
-            switch ($response->code) {
-                case 401:
-                    throw new Exception\Unauthorized($errors);
-                    break;
-                case 404:
-                    throw new Exception\NotFound($errors);
-                default:
-                    throw new Exception\Api($errors);
-                    break;
-            }
-        }
-        
-        $data = json_decode($response, true);
-        
-        if ($data) {
-            self::$jsonResponse = $data;
-        }
-        
-        return $response;
-    }
-    
-    private static function buildErrorMessage($response)
-    {
-        $jsonReponse = json_decode($response->raw_body);
-        $message = '';
-        
-        if (isset($jsonReponse->message)) 
-        {
-            $message = $jsonReponse->message;
-        }
-        
-        if (isset($jsonReponse->errors))
-        {
-            foreach($jsonReponse->errors as $attribute => $content)
-            {
-                if (is_array($content))
-                {
-                    $content = implode(" ", $content);
-                }
-                if (is_object($content))
-                {
-                    $content = json_encode($content);
-                }
-                $message .= " {$attribute}: {$content} ";
-            }
-        }
-        
-        return $message ? $response->code . " error: " . $message : NULL;
-    }
-    
 }

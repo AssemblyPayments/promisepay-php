@@ -1,12 +1,10 @@
 <?php
 namespace PromisePay;
 
-class Tools {
-    
-    public static function getHealth() {
+class Tools {    
+    public function getHealth() {
         PromisePay::RestClient('get', 'status');
         
         return PromisePay::getDecodedResponse('status');
     }
-    
 }

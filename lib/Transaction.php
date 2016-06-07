@@ -1,37 +1,28 @@
 <?php
 namespace PromisePay;
 
-use PromisePay\Exception;
-use PromisePay\Log;
-use PromisePay\PromisePay;
-
 class Transaction {
-    
-    public static function getList($params = null) {
-        $response = PromisePay::RestClient('get', 'transactions/', $params);
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
+    public function getList($params = null) {
+        PromisePay::RestClient('get', 'transactions/', $params);
         
-        return $jsonDecodedResponse['transactions'];
+        return PromisePay::getDecodedResponse('transactions');
     }
     
-    public static function get($id) {
-        $response = PromisePay::RestClient('get', 'transactions/' . $id);
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
+    public function get($id) {
+        PromisePay::RestClient('get', 'transactions/' . $id);
         
-        return $jsonDecodedResponse['transactions'];
+        return PromisePay::getDecodedResponse('transactions');
     }
 
-    public static function getUser($id) {
-        $response = PromisePay::RestClient('get', 'transactions/' . $id . '/users');
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
+    public function getUser($id) {
+        PromisePay::RestClient('get', 'transactions/' . $id . '/users');
         
-        return $jsonDecodedResponse['users'];
+        return PromisePay::getDecodedResponse('users');
     }
 
-    public static function getFee($id) {
-        $response = PromisePay::RestClient('get', 'transactions/' . $id . '/fees');
-        $jsonDecodedResponse = json_decode($response->raw_body, true);
+    public function getFee($id) {
+        PromisePay::RestClient('get', 'transactions/' . $id . '/fees');
         
-        return $jsonDecodedResponse['fees'];
+        return PromisePay::getDecodedResponse('fees');
     }
 }

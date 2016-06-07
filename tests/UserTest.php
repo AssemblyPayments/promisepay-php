@@ -4,7 +4,12 @@ use PromisePay\PromisePay;
 
 class UserTest extends \PHPUnit_Framework_TestCase {
     
-    protected $GUID, $userData, $itemData, $bankAccountData, $cardAccountData, $payPalData;
+    protected $GUID,
+    $userData,
+    $itemData,
+    $bankAccountData,
+    $cardAccountData,
+    $payPalData;
     
     public function setUp() {
         $this->GUID = GUID();

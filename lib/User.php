@@ -1,76 +1,70 @@
 <?php
 namespace PromisePay;
 
-use PromisePay\PromisePay;
-use PromisePay\Exception;
-use PromisePay\Log;
-
 class User {
-    
-    public static function create($params) {
+    public function create($params) {
         PromisePay::RestClient('post', 'users/', $params);
 
         return PromisePay::getDecodedResponse('users');
     }
 
-    public static function get($id) {
+    public function get($id) {
         PromisePay::RestClient('get', 'users/' . $id);
 
         return PromisePay::getDecodedResponse('users');
     }
 
-    public static function getList($params = null) {
+    public function getList($params = null) {
         PromisePay::RestClient('get', 'users/', $params);
 
         return PromisePay::getDecodedResponse('users');
     }
 
-    public static function update($id, $params) {
+    public function update($id, $params) {
         PromisePay::RestClient('patch', 'users/' . $id . "/", $params);
 
         return PromisePay::getDecodedResponse('users');
     }
 
-    public static function sendMobilePin($id) {
+    public function sendMobilePin($id) {
         PromisePay::RestClient('post', '/users/' . $id . '/mobile_pin');
         
         return PromisePay::getDecodedResponse();
     }
 
-    public static function getListOfItems($id) {
+    public function getListOfItems($id) {
         PromisePay::RestClient('get', 'users/' . $id . '/items');
 
         return PromisePay::getDecodedResponse('items');
     }
 
-    public static function getListOfBankAccounts($id) {
+    public function getListOfBankAccounts($id) {
         PromisePay::RestClient('get', 'users/' . $id . '/bank_accounts');
 
         return PromisePay::getDecodedResponse('bank_accounts');
     }
 
-    public static function getListOfCardAccounts($id) {
+    public function getListOfCardAccounts($id) {
         PromisePay::RestClient('get', 'users/' . $id . '/card_accounts');
 
         return PromisePay::getDecodedResponse('card_accounts');
     }
 
-    public static function getListOfPayPalAccounts($id) {
+    public function getListOfPayPalAccounts($id) {
         PromisePay::RestClient('get', 'users/' . $id . '/paypal_accounts');
 
         return PromisePay::getDecodedResponse('paypal_accounts');
     }
     
-    public static function getListOfWalletAccounts($id) {
+    public function getListOfWalletAccounts($id) {
         PromisePay::RestClient('get', 'users/' . $id . '/wallet_accounts');
         
         return PromisePay::getDecodedResponse('wallet_accounts');
     }
 
-    public static function setDisbursementAccount($id, $params) {
+    public function setDisbursementAccount($id, $params) {
         PromisePay::RestClient('post', 'users/' . $id . '/disbursement_account', $params);
         
         return PromisePay::getDecodedResponse();
     }
-
 }

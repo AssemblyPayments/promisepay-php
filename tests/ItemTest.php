@@ -141,9 +141,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
             'seller' => $seller
         );
     }
-    /**
-     * @group first
-     */
+    
     public function testCreateItem() {
         $createItem = PromisePay::Item()->create($this->itemData);
         

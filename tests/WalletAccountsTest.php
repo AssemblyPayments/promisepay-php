@@ -76,15 +76,31 @@ class WalletAccountsTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($user['last_name'], $walletUser['last_name']);
     }
     /**
-     * @group failing
+     * @group deposit
      */
-    public function testDepositFunds_failing() {
+    public function testDepositFunds() {
         // USING 1 USER, 2 BANK ACCOUNTS AND DIRECT DEBIT AUTHORITY
-        $this->markTestSkipped();
         $user = $this->createUser();
+        
+        // add KYC (Know Your Customer) properties
+        $user = PromisePay::User()->update(
+            $user['id'],
+            array(
+                'government_number'      => 123456782,
+                'phone'                  => '+1234567889',
+                'dob'                    => '30/01/1990',
+                'drivers_license_number' => '123456789',
+                'drivers_license_state'  => 'NSW'
+            )
+        );
+        
+        $this->assertNotNull($user);
         
         $bankReceiving = $this->createBankAccount($user['id']);
         $bankSending = $this->createBankAccount($user['id']);
+        
+        $this->assertNotNull($bankReceiving);
+        $this->assertNotNull($bankSending);
         
         $depositAmount = 1000;
         
@@ -95,7 +111,7 @@ class WalletAccountsTest extends \PHPUnit_Framework_TestCase {
             )
         );
         
-        var_dump($user);
+        $this->assertNotNull($bankSendingAuthority);
         
         $deposit = PromisePay::WalletAccounts()->deposit(
             $bankReceiving['id'],
@@ -116,28 +132,6 @@ class WalletAccountsTest extends \PHPUnit_Framework_TestCase {
         $item->setUp();
         
         return $item->makePayment();
-    }
-    
-    /**
-     * @group dev
-     */
-    public function testDepositFunds() {
-        /*
-        extract($this->makePayment());
-        
-        $releasePayment = PromisePay::Item()->releasePayment(
-            $item['id']
-        );
-        
-        $releasePaymentEndpoint = $releasePayment['links']['transactions'];
-        
-        PromisePay::RestClient('get', $releasePaymentEndpoint);
-        $transactions = PromisePay::getDecodedResponse();
-        */
-        
-        $depositFunds = PromisePay::WalletAccounts()->deposit(
-            
-        );
     }
     
     /**

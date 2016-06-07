@@ -187,18 +187,22 @@ class UserTest extends \PHPUnit_Framework_TestCase {
         // We're gonna go for PayPal.
         
         // Update PayPal account data with the id of just created user
-        $this->payPalData['user_id'] = $createUser['id'];
+        $this->payPalData['user_id'] = $UID;
         
         // Create a PayPal Account
         $createPayPalAccount = PromisePay::PayPalAccount()->create($this->payPalData);
         
-        
-        $setDisbursementAccountRequestParams = array(
-            'id'         => $UID,
-            'account_id' => $createPayPalAccount['id']
+        $setDisbursementAccount = PromisePay::User()->setDisbursementAccountV2(
+            $UID,
+            array(
+                'account_id' => $createPayPalAccount['id']
+            )
         );
         
-        $setDisbursementAccount = PromisePay::User()->setDisbursementAccount($UID, $setDisbursementAccountRequestParams);
+        $this->assertEquals(
+            $createPayPalAccount['id'],
+            $setDisbursementAccount['related']['payout_account']
+        );
     }
     
 }

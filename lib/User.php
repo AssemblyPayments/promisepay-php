@@ -63,8 +63,12 @@ class User {
     }
 
     public function setDisbursementAccount($id, $params) {
-        PromisePay::RestClient('post', 'users/' . $id . '/disbursement_account', $params);
+        PromisePay::RestClient('patch', 'users/' . $id . '/disbursement_account', $params);
         
         return PromisePay::getDecodedResponse();
+    }
+    
+    public function setDisbursementAccountV2($id, $params) {
+        return $this->setDisbursementAccount($id, $params)['users'];
     }
 }

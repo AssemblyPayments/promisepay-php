@@ -33,47 +33,39 @@ class WalletAccountsTest extends \PHPUnit_Framework_TestCase {
         return $user;
     }
     
-    /**
-     * @group dev
-     */
+    protected function createBankAccount($uid) {
+        require_once __DIR__ . '/BankAccountTest.php';
+        
+        $bankAccountTest = new BankAccountTest;
+        
+        $bankAccountTest->setUp();
+        $bankAccountTest->setBankAccountUserId($uid);
+        
+        return $bankAccountTest->testCreateBankAccount();
+    }
+    
     public function testShow() {
         $user = $this->createUser();
+        $bank = $this->createBankAccount($user['id']);
         
-        $wallet = PromisePay::WalletAccounts()->show($user['id']);
+        $wallet = PromisePay::WalletAccounts()->show($bank['id']);
+        
+        $this->assertNotNull($wallet);
+        $this->assertEquals($bank['id'], $wallet['id']);
     }
     
-    /**
-     * @group api_broken
-     */
-    public function testDeposit() {
-        $depositAmount = 50; // 50 cents
+    public function testGetUser() {
+        $user = $this->createUser();
+        $bank = $this->createBankAccount($user['id']);
         
-        PromisePay::WalletAccounts()->deposit(
-            $this->userId,
-            array(
-                'account_id' => $this->userId,
-                'amount' => $depositAmount
-            )
+        $walletUser = PromisePay::WalletAccounts()->getUser(
+            $bank['id']
         );
-    }
-    
-    /**
-     * @group failing
-     */
-    public function testGetWalletAccount() {
-        $links = PromisePay::getLinks();
         
-        //print_r($links);
-        
-        //print_r(PromisePay::getDebugData());
-        
-        //$url = 'https://test.api.promisepay.com' . $links['wallet_accounts'];
-        
-        //var_dump($url);
-        
-        //PromisePay::RestClient('get', $url);
-        
-        //$walletAccounts = PromisePay::WalletAccounts()->get($this->userId);
+        $this->assertNotNull($walletUser);
+        $this->assertEquals($user['email'], $walletUser['email']);
+        $this->assertEquals($user['first_name'], $walletUser['first_name']);
+        $this->assertEquals($user['last_name'], $walletUser['last_name']);
     }
 }
 

@@ -22,12 +22,18 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase {
         );
     }
     
+    public function setBankAccountUserId($id) {
+        $this->bankAccountData['user_id'] = $id;
+    }
+    
     public function testCreateBankAccount() {
         $createBankAccount = PromisePay::BankAccount()->create($this->bankAccountData);
         
         $this->assertEquals($this->bankAccountData['account_name'], $createBankAccount['bank']['account_name']);
         $this->assertNotNull($createBankAccount['created_at']);
         $this->assertNotNull($createBankAccount['updated_at']);
+        
+        return $createBankAccount;
     }
 
     public function testGetBankAccount() {

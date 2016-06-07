@@ -12,16 +12,16 @@ class WalletAccounts {
         return $this->get($id);
     }
     
-    public function withdraw($id) {
-        PromisePay::RestClient('get', 'wallet_accounts/' . $id . '/disbursements');
+    public function withdraw($id, $params) {
+        PromisePay::RestClient('post', 'wallet_accounts/' . $id . '/withdraw', $params);
         
         return PromisePay::getDecodedResponse('disbursements');
     }
     
     public function deposit($id, $params) {
-        PromisePay::RestClient('get', 'wallet_accounts/' . $id . '/transactions');
+        PromisePay::RestClient('post', 'wallet_accounts/' . $id . '/deposit', $params);
         
-        return PromisePay::getDecodedResponse('transactions');
+        return PromisePay::getDecodedResponse('disbursements');
     }
     
     public function getUser($id) {

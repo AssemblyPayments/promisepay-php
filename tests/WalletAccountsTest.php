@@ -67,5 +67,16 @@ class WalletAccountsTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($user['first_name'], $walletUser['first_name']);
         $this->assertEquals($user['last_name'], $walletUser['last_name']);
     }
+    /**
+     * @group dev
+     */
+    public function testDepositFunds() {
+        $user = $this->createUser();
+        
+        $bankOne = $this->createBankAccount($user['id']);
+        $bankTwo = $this->createBankAccount($user['id']);
+        
+        var_dump($bankOne, $bankTwo);
+    }
 }
 

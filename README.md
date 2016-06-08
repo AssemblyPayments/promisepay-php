@@ -642,6 +642,12 @@ $user = PromisePay::Transaction()->getUser('TRANSACTION_ID');
 $fee = PromisePay::Transaction()->getFee('TRANSACTION_ID');
 ```
 
+##Addresses
+#####Show Address
+```php
+$address = PromisePay::Address()->get('ADDRESS_ID');
+```
+
 ##Tools
 #####Health check
 ```php

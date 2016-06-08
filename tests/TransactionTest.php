@@ -11,10 +11,14 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
         $this->transactionId = 'b916bd3e-973e-4274-9b10-1ef1db2b855c';
     }
     
-    public function testGetListOfTransactions() {
+    public function testListTransactions() {
         $getList = PromisePay::Transaction()->getList();
         
         $this->assertTrue(is_array($getList));
+        
+        foreach ($getList as $transaction) {
+            $this->assertNotNull($transaction['id']);
+        }
     }
     
     public function testGetById() {
@@ -30,18 +34,40 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue(is_array($getUser));
     }
     
-    /**
-     * @group failing
-     */
-    public function testGetFees() {
-        $this->markTestSkipped();
-        $getFee = PromisePay::Transaction()->getFee($this->transactionId);
+    protected function makePaymentWithFees() {
+        require_once __DIR__ . '/ItemTest.php';
         
-        $this->assertTrue(is_array($getFee));
+        $itemTest = new ItemTest;
+        
+        $itemTest->setUp();
+        
+        $itemTest->itemData['payment_type'] = 4;
+        
+        return $itemTest->makePayment();
     }
     
-    public function testNeedsMoreTests() {
-        $this->markTestIncomplete();
+    public function testGetFees() {
+        extract($this->makePaymentWithFees());
+        
+        $itemTransactions = PromisePay::Item()->getListOfTransactions(
+            $item['id']
+        );
+        
+        $feeTransactionId = null;
+        
+        foreach ($itemTransactions as $transaction) {
+            if ($transaction['type'] != 'fee') continue;
+            
+            $feeTransactionId = $transaction['id'];
+            
+            break;
+        }
+        
+        $getFee = PromisePay::Transaction()->getFee($feeTransactionId);
+        
+        $this->assertTrue(is_array($getFee));
+        $this->assertEquals($getFee['fee_list']['amount'], $fee['amount']);
+        $this->assertEquals($getFee['fee_list']['name'], $fee['name']);
     }
     
 }

@@ -5,7 +5,7 @@ use PromisePay\PromisePay;
 
 class ItemTest extends \PHPUnit_Framework_TestCase {
     
-    protected $GUID,
+    public $GUID,
     $buyerId,
     $sellerId,
     $itemData,
@@ -30,13 +30,13 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         
         // Setup fee data
         $this->feeData = array(
-            'amount'      => 6666,
-            'name'        => 'fee test TEST123TEST123TEST123',
+            'amount'      => 15,
+            'name'        => '15 cents of fee',
             'fee_type_id' => '1',
             'cap'         => '1',
             'max'         => '3',
             'min'         => '2',
-            'to'          => 'buyer'
+            'to'          => 'seller'
         );
         
         $this->userData = array(
@@ -111,6 +111,12 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         return PromisePay::User()->create($this->userData);
     }
     
+    protected function createFee() {
+        return PromisePay::Fee()->create(
+            $this->feeData
+        );
+    }
+    
     protected function createItem() {
         return PromisePay::Item()->create($this->itemData);
     }
@@ -118,7 +124,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
     protected function payForItem($itemId, $buyerCardAccountId) {
         return PromisePay::Item()->makePayment(
             $itemId,
-            array(
+            array
+            (
                 'account_id' => $buyerCardAccountId
             )
         );
@@ -130,6 +137,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $seller = $this->createSeller();
         $buyer = $this->createBuyer();
         $buyerCard = $this->createBuyerCardAccount();
+        
+        $fee = $this->createFee();
+        $this->itemData['fee_ids'] = $fee['id'];
+        
         $item = $this->createItem();
         $payment = $this->payForItem($item['id'], $buyerCard['id']);
         
@@ -138,6 +149,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
             'item' => $item,
             'buyer' => $buyer,
             'buyer_card' => $buyerCard,
+            'fee' => $fee,
             'seller' => $seller
         );
     }
@@ -206,13 +218,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($data['name'], $updateItem['name']);
         $this->assertEquals($data['description'], $updateItem['description']);
     }
-    
     public function testMakePayment() {
         $makePayment = $this->makePayment();
         
         $this->assertEquals($makePayment['payment']['state'], 'payment_deposited');
     }
-    
     public function testListTransactionsForItem() {
         $makePayment = $this->makePayment();
         
@@ -275,7 +285,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($getSeller['last_name'], $makePayment['seller']['last_name']);
         $this->assertEquals($sellerFullName, $makePayment['payment']['seller_name']);
     }
-        
+    /**
+     * @group dev
+     */
     public function testGetWireDetailsForItem() {
         $makePayment = $this->makePayment();
         
@@ -378,7 +390,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertEquals(
             $requestPartialRelease['pending_release_amount'],
-            $halfThePrice
+            $halfThePrice - $this->feeData['amount']
         );
         
         $this->assertEquals(
@@ -398,7 +410,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($releasePayment['state'], 'completed');
         $this->assertEquals(
             $releasePayment['pending_release_amount'],
-            $this->itemData['amount']
+            $this->itemData['amount'] - $this->feeData['amount']
         );
     }
     
@@ -421,7 +433,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertEquals(
             $releasePartialPayment['pending_release_amount'],
-            $halfThePrice
+            $halfThePrice - $this->feeData['amount']
         );
         
         $this->assertEquals(

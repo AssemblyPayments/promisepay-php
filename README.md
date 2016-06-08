@@ -352,6 +352,73 @@ $accounts = PromisePay::User()->getListOfWalletAccounts('USER_ID');
 $account = PromisePay::User()->setDisbursementAccount('ACCOUNT_ID');
 ```
 
+##Wallet Accounts
+#####Show Wallet Account
+```php
+$wallet = PromisePay::WalletAccounts()->show('WALLET_ID');
+```
+#####Withdraw Funds
+```php
+// Withdraw to PayPal
+
+// Authorize bank account to be used as a funding source
+$authority = PromisePay::DirectDebitAuthority()->create(
+    array(
+        'account_id' => 'SOURCE_BANK_ID',
+        'amount'     => 100
+    )
+);
+
+$withdrawal = PromisePay::WalletAccounts()->withdraw(
+    'SOURCE_BANK_ID',
+    array(
+        'account_id' => 'PAYPAY_ACCOUNT_ID',
+        'amount'     => 100
+    )
+);
+
+// Withdraw to Bank Account
+
+// Authorize bank account to be used as a funding source
+$authority = PromisePay::DirectDebitAuthority()->create(
+    array(
+        'account_id' => 'SOURCE_BANK_ID',
+        'amount'     => 100
+    )
+);
+
+$withdrawal = PromisePay::WalletAccounts()->withdraw(
+    'SOURCE_BANK_ID',
+    array(
+        'account_id' => 'TARGET_BANK_ID',
+        'amount'     => 100
+    )
+);
+```
+#####Deposit Funds
+```php
+// Authorize bank account to be used as a funding source
+$authority = PromisePay::DirectDebitAuthority()->create(
+    array(
+        'account_id' => 'SOURCE_BANK_ID',
+        'amount'     => 100
+    )
+);
+
+$deposit = PromisePay::WalletAccounts()->deposit(
+    'TARGET_WALLET_ID',
+    array(
+        'account_id' => 'SOURCE_BANK_ID',
+        'amount'     => 100
+    )
+);
+```
+#####Show Wallet Account User
+```php
+$walletUser = PromisePay::WalletAccounts()->getUser('WALLET_ID');
+```
+
+
 
 ##Card Accounts
 #####Create a card account

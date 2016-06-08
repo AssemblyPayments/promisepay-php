@@ -241,7 +241,10 @@ class WalletAccountsTest extends \PHPUnit_Framework_TestCase {
         );
         
         // WITHDRAW
+        
         // Withdraw to PayPal
+        
+        // Authorize bank account to be used as a funding source
         $authority = PromisePay::DirectDebitAuthority()->create(
             array(
                 'account_id' => 'SOURCE_BANK_ID',
@@ -258,13 +261,20 @@ class WalletAccountsTest extends \PHPUnit_Framework_TestCase {
         );
         
         // Withdraw to Bank Account
+        
+        // Authorize bank account to be used as a funding source
+        $authority = PromisePay::DirectDebitAuthority()->create(
             array(
+                'account_id' => 'SOURCE_BANK_ID',
+                'amount'     => 100
             )
         );
         
         $withdrawal = PromisePay::WalletAccounts()->withdraw(
+            'SOURCE_BANK_ID',
             array(
-                'amount'     => $withdrawalAmount
+                'account_id' => 'TARGET_BANK_ID',
+                'amount'     => 100
             )
         );
     }

@@ -17,9 +17,16 @@ class CompanyTest extends \PHPUnit_Framework_TestCase {
             'country'    => 'AUS'
         );
     }
-    
+    /**
+     * @group failing
+     */
     public function testListOfCompanies() {
-        $companiesList = PromisePay::Company()->getList();
+        $companiesList = PromisePay::Company()->getList(
+            array(
+                'limit' => 2,
+                'offset' => 0
+            )
+        );
         
         $this->assertNotEmpty($companiesList);
         $this->assertTrue(is_array($companiesList));

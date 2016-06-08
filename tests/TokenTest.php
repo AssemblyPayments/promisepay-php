@@ -33,12 +33,13 @@ class TokenTest extends \PHPUnit_Framework_TestCase {
     public function testGenerateCardToken() {
         $tokenType = 'card';
         
-        $params = array(
-            'token_type' => $tokenType,
-            'user_id' => $this->userId
+        $cardToken = PromisePay::Token()->generateCardToken(
+            array
+            (
+                'token_type' => $tokenType,
+                'user_id' => $this->userId
+            )
         );
-        
-        $cardToken = PromisePay::Token()->generateCardToken($params);
         
         $this->assertEquals($cardToken['token_type'], $tokenType);
         $this->assertEquals($cardToken['user_id'], $this->userId);
@@ -57,6 +58,16 @@ class TokenTest extends \PHPUnit_Framework_TestCase {
     public function testRequestSessionToken() {
         $this->markTestSkipped();
         $requestSessionToken = PromisePay::Token()->requestSessionToken($this->tokenData);
+    }
+    
+    private function readmeExamples() {
+        $cardToken = PromisePay::Token()->generateCardToken(
+            array
+            (
+                'token_type' => 'card',
+                'user_id' => 'USER_ID'
+            )
+        );
     }
     
 }

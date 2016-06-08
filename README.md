@@ -503,6 +503,18 @@ $account = PromisePay::PayPalAccount()->delete('PAYPAL_ACCOUNT_ID');
 $user = PromisePay::PayPalAccount()->getUser('PAYPAL_ACCOUNT_ID');
 ```
 
+##Token Auth
+#####Generate Card Token
+```php
+$cardToken = PromisePay::Token()->generateCardToken(
+    array
+    (
+        'token_type' => 'card',
+        'user_id' => 'USER_ID'
+    )
+);
+```
+
 ##Direct Debit Authority
 
 #####Create Direct Debit Authority

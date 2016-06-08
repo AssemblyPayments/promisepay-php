@@ -139,6 +139,10 @@ class WalletAccountsTest extends \PHPUnit_Framework_TestCase {
     public function testWithdrawalToPayPal() {
         extract($this->testDeposit());
         
+        // in testDeposit(), money was being sent to receiving bank.
+        // now, we're going to withdraw that money to a PayPal account
+        $bankWithdrawingFrom = $bankReceiving;
+        
         $withdrawalAmount = 100;
         
         $payPalAccount = PromisePay::PayPalAccount()->create(
@@ -150,13 +154,13 @@ class WalletAccountsTest extends \PHPUnit_Framework_TestCase {
         
         $bankWithdrawingFromAuthority = PromisePay::DirectDebitAuthority()->create(
             array(
-                'account_id' => $bankReceiving['id'],
+                'account_id' => $bankWithdrawingFrom['id'],
                 'amount'     => $withdrawalAmount
             )
         );
         
         $withdrawal = PromisePay::WalletAccounts()->withdraw(
-            $bankReceiving['id'],
+            $bankWithdrawingFrom['id'],
             array(
                 'account_id' => $payPalAccount['id'],
                 'amount'     => $withdrawalAmount
@@ -166,12 +170,14 @@ class WalletAccountsTest extends \PHPUnit_Framework_TestCase {
         $this->assertNotNull($withdrawal);
         $this->assertEquals($withdrawal['amount'], $withdrawalAmount);
         $this->assertEquals(
-            trim($withdrawal['to']), // API currently returns "PayPal Disbursement "
+            trim($withdrawal['to']), // trimming because API currently returns "PayPal Disbursement "
             'PayPal Disbursement'
         );
         $this->assertEquals($withdrawal['paypal_email'], $user['email']);
     }
-    
+    /**
+     * @group dev
+     */
     public function testWithdrawToBankAccount() {
         extract($this->testDeposit());
         
@@ -189,11 +195,10 @@ class WalletAccountsTest extends \PHPUnit_Framework_TestCase {
             )
         );
         
-        
         $withdrawal = PromisePay::WalletAccounts()->withdraw(
-            $bankWithdrawingTo['id'],
+            $bankWithdrawingFrom['id'],
             array(
-                'account_id' => $bankWithdrawingFrom['id'],
+                'account_id' => $bankWithdrawingTo['id'],
                 'amount'     => $withdrawalAmount
             )
         );
@@ -209,5 +214,58 @@ class WalletAccountsTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($withdrawal['bank_account_name'], $bankWithdrawingTo['bank']['account_name']);
         $this->assertEquals($withdrawal['bank_account_number'], $bankWithdrawingTo['bank']['account_number']);
         $this->assertEquals($withdrawal['bank_routing_number'], $bankWithdrawingTo['bank']['routing_number']);
+    }
+    
+    private function readmeExamples() {
+        // SHOW
+        $wallet = PromisePay::WalletAccounts()->show('WALLET_ID');
+        
+        // SHOW ACCOUNT USER
+        $walletUser = PromisePay::WalletAccounts()->getUser('WALLET_ID');
+        
+        // DEPOSIT
+        // Authorize bank account to be used as a funding source
+        $authority = PromisePay::DirectDebitAuthority()->create(
+            array(
+                'account_id' => 'SOURCE_BANK_ID',
+                'amount'     => 100
+            )
+        );
+        
+        $deposit = PromisePay::WalletAccounts()->deposit(
+            'TARGET_WALLET_ID',
+            array(
+                'account_id' => 'SOURCE_BANK_ID',
+                'amount'     => 100
+            )
+        );
+        
+        // WITHDRAW
+        // Withdraw to PayPal
+        $authority = PromisePay::DirectDebitAuthority()->create(
+            array(
+                'account_id' => 'SOURCE_BANK_ID',
+                'amount'     => 100
+            )
+        );
+        
+        $withdrawal = PromisePay::WalletAccounts()->withdraw(
+            'SOURCE_BANK_ID',
+            array(
+                'account_id' => 'PAYPAY_ACCOUNT_ID',
+                'amount'     => 100
+            )
+        );
+        
+        // Withdraw to Bank Account
+            array(
+            )
+        );
+        
+        $withdrawal = PromisePay::WalletAccounts()->withdraw(
+            array(
+                'amount'     => $withdrawalAmount
+            )
+        );
     }
 }

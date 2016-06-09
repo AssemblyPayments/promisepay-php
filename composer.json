@@ -1,5 +1,5 @@
 {
-    "name": "promisepay/promisepay-php",
+    "name": "NinoSkopac/promisepay-php",
     "description": "PHP SDK for the PromisePay API",
     "keywords": [
         "promisepay",
@@ -22,10 +22,11 @@
         "satooshi/php-coveralls": "~0.6.1",
         "squizlabs/php_codesniffer": "~2.0"
     },
+    
     "repositories":[
         {
             "type": "git",
-            "url":"https://github.com/PromisePay/promisepay-php"
+            "url":"https://github.com/NinoSkopac/promisepay-php"
         }
     ],
 

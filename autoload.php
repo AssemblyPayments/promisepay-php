@@ -26,6 +26,21 @@ spl_autoload_register(function ($class) {
     }
 });
 
-require_once __DIR__ . '/lib/Vendors/Httpful/Bootstrap.php';
-require_once __DIR__ . '/lib/Vendors/Httpful/Http.php';
-require_once __DIR__ . '/lib/Vendors/Httpful/Request.php';
+// Was the package installed through Composer?
+$composerAutoloadFile = __DIR__ . '/../../../autoload.php';
+$vendorFiles = array(
+    __DIR__ . '/lib/Vendors/Httpful/Bootstrap.php',
+    __DIR__ . '/lib/Vendors/Httpful/Http.php',
+    __DIR__ . '/lib/Vendors/Httpful/Request.php'
+);
+
+// Prefer Composer installs
+if (!is_file($composerAutoloadFile) || !class_exists('\Httpful\Request')) {
+    foreach ($vendorFiles as $file) {
+        require_once $file;
+    }
+    
+    var_dump("NOT USING COMPOSER AUTOLOAD");
+} else {
+    var_dump("USING COMPOSER AUTOLOAD");
+}

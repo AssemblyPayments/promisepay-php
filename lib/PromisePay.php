@@ -52,18 +52,18 @@ class PromisePay {
     /**
      * Static method invoker.
      *
-     * @param string $neededClassName
-     * @param mixed $passableArgs
+     * @param string $class
+     * @param mixed $args
      * @throws Exception\NotFound
      * @return object
      */
-    public static function __callStatic($neededClassName, $autoPassedArgs) {
-        $neededClassName = __NAMESPACE__ . '\\' . $neededClassName;
+    public static function __callStatic($class, $args) {
+        $class = __NAMESPACE__ . '\\' . $class;
         
-        if (class_exists($neededClassName)) {
-            return new $neededClassName;
+        if (class_exists($class)) {
+            return new $class;
         } else {
-            throw new Exception\NotFound("Class $neededClassName not found");
+            throw new Exception\NotFound("Repository $class not found");
         }
     }
 

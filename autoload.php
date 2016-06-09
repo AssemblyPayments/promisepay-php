@@ -36,11 +36,21 @@ $vendorFiles = array(
 
 // Prefer Composer installs
 if (!is_file($composerAutoloadFile) || !class_exists('\Httpful\Request')) {
+    var_dump(
+        "NOT USING COMPOSER AUTOLOAD",
+        $composerAutoloadFile,
+        is_file($composerAutoloadFile),
+        class_exists('\Httpful\Request')
+    );
+    
     foreach ($vendorFiles as $file) {
         require_once $file;
     }
-    
-    var_dump("NOT USING COMPOSER AUTOLOAD");
 } else {
-    var_dump("USING COMPOSER AUTOLOAD");
+    var_dump(
+        "NOT USING COMPOSER AUTOLOAD",
+        $composerAutoloadFile,
+        is_file($composerAutoloadFile),
+        class_exists('\Httpful\Request')
+    );
 }

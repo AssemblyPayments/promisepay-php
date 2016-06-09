@@ -166,12 +166,12 @@ class PromisePay {
     }
     
     protected static function buildErrorMessage($response) {
-        $jsonReponse = json_decode($response->raw_body);
+        $jsonResponse = json_decode($response->raw_body);
         
-        $message = isset($jsonReponse->message) ? $jsonReponse->message : null;
+        $message = isset($jsonResponse->message) ? $jsonResponse->message : null;
         
-        if (isset($jsonReponse->errors)) {
-            foreach($jsonReponse->errors as $attribute => $content) {
+        if (isset($jsonResponse->errors)) {
+            foreach($jsonResponse->errors as $attribute => $content) {
                 if (is_array($content)) {
                     $content = implode(" ", $content);
                 }

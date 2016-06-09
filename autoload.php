@@ -27,7 +27,7 @@ spl_autoload_register(function ($class) {
 });
 
 // Was the package installed through Composer?
-$composerAutoloadFile = __DIR__ . '/../../../autoload.php';
+$composerAutoloadFile = __DIR__ . '/../../autoload.php';
 $vendorFiles = array(
     __DIR__ . '/lib/Vendors/Httpful/Bootstrap.php',
     __DIR__ . '/lib/Vendors/Httpful/Http.php',

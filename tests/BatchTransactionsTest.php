@@ -14,16 +14,4 @@ class BatchTransactionsTest extends \PHPUnit_Framework_TestCase {
         $this->itemTest->setUp();
     }
     
-    public function testListTransactions() {
-        $payment = $this->itemTest->makePayment();
-        
-        $transactions = PromisePay::BatchTransactions()->listTransactions();
-        
-        $this->markTestIncomplete();
-    }
-    
-    public function testShowTransactions() {
-        $this->markTestIncomplete();
-    }
-    
 }

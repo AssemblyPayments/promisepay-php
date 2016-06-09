@@ -7,12 +7,6 @@ class Token {
         
         return PromisePay::getDecodedResponse('token_auth');
     }
-    
-    public function requestToken() {
-        PromisePay::RestClient('get', 'request_token/');
-        
-        return PromisePay::getDecodedResponse();
-    }
 
     public function requestSessionToken($params) {
         PromisePay::RestClient('get', 'request_session_token/', $params);

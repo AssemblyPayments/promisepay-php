@@ -80,29 +80,6 @@ $token = PromisePay::Token()->requestSessionToken(array(
 ));
 ```
 
-#####Example 2 - Request session token
-The below example shows the request for a marketplace that passes the Item and User IDs.
-
-```php
-$token = PromisePay::Token()->requestSessionToken(array(
-	'current_user_id'        => 'seller1234',
-	'item_name'              => 'Test Item',
-	'amount'                 => '2500',
-	'seller_lastname'        => 'Seller',
-	'seller_firstname'       => 'Sally',
-	'buyer_lastname'         => 'Buyer',
-	'buyer_firstname'        => 'Bobby',
-	'buyer_country'          => 'AUS',
-	'seller_country'         => 'USA',
-	'seller_email'           => 'sally.seller@promisepay.com',
-	'buyer_email'            => 'bobby.buyer@promisepay.com',
-	'external_item_id'       => 'TestItemId1234',
-	'external_seller_id'     => 'seller1234',
-	'external_buyer_id'      => 'buyer1234',
-	'fee_ids'                => '',
-	'payment_type_id'        => '2'
-));
-```
 ##Items
 
 #####Create an item

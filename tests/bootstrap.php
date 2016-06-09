@@ -13,6 +13,12 @@ require_once(__DIR__ . '/GUID.php');
 // Project files autoloader
 require __DIR__ . '/../autoload.php';
 
+$composerAutoloadFile = __DIR__ . '/../../../autoload.php';
+
+if (is_file($composerAutoloadFile)) {
+    require_once $composerAutoloadFile;
+}
+
 // Setup testing environment
 PromisePay::Configuration()->environment('prelive');
 PromisePay::Configuration()->login('idsidorov@gmail.com');

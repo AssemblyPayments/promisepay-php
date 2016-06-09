@@ -80,29 +80,6 @@ $token = PromisePay::Token()->requestSessionToken(array(
 ));
 ```
 
-#####Example 2 - Request session token
-The below example shows the request for a marketplace that passes the Item and User IDs.
-
-```php
-$token = PromisePay::Token()->requestSessionToken(array(
-	'current_user_id'        => 'seller1234',
-	'item_name'              => 'Test Item',
-	'amount'                 => '2500',
-	'seller_lastname'        => 'Seller',
-	'seller_firstname'       => 'Sally',
-	'buyer_lastname'         => 'Buyer',
-	'buyer_firstname'        => 'Bobby',
-	'buyer_country'          => 'AUS',
-	'seller_country'         => 'USA',
-	'seller_email'           => 'sally.seller@promisepay.com',
-	'buyer_email'            => 'bobby.buyer@promisepay.com',
-	'external_item_id'       => 'TestItemId1234',
-	'external_seller_id'     => 'seller1234',
-	'external_buyer_id'      => 'buyer1234',
-	'fee_ids'                => '',
-	'payment_type_id'        => '2'
-));
-```
 ##Items
 
 #####Create an item
@@ -126,9 +103,9 @@ $item = PromisePay::Item()->get('ITEM_ID');
 #####Get a list of items
 ```php
 $items = PromisePay::Item()->getList(array(
-            'limit' => 20,
-            'offset' => 0
-        ));
+	'limit' => 20,
+	'offset' => 0
+));
 ```
 #####Update an item
 ```php
@@ -184,73 +161,6 @@ $bPayDetails = PromisePay::Item()->getBPayDetails('ITEM_ID');
 ```
 
 
-##Users
-
-#####Create a user
-```php
-$user = PromisePay::User()->create(array(
-    'id'            => 'USER_ID',
-    'first_name'    => 'UserCreateTest',
-    'last_name'     => 'UserLastname',
-    'email'         => 'email@google.com',
-    'mobile'        => '5455400012',
-    'address_line1' => 'a_line1',
-    'address_line2' => 'a_line2',
-    'state'         => 'state',
-    'city'          => 'city',
-    'zip'           => '90210',
-    'country'       => 'AUS'
-));
-```
-#####Get a user
-```php
-$user = PromisePay::User()->get('USER_ID');
-```
-#####Get a list of users
-```php
-$users = PromisePay::User()->getList(array(
-            'limit' => 20,
-            'offset' => 0
-        ));
-```
-#####Update a user
-```php
-$user = PromisePay::User()->update('USER_ID', array(
-    'id'            => 'USER_ID',
-    'first_name'    => 'UserCreateTest',
-    'last_name'     => 'UserLastname',
-    'email'         => 'email@google.com',
-    'mobile'        => '5455400012',
-    'address_line1' => 'a_line1',
-    'address_line2' => 'a_line2',
-    'state'         => 'state',
-    'city'          => 'city',
-    'zip'           => '90210',
-    'country'       => 'AUS'
-));
-```
-#####Get a user's card accounts
-```php
-$accounts = PromisePay::User()->getListOfCardAccounts('USER_ID');
-```
-#####Get a user's PayPal accounts
-```php
-$accounts = PromisePay::User()->getListOfPayPalAccounts('USER_ID');
-```
-
-#####Get a user's bank accounts
-```php
-$accounts = PromisePay::User()->getListOfBankAccounts('USER_ID');
-```
-#####Get a user's items
-```php
-$items = PromisePay::User()->getListOfItems('USER_ID');
-```
-#####Set a user's disbursement account
-```php
-$account = PromisePay::User()->setDisbursementAccount('ACCOUNT_ID');
-```
-
 ##Item Actions
 
 #####Make payment
@@ -292,16 +202,200 @@ $item = PromisePay::Item()->revertWire('ITEM_ID');
 ```php
 $item = PromisePay::Item()->requestRefund('ITEM_ID', array(
 	'refund_amount' => 1000,
-	'refund_message' => 'Refund please.'
+	'refund_message' => 'Frame already constructed.'
 ));
 ```
 #####Refund
 ```php
 $item = PromisePay::Item()->refund('ITEM_ID', array(
 	'refund_amount' => 1000,
-	'refund_message' => 'Refund please.'
+	'refund_message' => 'Stable deck refund.'
 ));
 ```
+#####Decline refund
+```php
+$declineRefund = PromisePay::Item()->declineRefund(
+    'ITEM_ID'
+);
+```
+#####Raise Dispute
+```php
+$raiseDispute = PromisePay::Item()->raiseDispute(
+    'ITEM_ID',
+    'BUYER_ID'
+);
+```
+#####Request Dispute Resolution
+```php
+$requestDisputeResolution = PromisePay::Item()->requestDisputeResolution(
+    'ITEM_ID'
+);
+```
+#####Resolve Dispute
+```php
+$resolveDispute = PromisePay::Item()->resolveDispute(
+    'ITEM_ID'
+);
+```
+#####Escalate Dispute
+```php
+$resolveDispute = PromisePay::Item()->escalateDispute(
+    'ITEM_ID'
+);
+```
+#####Request Tax Invoice
+```php
+$requestTaxInvoice = PromisePay::Item()->requestTaxInvoice(
+    'ITEM_ID'
+);
+```
+#####Send Tax Invoice
+```php
+$sendTaxInvoice = PromisePay::Item()->sendTaxInvoice(
+    'ITEM_ID'
+);
+```
+
+
+
+##Users
+
+#####Create a user
+```php
+$user = PromisePay::User()->create(array(
+    'id'            => 'USER_ID',
+    'first_name'    => 'UserCreateTest',
+    'last_name'     => 'UserLastname',
+    'email'         => 'email@google.com',
+    'mobile'        => '5455400012',
+    'address_line1' => 'a_line1',
+    'address_line2' => 'a_line2',
+    'state'         => 'state',
+    'city'          => 'city',
+    'zip'           => '90210',
+    'country'       => 'AUS'
+));
+```
+#####Get a user
+```php
+$user = PromisePay::User()->get('USER_ID');
+```
+#####Get a list of users
+```php
+$users = PromisePay::User()->getList(array(
+	'limit' => 20,
+	'offset' => 0
+));
+```
+#####Update a user
+```php
+$user = PromisePay::User()->update('USER_ID', array(
+    'id'            => 'USER_ID',
+    'first_name'    => 'UserCreateTest',
+    'last_name'     => 'UserLastname',
+    'email'         => 'email@google.com',
+    'mobile'        => '5455400012',
+    'address_line1' => 'a_line1',
+    'address_line2' => 'a_line2',
+    'state'         => 'state',
+    'city'          => 'city',
+    'zip'           => '90210',
+    'country'       => 'AUS'
+));
+```
+#####Get a user's card accounts
+```php
+$accounts = PromisePay::User()->getListOfCardAccounts('USER_ID');
+```
+#####Get a user's PayPal accounts
+```php
+$accounts = PromisePay::User()->getListOfPayPalAccounts('USER_ID');
+```
+
+#####Get a user's bank accounts
+```php
+$accounts = PromisePay::User()->getListOfBankAccounts('USER_ID');
+```
+#####Get a user's items
+```php
+$items = PromisePay::User()->getListOfItems('USER_ID');
+```
+#####Show User Wallet Account
+```php
+$accounts = PromisePay::User()->getListOfWalletAccounts('USER_ID');
+```
+#####Set a user's disbursement account
+```php
+$account = PromisePay::User()->setDisbursementAccount('ACCOUNT_ID');
+```
+
+##Wallet Accounts
+#####Show Wallet Account
+```php
+$wallet = PromisePay::WalletAccounts()->show('WALLET_ID');
+```
+#####Withdraw Funds
+```php
+// Withdraw to PayPal
+
+// Authorize bank account to be used as a funding source
+$authority = PromisePay::DirectDebitAuthority()->create(
+    array(
+        'account_id' => 'SOURCE_BANK_ID',
+        'amount'     => 100
+    )
+);
+
+$withdrawal = PromisePay::WalletAccounts()->withdraw(
+    'SOURCE_BANK_ID',
+    array(
+        'account_id' => 'PAYPAY_ACCOUNT_ID',
+        'amount'     => 100
+    )
+);
+
+// Withdraw to Bank Account
+
+// Authorize bank account to be used as a funding source
+$authority = PromisePay::DirectDebitAuthority()->create(
+    array(
+        'account_id' => 'SOURCE_BANK_ID',
+        'amount'     => 100
+    )
+);
+
+$withdrawal = PromisePay::WalletAccounts()->withdraw(
+    'SOURCE_BANK_ID',
+    array(
+        'account_id' => 'TARGET_BANK_ID',
+        'amount'     => 100
+    )
+);
+```
+#####Deposit Funds
+```php
+// Authorize bank account to be used as a funding source
+$authority = PromisePay::DirectDebitAuthority()->create(
+    array(
+        'account_id' => 'SOURCE_BANK_ID',
+        'amount'     => 100
+    )
+);
+
+$deposit = PromisePay::WalletAccounts()->deposit(
+    'TARGET_WALLET_ID',
+    array(
+        'account_id' => 'SOURCE_BANK_ID',
+        'amount'     => 100
+    )
+);
+```
+#####Show Wallet Account User
+```php
+$walletUser = PromisePay::WalletAccounts()->getUser('WALLET_ID');
+```
+
+
 
 ##Card Accounts
 #####Create a card account
@@ -358,6 +452,12 @@ $account = PromisePay::BankAccount()->delete('BANK_ACCOUNT_ID');
 ```php
 $user = PromisePay::BankAccount()->getUser('BANK_ACCOUNT_ID');
 ```
+#####Validate Routing Number
+```php
+$validateRoutingNumber = PromisePay::BankAccount()->validateRoutingNumber(
+    'ROUTING_NUMBER'
+);
+```
 
 ##PayPal Accounts
 #####Create a PayPal account
@@ -380,6 +480,56 @@ $account = PromisePay::PayPalAccount()->delete('PAYPAL_ACCOUNT_ID');
 $user = PromisePay::PayPalAccount()->getUser('PAYPAL_ACCOUNT_ID');
 ```
 
+##Token Auth
+#####Generate Card Token
+```php
+$cardToken = PromisePay::Token()->generateCardToken(
+    array
+    (
+        'token_type' => 'card',
+        'user_id' => 'USER_ID'
+    )
+);
+```
+
+##Direct Debit Authority
+
+#####Create Direct Debit Authority
+```php
+$directDebitAuthority = PromisePay::DirectDebitAuthority()->create(
+    array
+    (
+        'account_id' => 'ACCOUNT_ID',
+        'amount'     => 100
+    )
+);
+```
+
+#####List Direct Debit Authority
+```php
+$getList = PromisePay::DirectDebitAuthority()->getList(
+    array
+    (
+        'account_id' => 'BANK_ACCOUNT_ID'
+    )
+);
+```
+
+#####Show Direct Debit Authority
+```php
+$directDebitAuthority = PromisePay::DirectDebitAuthority()->show(
+    'DIRECT_DEBIT_AUTHORITY_ID'
+);
+```
+
+#####Delete Direct Debit Authority
+```php
+$deleteDirectDebitAuthority = PromisePay::DirectDebitAuthority()->delete(
+    'DIRECT_DEBIT_AUTHORITY_ID'
+);
+```
+
+
 ##Companies
 
 #####Create a company
@@ -400,9 +550,9 @@ $company = PromisePay::Company()->get('COMPANY_ID');
 #####Get a list of companies
 ```php
 $companys = PromisePay::Company()->getList(array(
-            'limit' => 20,
-            'offset' => 0
-        ));
+	'limit' => 20,
+	'offset' => 0
+));
 ```
 
 #####Update a company
@@ -427,9 +577,9 @@ $company = PromisePay::Company()->update('COMPANY_ID', array(
 #####Get a list of fees
 ```php
 $fees = PromisePay::Fee()->getList(array(
-            'limit' => 20,
-            'offset' => 0
-        ));
+	'limit' => 20,
+	'offset' => 0
+));
 ```
 #####Get a fee
 ```php
@@ -452,9 +602,9 @@ $fee = PromisePay::Fee()->create(array(
 #####Get a list of transactions
 ```php
 $transactions = PromisePay::Transaction()->getList(array(
-            'limit' => 20,
-            'offset' => 0
-        ));
+	'limit' => 20,
+	'offset' => 0
+));
 ```
 #####Get a transaction
 ```php
@@ -467,6 +617,18 @@ $user = PromisePay::Transaction()->getUser('TRANSACTION_ID');
 #####Get a transaction's fee
 ```php
 $fee = PromisePay::Transaction()->getFee('TRANSACTION_ID');
+```
+
+##Addresses
+#####Show Address
+```php
+$address = PromisePay::Address()->get('ADDRESS_ID');
+```
+
+##Tools
+#####Health check
+```php
+$healthStatus = PromisePay::Tools()->getHealth();
 ```
 
 #4. Contributing

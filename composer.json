@@ -22,11 +22,11 @@
         "satooshi/php-coveralls": "~0.6.1",
         "squizlabs/php_codesniffer": "~2.0"
     },
+    
     "repositories":[
         {
             "type": "git",
-            "url":"https://github.com/PromisePay/promisepay-php"
-
+            "url":"https://github.com/promisepay/promisepay-php"
         }
     ],
 

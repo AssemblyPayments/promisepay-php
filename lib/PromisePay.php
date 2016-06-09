@@ -186,9 +186,7 @@ class PromisePay {
                     PHP_EOL
                 );
             }
-        }
-        
-        if (!empty($message)) {
+            
             return sprintf(
                 '%sResponse Code: %d%sError Message: %s%s',
                 PHP_EOL,
@@ -198,6 +196,8 @@ class PromisePay {
                 PHP_EOL
             );
         }
+        
+        return null;
     }
     
     public static function getArrayValuesByKeyRecursive($needle, array $array) {

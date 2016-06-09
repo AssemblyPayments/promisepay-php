@@ -2,20 +2,20 @@
 namespace PromisePay\Tests;
 
 use PromisePay\PromisePay;
-use PromisePay\Enum\FeeType;
 
 class FeeTest extends \PHPUnit_Framework_TestCase {
     
-    protected $enum, $GUID, $feeData;
+    protected $enum,
+    $GUID,
+    $feeData;
     
     public function setUp() {
-        $this->enum = new FeeType;
         $this->GUID = GUID();
         
         $this->feeData = array(
             'amount'      => 1000,
             'name'        => 'DELIVERY FEE',
-            'fee_type_id' => (string) $this->enum->Fixed,
+            'fee_type_id' =>  1,
             'cap'         => '1',
             'max'         => '3',
             'min'         => '2',
@@ -29,7 +29,7 @@ class FeeTest extends \PHPUnit_Framework_TestCase {
         $this->assertNotNull($createFee['id']);
         $this->assertEquals($createFee['name'], $this->feeData['name']);
     }
-
+    
     public function testGetFeeById() {
         $createFee = PromisePay::Fee()->create($this->feeData);
         
@@ -42,15 +42,36 @@ class FeeTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($createFee['id'], $getFeeById['id']);
         $this->assertEquals($createFee['name'], $getFeeById['name']);
     }
-
+    
     public function testList() {
-        
         $createFee = PromisePay::Fee()->create($this->feeData);
         
-        $getList = PromisePay::Fee()->getList(200);
+        $limit = 200;
+        $offset = 0;
         
-        //var_dump($createFee, $getList);
-        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
+        while (true) {
+            $getList = PromisePay::Fee()->getList(array(
+                'limit' => $limit,
+                'offset' => $offset
+            ));
+            
+            foreach ($getList as $fee) {
+                if ($fee['id'] == $createFee['id']) {
+                    $feeFound = true;
+                    
+                    break 2;
+                }
+            }
+            
+            $getListCount = count($getList);
+            
+            if ($getListCount < $limit) {
+                break;
+            }
+            
+            $offset += $getListCount;
+        }
+        
+        $this->assertTrue($feeFound);
     }
-
 }

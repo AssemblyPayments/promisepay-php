@@ -7,4 +7,10 @@ class Charges {
         
         return PromisePay::getDecodedResponse('charges');
     }
+    
+    public function getList($params = null) {
+        PromisePay::RestClient('get', 'charges', $params);
+        
+        return PromisePay::getDecodedResponse('charges');
+    }
 }

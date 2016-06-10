@@ -82,6 +82,28 @@ class ChargesTest extends \PHPUnit_Framework_TestCase {
             $createCharge['buyer_email'],
             $this->userData['email']
         );
+        
+        return $createCharge;
+    }
+    
+    public function testGetList() {
+        $createCharge = $this->testCreate();
+        
+        $getList = PromisePay::Charges()->getList();
+        
+        $this->assertNotNull($getList);
+        
+        $chargeFound = false;
+        
+        foreach ($getList as $charge) {
+            if ($charge['id'] == $createCharge['id']) {
+                $chargeFound = true;
+                
+                break;
+            }
+        }
+        
+        $this->assertTrue($chargeFound);
     }
     
 }

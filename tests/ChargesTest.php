@@ -128,15 +128,28 @@ class ChargesTest extends \PHPUnit_Framework_TestCase {
             $this->userData['email']
         );
     }
-    /**
-     * @group failing
-     */
+    
     public function testShowBuyer() {
         $charge = $this->testCreate();
         
-        $user = PromisePay::Charges()->showBuyer($charge['id']);
+        $buyer = PromisePay::Charges()->showBuyer($charge['id']);
         
-        var_dump($user); 
+        $this->assertNotNull($buyer);
+        
+        $this->assertEquals(
+            $buyer['email'],
+            $this->userData['email']
+        );
+        
+        $this->assertEquals(
+            $buyer['first_name'],
+            $this->userData['first_name']
+        );
+        
+        $this->assertEquals(
+            $buyer['last_name'],
+            $this->userData['last_name']
+        );
     }
     
     public function testShowStatus() {

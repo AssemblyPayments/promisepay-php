@@ -25,7 +25,7 @@ class Charges {
     }
     
     public function showBuyer($id) {
-        PromisePay::RestClient('get', 'charges/' . $id . '/buyer');
+        PromisePay::RestClient('get', 'charges/' . $id . '/buyers');
         
         return PromisePay::getDecodedResponse('users');
     }

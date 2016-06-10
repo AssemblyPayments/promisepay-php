@@ -148,6 +148,10 @@ class PromisePay {
                     
                     break;
                 case 404:
+                    if (empty($errors)) {
+                        $errors = "$url wasn't found.";
+                    }
+                    
                     throw new Exception\NotFound($errors);
                     
                     break;

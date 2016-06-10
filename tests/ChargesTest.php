@@ -106,4 +106,27 @@ class ChargesTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue($chargeFound);
     }
     
+    public function testShow() {
+        $charge = $this->testCreate();
+        
+        $showCharge = PromisePay::Charges()->show($charge['id']);
+        
+        $this->assertNotNull($showCharge);
+        
+        $this->assertEquals(
+            $showCharge['buyer_zip'],
+            $this->chargeData['zip']
+        );
+        
+        $this->assertEquals(
+            $showCharge['amount'],
+            $this->chargeData['amount']
+        );
+        
+        $this->assertEquals(
+            $showCharge['buyer_email'],
+            $this->userData['email']
+        );
+    }
+    
 }

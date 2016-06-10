@@ -13,4 +13,14 @@ class Charges {
         
         return PromisePay::getDecodedResponse('charges');
     }
+    
+    public function get($id) {
+        PromisePay::RestClient('get', 'charges/' . $id);
+        
+        return PromisePay::getDecodedResponse('charges');
+    }
+    
+    public function show($id) {
+        return $this->get($id);
+    }
 }

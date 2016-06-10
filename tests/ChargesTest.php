@@ -11,7 +11,8 @@ class ChargesTest extends \PHPUnit_Framework_TestCase {
     $userData;
     
     protected function setUp() {
-        $this->chargeData = array(
+        $this->chargeData = array
+        (
             'account_id' => null,
             'amount' => 100,
             'email' => null,
@@ -160,6 +161,34 @@ class ChargesTest extends \PHPUnit_Framework_TestCase {
         $this->assertNotNull($status);
         $this->assertNotNull($status['state']);
         $this->assertEquals($status['id'], $charge['id']);
+    }
+    
+    private function readmeExamples() {
+        // CREATE
+        $createCharge = PromisePay::Charges()->create(
+            array
+            (
+                'account_id' => 'CARD_OR_BANK_ACCOUNT_ID',
+                'amount' => 100,
+                'email' => 'charged.user@email.com',
+                'zip' => 90210,
+                'country' => 'AUS',
+                'device_id' => 'DEVICE_ID',
+                'ip_address' => '49.229.186.182'
+            )
+        );
+        
+        // GET LIST
+        $getList = PromisePay::Charges()->getList();
+        
+        // SHOW CHARGE
+        $charge = PromisePay::Charges()->show('CHARGE_ID');
+        
+        // SHOW BUYER
+        $buyer = PromisePay::Charges()->showBuyer('CHARGE_ID');
+        
+        // SHOW STATUS
+        $status = PromisePay::Charges()->showStatus('CHARGE_ID');
     }
     
 }

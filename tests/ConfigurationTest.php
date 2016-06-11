@@ -1,9 +1,6 @@
 <?php
 namespace PromisePay\Tests;
 
-use PromisePay\Configuration;
-use PromisePay\Exception;
-
 /**
  * Class Configuration
  *

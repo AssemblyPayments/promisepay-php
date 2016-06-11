@@ -1,10 +1,16 @@
 <?php
 namespace PromisePay\Tests;
+
 use PromisePay\PromisePay;
 
 class UserTest extends \PHPUnit_Framework_TestCase {
     
-    protected $GUID, $userData, $itemData, $bankAccountData, $cardAccountData, $payPalData;
+    protected $GUID,
+    $userData,
+    $itemData,
+    $bankAccountData,
+    $cardAccountData,
+    $payPalData;
     
     public function setUp() {
         $this->GUID = GUID();
@@ -41,7 +47,7 @@ class UserTest extends \PHPUnit_Framework_TestCase {
             "active"         => 'true',
             "bank_name"      => 'Bank of America',
             "account_name"   => 'John Doe',
-            "routing_number" => '12344455512',
+            "routing_number" => '122235821',
             "account_number" => '123334242134',
             "account_type"   => 'savings',
             "holder_type"    => 'personal',
@@ -129,7 +135,9 @@ class UserTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertEquals($this->bankAccountData['bank_name'], $userBankAccounts['bank']['bank_name']);
     }
-    
+    /**
+     * @group failing
+     */
     public function testListUserCardAccount() {
         // First, create the user
         $createUser = PromisePay::User()->create($this->userData);
@@ -145,7 +153,6 @@ class UserTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertEquals($this->cardAccountData['full_name'], $userCardAccounts['card']['full_name']);
     }
-    
     
     public function testListUserPayPalAccountSuccess() {
         // First, create the user
@@ -163,6 +170,13 @@ class UserTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($this->payPalData['paypal_email'], $userPayPalAccounts['paypal']['email']);
     }
     
+    public function testGetWalletAccounts() {
+        $accounts = PromisePay::User()->getListOfWalletAccounts($this->buyerId);
+        
+        $this->assertTrue(is_array($accounts));
+        $this->assertNotEmpty($accounts['id']);
+    }
+    
     public function testSetDisbursementAccount() {
         // First, create the user
         $createUser = PromisePay::User()->create($this->userData);
@@ -174,18 +188,22 @@ class UserTest extends \PHPUnit_Framework_TestCase {
         // We're gonna go for PayPal.
         
         // Update PayPal account data with the id of just created user
-        $this->payPalData['user_id'] = $createUser['id'];
+        $this->payPalData['user_id'] = $UID;
         
         // Create a PayPal Account
         $createPayPalAccount = PromisePay::PayPalAccount()->create($this->payPalData);
         
-        
-        $setDisbursementAccountRequestParams = array(
-            'id'         => $UID,
-            'account_id' => $createPayPalAccount['id']
+        $setDisbursementAccount = PromisePay::User()->setDisbursementAccountV2(
+            $UID,
+            array(
+                'account_id' => $createPayPalAccount['id']
+            )
         );
         
-        $setDisbursementAccount = PromisePay::User()->setDisbursementAccount($UID, $setDisbursementAccountRequestParams);
+        $this->assertEquals(
+            $createPayPalAccount['id'],
+            $setDisbursementAccount['related']['payout_account']
+        );
     }
     
 }

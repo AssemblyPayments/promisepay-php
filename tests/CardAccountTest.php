@@ -1,5 +1,6 @@
 <?php
 namespace PromisePay\Tests;
+
 use Promisepay\PromisePay;
 
 class CardAccountTest extends \PHPUnit_Framework_TestCase {
@@ -73,9 +74,9 @@ class CardAccountTest extends \PHPUnit_Framework_TestCase {
         // Create the Card Account
         $createAccount = PromisePay::CardAccount()->create($this->cardAccountData);
         
-        $getList = PromisePay::CardAccount()->getUser($createAccount['id']);
+        $user = PromisePay::CardAccount()->getUser($createAccount['id']);
         
-        $this->assertEquals($this->cardAccountData['full_name'], $getList['full_name']);
+        $this->assertEquals($this->cardAccountData['full_name'], $user['full_name']);
     }
 
 }

@@ -1,44 +1,70 @@
 <?php
 namespace PromisePay\Tests;
+
 use PromisePay\PromisePay;
 
 class TokenTest extends \PHPUnit_Framework_TestCase {
     
-    protected $tokenData;
+    protected $tokenData, $userId;
     
     public function setUp() {
-        $this->tokenData = array(
-            'current_user_id'    => 'ec9bf096-c505-4bef-87f6-18822b9dbf2c',
-            'item_name'          => 'bear',
-            'amount'             => '$100',
-            'external_item_id'   => 'b3b4d024-a6de-4b04-9f8d-6545eef3b28f',
-            'payment_type_id'    => 'fdf58725-96bd-4bf8-b5e6-9b61be20662e',
-            'fee_ids'            => '',
-            'seller_email'       => 'ccc@ddd.com',
-            'seller_firstname'   => 'test seller 1name',
-            'seller_lastname'    => 'test seller lname',
-            'seller_country'     => 'AUS',
-            'external_seller_id' => 'ec9bf096-c505-4bef-87f6-18822b9dbf2c',
-            'buyer_email'        => 'cccaaaa@ddd.com',
-            'buyer_firstname'    => 'b fname',
-            'buyer_lastname'     => 'b lname',
-            'buyer_country'      => 'AUS',
-            'external_buyer_id'  => 'fdf58725-96bd-4bf8-b5e6-9b61be20662e',
+        $this->userId = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';
+        
+        $this->sessionTokenData = array(
+            'current_user'           => 'seller',
+            'item_name'              => 'Test Item',
+            'amount'                 => '2500',
+            'seller_lastname'        => 'Seller',
+            'seller_firstname'       => 'Sally',
+            'buyer_lastname'         => 'Buyer',
+            'buyer_firstname'        => 'Bobby',
+            'buyer_country'          => 'AUS',
+            'seller_country'         => 'USA',
+            'seller_email'           => 'sally.seller@promisepay.com',
+            'buyer_email'            => 'bobby.buyer@promisepay.com',
+            'fee_ids'                => '',
+            'payment_type_id'        => '2'
         );
     }
     
-    /**
-     * @expectedException \PromisePay\Exception\Unauthorized
-     */
-    public function testRequestToken() {
-        $requestToken = PromisePay::Token()->requestToken();
-    }
-
-    public function testRequestSessionToken() {
-        $this->markTestSkipped(__METHOD__ . ' skipped ' . PHP_EOL);
-        $requestSessionToken = PromisePay::Token()->requestSessionToken($this->tokenData);
+    public function testGenerateCardToken() {
+        $tokenType = 'card';
         
-        //var_dump($requestSessionToken);
+        $cardToken = PromisePay::Token()->generateCardToken(
+            array
+            (
+                'token_type' => $tokenType,
+                'user_id' => $this->userId
+            )
+        );
+        
+        $this->assertEquals($cardToken['token_type'], $tokenType);
+        $this->assertEquals($cardToken['user_id'], $this->userId);
+    }
+    
+    /**
+     * @group failing
+     */
+    public function testRequestSessionToken() {
+        $requestSessionToken = PromisePay::Token()->requestSessionToken(
+            $this->sessionTokenData
+        );
+        
+        $this->assertNotNull($requestSessionToken['token_type']);
+        $this->assertNotNull($requestSessionToken['token']);
+        $this->assertNotNull($requestSessionToken['item']);
+        $this->assertNotNull($requestSessionToken['buyer']);
+        $this->assertNotNull($requestSessionToken['seller']);
+    }
+    
+    private function readmeExamples() {
+        $cardToken = PromisePay::Token()->generateCardToken(
+            array
+            (
+                'token_type' => 'card',
+                'user_id' => 'USER_ID'
+            )
+        );
     }
     
 }

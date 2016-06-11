@@ -16,4 +16,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($this->addressId, $getAddress['id']);
     }
     
+    private function readmeExamples() {
+        $address = PromisePay::Address()->get('ADDRESS_ID');
+    }
+    
 }

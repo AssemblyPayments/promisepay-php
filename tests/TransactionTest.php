@@ -104,5 +104,53 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertTrue($walletAccountsFound);
     }
+    public function testGetBankAccount() {
+        $this-markTestIncomplete();
+    }
+    
+    public function testGetCardAccount() {
+        extract($this->makePaymentWithFees());
+        
+        $itemTransactions = PromisePay::Transaction()->getList(
+            array(
+                'item_id'                 => $item['id'],
+                'transaction_type_method' => 'credit_card'
+            )
+        );
+        
+        $this->assertTrue(is_array($itemTransactions));
+        
+        foreach ($itemTransactions as $transaction) {
+            if (strpos($transaction['type_method'], 'credit_card') === false) {
+                // the server side of getList() from above currently
+                // doesn't filter out as intended, so we're filtering
+                // it here manually
+                continue;
+            }
+            
+            foreach ($transaction['related']['transactions'] as $transactionMeta) {
+                $cardAccounts = PromisePay::Transaction()->getCardAccount(
+                    $transactionMeta['id']
+                );
+                
+                $this->assertNotNull($cardAccounts);
+                $this->assertNotNUll($cardAccounts['id']);
+                $this->assertNotNUll($cardAccounts['card']);
+                $this->assertNotNUll($cardAccounts['card']['type']);
+                $this->assertNotNUll($cardAccounts['card']['full_name']);
+                $this->assertNotNUll($cardAccounts['card']['number']);
+                $this->assertNotNUll($cardAccounts['card']['expiry_month']);
+                $this->assertNotNUll($cardAccounts['card']['expiry_year']);
+                
+                $cardAccountsFound = true;
+            }
+        }
+        
+        $this->assertTrue($cardAccountsFound);
+    }
+    
+    public function testGetPayPalAccount() {
+        $this->markTestIncomplete();
+    }
     
 }

@@ -41,7 +41,7 @@ class Transaction {
     public function getCardAccount($id) {
         PromisePay::RestClient('get', 'transactions/' . $id . '/card_accounts');
         
-        return PromisePay::getDecodedResponse();
+        return PromisePay::getDecodedResponse('card_accounts');
     }
     
     public function getPayPalAccount($id) {

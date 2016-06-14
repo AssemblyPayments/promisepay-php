@@ -15,4 +15,8 @@ class BatchTransactions {
         return PromisePay::getDecodedResponse('batch_transactions');
     }
     
+    public function show($id) {
+        return $this->showTransaction($id);
+    }
+    
 }

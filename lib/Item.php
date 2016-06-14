@@ -179,4 +179,10 @@ class Item {
         
         return PromisePay::getDecodedResponse('items');
     }
+    
+    public function listBatchTransactions($itemId) {
+        PromisePay::RestClient('get', 'items/' . $itemId . '/transactions');
+        
+        return PromisePay::getDecodedResponse('batch_transactions');
+    }
 }

@@ -29,6 +29,45 @@ class BatchTransactions extends \PHPUnit_Framework_TestCase {
         self::$transaction = $batches[0];
     }
     
+    public function testListTransactionsIterateAllResults() {
+        $limit = 200;
+        $offset = 0;
+        
+        $batchIds = $meta = null;
+        
+        do {
+            $batches = PromisePay::BatchTransactions()->listTransactions(
+                array
+                (
+                    'limit' => $limit,
+                    'offset' => $offset
+                )
+            );
+            
+            if ($meta === null) {
+                $meta = PromisePay::getMeta();
+            }
+            
+            foreach ($batches as $batch) {
+                $batchIds[] = $batch['id'];
+            }
+            
+            $offset += $limit;
+        } while ($meta['total'] > $offset);
+        
+        $this->assertNotNull($batches);
+        $this->assertNotNull($meta);
+        
+        $this->assertTrue(is_array($batches));
+        $this->assertTrue(is_array($meta));
+        $this->assertTrue(is_numeric($meta['total']));
+        
+        $this->assertEquals(
+            $meta['total'],
+            count(array_unique($batchIds))
+        );
+    }
+    
     public function testShowTransaction() {
         $batch = PromisePay::BatchTransactions()->showTransaction(
             self::$transaction['id']

@@ -156,6 +156,10 @@ class PromisePay {
                     
                     break;
                 default:
+                    if (empty($errors) && isset($response->raw_headers)) {
+                        list($errors) = explode("\n", $response->raw_headers);
+                    }
+                    
                     throw new Exception\Api($errors);
             }
         }

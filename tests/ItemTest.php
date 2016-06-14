@@ -644,7 +644,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         );
         
         $batchTransactions = PromisePay::Item()->listBatchTransactions($item['id']);
-        
+                
         $this->markTestIncomplete();
     }
     

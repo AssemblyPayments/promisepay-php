@@ -513,6 +513,12 @@ $buyer = PromisePay::Charges()->showBuyer('CHARGE_ID');
 $status = PromisePay::Charges()->showStatus('CHARGE_ID');
 ```
 
+##Marketplaces
+#####Show Marketplace
+```php
+$marketplaces = PromisePay::Marketplaces()->show();
+```
+
 ##Token Auth
 #####Generate Card Token
 ```php

@@ -70,4 +70,39 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($getFee['fee_list']['name'], $fee['name']);
     }
     
+    public function testGetWalletAccounts() {
+        extract($this->makePaymentWithFees());
+        
+        $itemTransactions = PromisePay::Transaction()->getList(
+            array(
+                'item_id'                 => $item['id'],
+                'transaction_type_method' => 'wallet_account_transfer'
+            )
+        );
+        
+        $this->assertTrue(is_array($itemTransactions));
+        
+        foreach ($itemTransactions as $transaction) {
+            if (strpos($transaction['type_method'], 'wallet_account') === false) {
+                // the server side of getList() from above currently
+                // doesn't filter out as intended, so we're filtering
+                // it here manually
+                continue;
+            }
+            
+            foreach ($transaction['related']['transactions'] as $transactionMeta) {
+                $walletAccounts = PromisePay::Transaction()->getWalletAccount(
+                    $transactionMeta['id']
+                );
+                
+                $this->assertNotNull($walletAccounts);
+                $this->assertNotNUll($walletAccounts['id']);
+                
+                $walletAccountsFound = true;
+            }
+        }
+        
+        $this->assertTrue($walletAccountsFound);
+    }
+    
 }

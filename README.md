@@ -480,6 +480,18 @@ $account = PromisePay::PayPalAccount()->delete('PAYPAL_ACCOUNT_ID');
 $user = PromisePay::PayPalAccount()->getUser('PAYPAL_ACCOUNT_ID');
 ```
 
+##Batch Transactions
+#####List Batch Transactions
+```php
+$batches = PromisePay::BatchTransactions()->listTransactions();
+```
+#####Show Batch Transaction
+```php
+$batch = PromisePay::BatchTransactions()->showTransaction(
+    'BATCH_TRANSACTION_ID'
+);
+```
+
 ##Charges
 #####Create Charge
 ```php

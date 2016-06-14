@@ -26,6 +26,10 @@ class BankAccountTest extends \PHPUnit_Framework_TestCase {
         $this->bankAccountData['user_id'] = $id;
     }
     
+    public function getBankAccountUserId() {
+        return $this->bankAccountData['user_id'];
+    }
+    
     public function testCreateBankAccount() {
         $createBankAccount = PromisePay::BankAccount()->create($this->bankAccountData);
         

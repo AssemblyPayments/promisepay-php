@@ -480,6 +480,39 @@ $account = PromisePay::PayPalAccount()->delete('PAYPAL_ACCOUNT_ID');
 $user = PromisePay::PayPalAccount()->getUser('PAYPAL_ACCOUNT_ID');
 ```
 
+##Charges
+#####Create Charge
+```php
+$createCharge = PromisePay::Charges()->create(
+    array
+    (
+        'account_id' => 'CARD_OR_BANK_ACCOUNT_ID',
+        'amount' => 100,
+        'email' => 'charged.user@email.com',
+        'zip' => 90210,
+        'country' => 'AUS',
+        'device_id' => 'DEVICE_ID',
+        'ip_address' => '49.229.186.182'
+    )
+);
+```
+#####List Charges
+```php
+$getList = PromisePay::Charges()->getList();
+```
+#####Show Charge
+```php
+$charge = PromisePay::Charges()->show('CHARGE_ID');
+```
+#####Show Charge Buyer
+```php
+$buyer = PromisePay::Charges()->showBuyer('CHARGE_ID');
+```
+#####Show Charge Status
+```php
+$status = PromisePay::Charges()->showStatus('CHARGE_ID');
+```
+
 ##Token Auth
 #####Generate Card Token
 ```php

@@ -13,6 +13,10 @@ class User {
 
         return PromisePay::getDecodedResponse('users');
     }
+    
+    public function show($id) {
+        return $this->get($id);
+    }
 
     public function getList($params = null) {
         PromisePay::RestClient('get', 'users/', $params);

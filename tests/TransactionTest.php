@@ -104,8 +104,11 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertTrue($walletAccountsFound);
     }
+    /**
+     * @group dev
+     */
     public function testGetBankAccount() {
-        $this-markTestIncomplete();
+        $this->markTestIncomplete();
     }
     
     public function testGetCardAccount() {

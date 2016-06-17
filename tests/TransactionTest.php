@@ -257,7 +257,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
         
         $total = null;
         $offset = 0;
-        $types = [];
+        $types = array();
         
         do {
             $disbursements = PromisePay::Transaction()->getList(array(

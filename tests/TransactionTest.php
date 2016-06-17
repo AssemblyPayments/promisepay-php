@@ -283,7 +283,8 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
             fwrite(STDOUT, PHP_EOL . sprintf('%d/%d', $offset, $total) . PHP_EOL . PHP_EOL);
             
             if ($total === null) {
-                $total = PromisePay::getMeta()['total'];
+                $meta = PromisePay::getMeta();
+                $total = $meta['total'];
             }
             
             $offset += 200;

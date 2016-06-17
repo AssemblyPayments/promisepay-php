@@ -34,7 +34,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue(is_array($getUser));
     }
     
-    protected function makePaymentWithFees() {
+    protected function makePaymentWithFees($fundingMethod = 'card') {
         require_once __DIR__ . '/ItemTest.php';
         
         $itemTest = new ItemTest;
@@ -43,7 +43,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
         
         $itemTest->itemData['payment_type'] = 4;
         
-        return $itemTest->makePayment();
+        return $itemTest->makePayment($fundingMethod);
     }
     
     public function testGetFees() {
@@ -105,10 +105,67 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue($walletAccountsFound);
     }
     /**
-     * @group dev
+     * @group bank
      */
     public function testGetBankAccount() {
-        $this->markTestIncomplete();
+        // create Item
+        $itemData = array(
+            "id"              => GUID(),
+            "name"            => 'Item #12893489',
+            "amount"          => 1000,
+            "payment_type"    => 2,
+            "buyer_id"        => "fdf58725-96bd-4bf8-b5e6-9b61be20662e",
+            "seller_id"       => "ec9bf096-c505-4bef-87f6-18822b9dbf2c",
+            "description"     => "This is item's description."
+        );
+        
+        $buyerBank = PromisePay::User()->getBankAccount(
+            $itemData['buyer_id']
+        );
+        
+        $sellerBank = PromisePay::User()->getBankAccount(
+            $itemData['seller_id']
+        );
+        
+        $item = PromisePay::Item()->create($itemData);
+        
+        // create authority
+        $directDebitAUthority = PromisePay::DirectDebitAuthority()->create(
+            array(
+                'account_id' => $buyerBank['id'],
+                'amount' => $itemData['amount']
+            )
+        );
+        
+        // request payment
+        $requestPayment = PromisePay::Item()->requestPayment(
+            $item['id']
+        );
+        
+        // acknowledge wire
+        $ackWire = PromisePay::Item()->acknowledgeWire($item['id']);
+        
+        // pay for item
+        $makePayment = PromisePay::Item()->makePayment(
+            $item['id'],
+            array(
+                'account_id' => $buyerBank['id']
+            )
+        );
+        
+        $wireDetails = PromisePay::Item()->getWireDetails($item['id']);
+        $this->assertNotNull($wireDetails); // this passes
+        
+        print_r($makePayment); // state is payment_pending, instead of completed
+        
+        $itemTransactions = PromisePay::Transaction()->getList(
+            array(
+                'limit' => 200,
+                'item_id' => $item['id']
+            )
+        );
+        
+        var_dump($itemTransactions); // yields NULL instead of array
     }
     
     public function testGetCardAccount() {

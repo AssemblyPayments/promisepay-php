@@ -85,8 +85,22 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $this->userData['id'] = $this->buyerId;
         $this->userData['email'] = $this->buyerId . '@google.com';
         $this->userData['mobile'] = $this->buyerId . '123456';
-
-        return PromisePay::User()->create($this->userData);
+        
+        $createBuyer = PromisePay::User()->create($this->userData);
+        
+        // add KYC (Know Your Customer) properties
+        $buyer = PromisePay::User()->update(
+            $createBuyer['id'],
+            array(
+                'government_number'      => strrev('123456782'),
+                'phone'                  => '+' . strrev('1234567889'),
+                'dob'                    => '30/01/1991',
+                'drivers_license_number' => strrev('123456789'),
+                'drivers_license_state'  => 'NSW'
+            )
+        );
+        
+        return $buyer;
     }
     
     protected function createBuyerCardAccount() {
@@ -124,6 +138,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         
         // add KYC (Know Your Customer) properties
         $seller = PromisePay::User()->update(
+            $this->sellerId,
             $createSeller['id'],
             array(
                 'government_number'      => 123456782,
@@ -179,7 +194,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         } else {
             assert(false);
             
-            return false;
+            throw new \InvalidArgumentException(
+                'Invalid funding method in ' . __METHOD__
+            );
         }
         
         $fee = $this->createFee();

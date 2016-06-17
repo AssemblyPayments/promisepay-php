@@ -134,6 +134,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
     
     /**
      * @group bank
+     * @group failing
      */
     public function testGetBankAccount() {
         // create Item
@@ -190,6 +191,8 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
         $wireDetails = PromisePay::Item()->getWireDetails($item['id']);
         $this->assertNotNull($wireDetails); // this passes
         
+        $this->markTestIncomplete();
+        
         print_r($makePayment); // state is payment_pending, instead of completed
         
         $itemTransactions = PromisePay::Transaction()->getList(
@@ -200,8 +203,6 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
         );
         
         var_dump($itemTransactions); // yields NULL instead of array
-        
-        $this->markTestIncomplete();
     }
     
     public function testGetCardAccount() {
@@ -246,6 +247,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
     }
     /**
      * @group paypal
+     * @group failing
      */
     public function testGetPayPalTransaction() {
         require_once __DIR__ . '/WalletAccountsTest.php';
@@ -254,6 +256,8 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
         $wallet->setUp();
         
         extract($wallet->testWithdrawalToPayPal());
+        
+        $this->markTestIncomplete();
         
         $total = null;
         $offset = 0;
@@ -270,7 +274,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
                 $types[] = $disbursement['account_type'];
                 
                 if (strpos($disbursement['description'], 'paypal') !== false) {
-                    var_dump($disbursement, "paypal detected");
+                    fwrite(STDOUT, 'PAYPAL DETECTED: ' . print_r($disbursement, true));
                     break;
                 }
             }
@@ -284,8 +288,16 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
             
             $offset += 200;
         } while ($total > $offset);
+    }
+    
+    private function readmeExamples() {
+        $walletAccount = PromisePay::Transaction()->getWalletAccount(
+            'TRANSACTION_ID'
+        );
         
-        $this->markTestIncomplete();
+        $cardAccount = PromisePay::Transaction()->getCardAccount(
+            'TRANSACTION_ID'
+        );
     }
     
 }

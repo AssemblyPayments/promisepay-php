@@ -673,6 +673,19 @@ $user = PromisePay::Transaction()->getUser('TRANSACTION_ID');
 ```php
 $fee = PromisePay::Transaction()->getFee('TRANSACTION_ID');
 ```
+#####Show Transaction Wallet Account
+```php
+$walletAccount = PromisePay::Transaction()->getWalletAccount(
+    'TRANSACTION_ID'
+);
+```
+#####Show Transaction Card Account
+```php
+$cardAccount = PromisePay::Transaction()->getCardAccount(
+    'TRANSACTION_ID'
+);
+```
+
 
 ##Addresses
 #####Show Address

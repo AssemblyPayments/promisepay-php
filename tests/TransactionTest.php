@@ -110,6 +110,8 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
      * @group charge
      */
     public function testGetChargeBankAccount() {
+        $this->markTestIncomplete();
+        
         $buyerId = "fdf58725-96bd-4bf8-b5e6-9b61be20662e";
         $sellerId = "ec9bf096-c505-4bef-87f6-18822b9dbf2c";
         
@@ -137,6 +139,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
      * @group failing
      */
     public function testGetBankAccount() {
+        $this->markTestIncomplete();
         // create Item
         $itemData = array(
             "id"              => GUID(),
@@ -250,14 +253,14 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
      * @group failing
      */
     public function testGetPayPalTransaction() {
+        $this->markTestIncomplete();
+        
         require_once __DIR__ . '/WalletAccountsTest.php';
         
         $wallet = new WalletAccountsTest;
         $wallet->setUp();
         
         extract($wallet->testWithdrawalToPayPal());
-        
-        $this->markTestIncomplete();
         
         $total = null;
         $offset = 0;

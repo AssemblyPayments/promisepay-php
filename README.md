@@ -249,6 +249,10 @@ $requestTaxInvoice = PromisePay::Item()->requestTaxInvoice(
     'ITEM_ID'
 );
 ```
+#####List Item Batch Transactions
+```php
+$batchTransactions = PromisePay::Item()->listBatchTransactions('ITEM_ID');
+```
 #####Send Tax Invoice
 ```php
 $sendTaxInvoice = PromisePay::Item()->sendTaxInvoice(

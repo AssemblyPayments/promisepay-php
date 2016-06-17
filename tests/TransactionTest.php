@@ -20,7 +20,9 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
             $this->assertNotNull($transaction['id']);
         }
     }
-    
+    /**
+     * @group show-transaction-details
+     */
     public function testGetById() {
         $getTransaction = PromisePay::Transaction()->get($this->transactionId);
         
@@ -104,6 +106,32 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertTrue($walletAccountsFound);
     }
+    /** 
+     * @group charge
+     */
+    public function testGetChargeBankAccount() {
+        $buyerId = "fdf58725-96bd-4bf8-b5e6-9b61be20662e";
+        $sellerId = "ec9bf096-c505-4bef-87f6-18822b9dbf2c";
+        
+        $buyer = PromisePay::User()->get($buyerId);
+        
+        $buyerBank = PromisePay::User()->getBankAccount(
+            $buyerId
+        );
+        
+        $charge = PromisePay::Charges()->create(array(
+            'account_id' => $buyerBank['id'],
+            'amount' => 1000,
+            'email' => $buyer['email'],
+            'zip' => 3000,
+            'country' => $buyer['location'],
+            'currency' => 'AUD',
+            'retain_account' => true
+        ));
+        
+        // $charge['state'] is "payment_pending". not good.
+    }
+    
     /**
      * @group bank
      */
@@ -126,6 +154,12 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
         $sellerBank = PromisePay::User()->getBankAccount(
             $itemData['seller_id']
         );
+        
+        // DEBUG/EXPERIMENTAL: maybe seller needs a PP disbursement account?
+        PromisePay::PayPalAccount()->create(array(
+            'user_id' => $itemData['seller_id'],
+            'paypal_email' => $itemData['seller_id'] . '@paypal.com'
+        ));
         
         $item = PromisePay::Item()->create($itemData);
         
@@ -166,6 +200,8 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
         );
         
         var_dump($itemTransactions); // yields NULL instead of array
+        
+        $this->markTestIncomplete();
     }
     
     public function testGetCardAccount() {
@@ -208,8 +244,47 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertTrue($cardAccountsFound);
     }
-    
-    public function testGetPayPalAccount() {
+    /**
+     * @group paypal
+     */
+    public function testGetPayPalTransaction() {
+        require_once __DIR__ . '/WalletAccountsTest.php';
+        
+        $wallet = new WalletAccountsTest;
+        $wallet->setUp();
+        
+        extract($wallet->testWithdrawalToPayPal());
+        
+        $total = null;
+        $offset = 0;
+        $types = [];
+        
+        do {
+            $disbursements = PromisePay::Transaction()->getList(array(
+                'limit' => 200,
+                'offset' => $offset,
+                'transaction_type' => 'withdrawal'
+            ));
+            
+            foreach ($disbursements as $disbursement) {
+                $types[] = $disbursement['account_type'];
+                
+                if (strpos($disbursement['description'], 'paypal') !== false) {
+                    var_dump($disbursement, "paypal detected");
+                    break;
+                }
+            }
+            
+            fwrite(STDOUT, print_r(array_unique($types), true));
+            fwrite(STDOUT, PHP_EOL . sprintf('%d/%d', $offset, $total) . PHP_EOL . PHP_EOL);
+            
+            if ($total === null) {
+                $total = PromisePay::getMeta()['total'];
+            }
+            
+            $offset += 200;
+        } while ($total > $offset);
+        
         $this->markTestIncomplete();
     }
     

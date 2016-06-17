@@ -209,10 +209,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
             'payment' => $payment,
             'item' => $item,
             'buyer' => $buyer,
-            'buyer_card' => isset($buyerCard) ? $buyerCard : null,
-            'buyer_bank_account' => isset($buyerBankAccount) ? $buyerBankAccount : null,
-            'direct_debit_authority' => isset($directDebitAuthority) ? $directDebitAuthority : null,
-            'funding_source' => $fundingSource,
+            'buyerCard' => isset($buyerCard) ? $buyerCard : null,
+            'buyerBankAccount' => isset($buyerBankAccount) ? $buyerBankAccount : null,
+            'directDebitAuthority' => isset($directDebitAuthority) ? $directDebitAuthority : null,
+            'fundingSource' => $fundingSource,
             'fee' => $fee,
             'seller' => $seller
         );
@@ -634,35 +634,27 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertNotNull($requestTaxInvoice);
     }
-    /**
-     * @group incomplete
-     */
+    
     public function testlistBatchTransactions() {
         $this->itemData['payment_type'] = $this->itemData['payment_type_id'] = 4;
         
         extract($this->makePayment('bank'));
         
-        /**
-         Response Code: 422
-         Error Message: seller: has not been verified by our fraud/security system
-         
-        $releasePayment = PromisePay::Item()->releasePayment(
-            $item['id']
-        );
-        */
-        
-        // withdraw seller's money to PayPal
-        // Create seller's PP account
-        $sellerPaypalAccount = PromisePay::PayPalAccount()->create(
-            array(
-                'user_id'      => $seller['id'],
-                'paypal_email' => $seller['email']
-            )
-        );
-        
         $batchTransactions = PromisePay::Item()->listBatchTransactions($item['id']);
-                
-        $this->markTestIncomplete();
+        
+        $this->assertNotNull($batchTransactions);
+        $this->assertTrue(is_array($batchTransactions));
+        
+        $payment = $batchTransactions[0];
+        
+        $this->assertEquals($payment['type'], 'payment');
+        $this->assertEquals($payment['type_method'], 'direct_debit');
+        $this->assertEquals($payment['account_type'], 'bank_account');
+        $this->assertEquals($payment['amount'], $this->itemData['amount']);
+        $this->assertEquals($payment['debit_credit'], 'debit');
+        $this->assertEquals($payment['account_id'], $buyerBankAccount['id']);
+        $this->assertEquals($payment['from_user_id'], $buyer['id']);
+        $this->assertEquals($payment['from_user_name'], $buyer['full_name']);
     }
     
     private function readmeExamples() {
@@ -694,6 +686,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $requestTaxInvoice = PromisePay::Item()->requestTaxInvoice(
             'ITEM_ID'
         );
+        
+        // List Item Batch Transactions
+        $batchTransactions = PromisePay::Item()->listBatchTransactions('ITEM_ID');
     }
     
 }

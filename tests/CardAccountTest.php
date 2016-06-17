@@ -12,12 +12,12 @@ class CardAccountTest extends \PHPUnit_Framework_TestCase {
         $this->userId = 'ec9bf096-c505-4bef-87f6-18822b9dbf2c';
         
         $this->cardAccountData = array(
-           'user_id'      => $this->userId,
-           'full_name'    => 'Bobby Buyer',
-           'number'       => '4111111111111111',
-           "expiry_month" => '06',
-           "expiry_year"  => '2020',
-           "cvv"          => '123'
+            'user_id'      => $this->userId,
+            'full_name'    => 'Bobby Buyer',
+            'number'       => '4111111111111111',
+            "expiry_month" => '06',
+            "expiry_year"  => '2020',
+            "cvv"          => '123'
         );
         
         $this->userData = array(

@@ -181,7 +181,7 @@ class Item {
     }
     
     public function listBatchTransactions($itemId) {
-        PromisePay::RestClient('get', 'items/' . $itemId . '/transactions');
+        PromisePay::RestClient('get', 'items/' . $itemId . '/batch_transactions');
         
         return PromisePay::getDecodedResponse('batch_transactions');
     }

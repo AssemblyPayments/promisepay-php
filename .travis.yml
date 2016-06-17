@@ -7,4 +7,9 @@ php:
   - 7.0
   - hhvm
   - nightly
+  
+matrix:
+  allow_failures:
+    - php: hhvm
+    - php: nightly
 script: "phpunit tests"

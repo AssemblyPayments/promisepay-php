@@ -11,7 +11,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
     $itemData,
     $feeData,
     $userData,
-    $cardAccountData;
+    $cardAccountData,
+    $bankAccountData;
     
     public function setUp() {
         $this->GUID = GUID();
@@ -28,7 +29,6 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
             "description"     => 'Description'
         );
         
-        // Setup fee data
         $this->feeData = array(
             'amount'      => 15,
             'name'        => '15 cents of fee',
@@ -85,8 +85,22 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $this->userData['id'] = $this->buyerId;
         $this->userData['email'] = $this->buyerId . '@google.com';
         $this->userData['mobile'] = $this->buyerId . '123456';
-
-        return PromisePay::User()->create($this->userData);
+        
+        $createBuyer = PromisePay::User()->create($this->userData);
+        
+        // add KYC (Know Your Customer) properties
+        $buyer = PromisePay::User()->update(
+            $createBuyer['id'],
+            array(
+                'government_number'      => strrev('123456782'),
+                'phone'                  => '+' . strrev('1234567889'),
+                'dob'                    => '30/01/1991',
+                'drivers_license_number' => strrev('123456789'),
+                'drivers_license_state'  => 'NSW'
+            )
+        );
+        
+        return $buyer;
     }
     
     protected function createBuyerCardAccount() {
@@ -101,6 +115,18 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         return PromisePay::CardAccount()->create($this->cardAccountData);
     }
     
+    protected function createBuyerBankAccount() {
+        require_once __DIR__ . '/BankAccountTest.php';
+        
+        $bankAccountTest = new BankAccountTest;
+        
+        $bankAccountTest->setUp();
+        
+        $bankAccountTest->setBankAccountUserId($this->buyerId);
+        
+        return $bankAccountTest->testCreateBankAccount();
+    }
+    
     protected function createSeller() {
         $this->userData['id'] = $this->sellerId;
         $this->userData['email'] = $this->sellerId . '@google.com';
@@ -108,7 +134,22 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $this->userData['first_name'] = 'Jane';
         $this->userData['last_name'] = 'Jonesy';
         
-        return PromisePay::User()->create($this->userData);
+        $createSeller = PromisePay::User()->create($this->userData);
+        
+        // add KYC (Know Your Customer) properties
+        $seller = PromisePay::User()->update(
+            $this->sellerId,
+            $createSeller['id'],
+            array(
+                'government_number'      => 123456782,
+                'phone'                  => '+1234567889',
+                'dob'                    => '30/01/1990',
+                'drivers_license_number' => '123456789',
+                'drivers_license_state'  => 'NSW'
+            )
+        );
+        
+        return $seller;
     }
     
     protected function createFee() {
@@ -121,34 +162,57 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         return PromisePay::Item()->create($this->itemData);
     }
     
-    protected function payForItem($itemId, $buyerCardAccountId) {
+    protected function payForItem($itemId, $fundingSource) {
         return PromisePay::Item()->makePayment(
             $itemId,
             array
             (
-                'account_id' => $buyerCardAccountId
+                'account_id' => $fundingSource
             )
         );
     }
-    
-    public function makePayment() {
+    /**
+     * @param $fundingMethod string card or bank
+     */
+    public function makePayment($fundingMethod = 'card') {
         $this->createRandomIds();
         
         $seller = $this->createSeller();
         $buyer = $this->createBuyer();
-        $buyerCard = $this->createBuyerCardAccount();
+        
+        if ($fundingMethod == 'card') {
+            $fundingSource = $buyerCard = $this->createBuyerCardAccount();
+        } elseif ($fundingMethod == 'bank') {
+            $fundingSource = $buyerBankAccount = $this->createBuyerBankAccount();
+            
+            $directDebitAuthority = PromisePay::DirectDebitAuthority()->create(
+                array(
+                    'account_id' => $buyerBankAccount['id'],
+                    'amount' => $this->itemData['amount']
+                )
+            );
+        } else {
+            assert(false);
+            
+            throw new \InvalidArgumentException(
+                'Invalid funding method in ' . __METHOD__
+            );
+        }
         
         $fee = $this->createFee();
         $this->itemData['fee_ids'] = $fee['id'];
         
         $item = $this->createItem();
-        $payment = $this->payForItem($item['id'], $buyerCard['id']);
+        $payment = $this->payForItem($item['id'], $fundingSource['id']);
         
         return array(
             'payment' => $payment,
             'item' => $item,
             'buyer' => $buyer,
-            'buyer_card' => $buyerCard,
+            'buyerCard' => isset($buyerCard) ? $buyerCard : null,
+            'buyerBankAccount' => isset($buyerBankAccount) ? $buyerBankAccount : null,
+            'directDebitAuthority' => isset($directDebitAuthority) ? $directDebitAuthority : null,
+            'fundingSource' => $fundingSource,
             'fee' => $fee,
             'seller' => $seller
         );
@@ -285,9 +349,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($getSeller['last_name'], $makePayment['seller']['last_name']);
         $this->assertEquals($sellerFullName, $makePayment['payment']['seller_name']);
     }
-    /**
-     * @group dev
-     */
+    
     public function testGetWireDetailsForItem() {
         $makePayment = $this->makePayment();
         
@@ -573,7 +635,29 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $this->assertNotNull($requestTaxInvoice);
     }
     
-    public function readmeExamples() {
+    public function testlistBatchTransactions() {
+        $this->itemData['payment_type'] = $this->itemData['payment_type_id'] = 4;
+        
+        extract($this->makePayment('bank'));
+        
+        $batchTransactions = PromisePay::Item()->listBatchTransactions($item['id']);
+        
+        $this->assertNotNull($batchTransactions);
+        $this->assertTrue(is_array($batchTransactions));
+        
+        $payment = $batchTransactions[0];
+        
+        $this->assertEquals($payment['type'], 'payment');
+        $this->assertEquals($payment['type_method'], 'direct_debit');
+        $this->assertEquals($payment['account_type'], 'bank_account');
+        $this->assertEquals($payment['amount'], $this->itemData['amount']);
+        $this->assertEquals($payment['debit_credit'], 'debit');
+        $this->assertEquals($payment['account_id'], $buyerBankAccount['id']);
+        $this->assertEquals($payment['from_user_id'], $buyer['id']);
+        $this->assertEquals($payment['from_user_name'], $buyer['full_name']);
+    }
+    
+    private function readmeExamples() {
         $declineRefund = PromisePay::Item()->declineRefund(
             'ITEM_ID'
         );
@@ -602,6 +686,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
         $requestTaxInvoice = PromisePay::Item()->requestTaxInvoice(
             'ITEM_ID'
         );
+        
+        // List Item Batch Transactions
+        $batchTransactions = PromisePay::Item()->listBatchTransactions('ITEM_ID');
     }
     
 }

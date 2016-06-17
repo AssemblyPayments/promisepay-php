@@ -13,8 +13,9 @@ if (is_file($composerAutoloadFile)) {
     require_once $composerAutoloadFile;
 }
 
-// Tests/PHPunit specific file
-require_once(__DIR__ . '/GUID.php');
+// Tests/PHPunit specific files
+require_once __DIR__ . '/GUID.php';
+require_once __DIR__ . '/functions.php';
 
 // Project files autoloader
 require __DIR__ . '/../autoload.php';

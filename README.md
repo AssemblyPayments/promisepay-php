@@ -249,6 +249,10 @@ $requestTaxInvoice = PromisePay::Item()->requestTaxInvoice(
     'ITEM_ID'
 );
 ```
+#####List Item Batch Transactions
+```php
+$batchTransactions = PromisePay::Item()->listBatchTransactions('ITEM_ID');
+```
 #####Send Tax Invoice
 ```php
 $sendTaxInvoice = PromisePay::Item()->sendTaxInvoice(
@@ -480,6 +484,18 @@ $account = PromisePay::PayPalAccount()->delete('PAYPAL_ACCOUNT_ID');
 $user = PromisePay::PayPalAccount()->getUser('PAYPAL_ACCOUNT_ID');
 ```
 
+##Batch Transactions
+#####List Batch Transactions
+```php
+$batches = PromisePay::BatchTransactions()->listTransactions();
+```
+#####Show Batch Transaction
+```php
+$batch = PromisePay::BatchTransactions()->showTransaction(
+    'BATCH_TRANSACTION_ID'
+);
+```
+
 ##Charges
 #####Create Charge
 ```php
@@ -511,6 +527,12 @@ $buyer = PromisePay::Charges()->showBuyer('CHARGE_ID');
 #####Show Charge Status
 ```php
 $status = PromisePay::Charges()->showStatus('CHARGE_ID');
+```
+
+##Marketplaces
+#####Show Marketplace
+```php
+$marketplaces = PromisePay::Marketplaces()->show();
 ```
 
 ##Token Auth
@@ -651,6 +673,19 @@ $user = PromisePay::Transaction()->getUser('TRANSACTION_ID');
 ```php
 $fee = PromisePay::Transaction()->getFee('TRANSACTION_ID');
 ```
+#####Show Transaction Wallet Account
+```php
+$walletAccount = PromisePay::Transaction()->getWalletAccount(
+    'TRANSACTION_ID'
+);
+```
+#####Show Transaction Card Account
+```php
+$cardAccount = PromisePay::Transaction()->getCardAccount(
+    'TRANSACTION_ID'
+);
+```
+
 
 ##Addresses
 #####Show Address

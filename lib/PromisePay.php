@@ -10,6 +10,8 @@ class PromisePay {
     protected static $jsonResponse;
     protected static $debugData;
     
+    protected static $checksPassed;
+    
     public static function getDecodedResponse($indexName = null) {
         if (!is_string($indexName) && $indexName !== null) {
             throw new \InvalidArgumentException(
@@ -66,6 +68,20 @@ class PromisePay {
             throw new Exception\NotFound("Repository $class not found");
         }
     }
+    
+    public static function checks() {
+        if (!extension_loaded('curl')) {
+            die(
+                sprintf(
+                    'curl extension is missing, and is required for %s package.',
+                    __NAMESPACE__
+                )
+                . PHP_EOL
+            );
+        }
+        
+        self::$checksPassed = true;
+    }
 
     /**
      * Method for performing requests to PromisePay endpoints.
@@ -76,6 +92,9 @@ class PromisePay {
      * @param string $mime optional Set specific MIME type.
      */
     public static function RestClient($method, $entity, $payload = null, $mime = null) {
+        if (!self::$checksPassed)
+            self::checks();
+        
         // Check whether critical constants are defined.
         if (!defined(__NAMESPACE__ . '\API_URL'))
             die('Fatal error: API_URL constant missing. Check if environment has been set.');

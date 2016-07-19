@@ -16,13 +16,176 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
         
         $this->assertTrue(is_array($getList));
         
+        $transaction = PromisePay::Transaction()->get($getList[0]['id']);
+        
+        $this->assertEquals($getList[0]['id'], $transaction['id']);
+        
         foreach ($getList as $transaction) {
             $this->assertNotNull($transaction['id']);
         }
     }
+    
     /**
-     * @group show-transaction-details
+     * @group filters-type
      */
+    public function testListTransactionsWithFilterTransactionType() {
+        // transaction type => payment
+        $getList = $getListPayment = PromisePay::Transaction()->getList(
+            array(
+                'transaction_type' => 'payment'
+            )
+        );
+        
+        foreach ($getList as $transaction) {
+            $this->assertEquals($transaction['type'], 'payment');
+        }
+        
+        // transaction type => refund
+        $getList = PromisePay::Transaction()->getList(
+            array(
+                'transaction_type' => 'refund'
+            )
+        );
+        
+        foreach ($getList as $transaction) {
+            $this->assertEquals($transaction['type'], 'refund');
+        }
+        
+        // transaction type => disbursement
+        $getList = PromisePay::Transaction()->getList(
+            array(
+                'transaction_type' => 'disbursement'
+            )
+        );
+        
+        foreach ($getList as $transaction) {
+            $this->assertEquals($transaction['type'], 'disbursement');
+        }
+        
+        // transaction type => fee
+        $getList = PromisePay::Transaction()->getList(
+            array(
+                'transaction_type' => 'fee'
+            )
+        );
+        
+        foreach ($getList as $transaction) {
+            $this->assertEquals($transaction['type'], 'fee');
+        }
+        
+        // transaction type => deposit
+        $getList = PromisePay::Transaction()->getList(
+            array(
+                'transaction_type' => 'deposit'
+            )
+        );
+        
+        foreach ($getList as $transaction) {
+            // this doesn't work as one might think:
+            // $this->assertEquals($transaction['type'], 'deposit');
+            // instead, checking for:
+            $this->assertEquals($transaction['type'], 'payment');
+            $this->assertEquals($transaction['type_method'], 'credit_card');
+        }
+        
+        // transaction type => withdrawal
+        $getList = PromisePay::Transaction()->getList(
+            array(
+                'transaction_type' => 'withdrawal'
+            )
+        );
+        
+        foreach ($getList as $transaction) {
+            // this doesn't work as intended
+            // $this->assertEquals($transaction['type'], 'withdrawal');
+            
+            // TODO
+            // PLACEHOLDER
+        }
+        
+        $this->markTestIncomplete();
+    }
+    
+    /**
+     * @group filters-type-method
+     */
+    public function testListTransactionsWithFilterTransactionTypeMethod() {
+        // transaction_type_method => credit_card
+        $getList = PromisePay::Transaction()->getList(
+            array(
+                'transaction_type_method' => 'credit_card'
+            )
+        );
+        
+        foreach ($getList as $transaction) {
+            $this->assertEquals($transaction['type_method'], 'credit_card');
+        }
+        
+        // transaction_type_method => wire_transfer
+        $getList = PromisePay::Transaction()->getList(
+            array(
+                'transaction_type_method' => 'wire_transfer'
+            )
+        );
+        
+        // TODO
+        // at the moment $getList returns NULL, so we'll do a bit of typecasting
+        // to avoid warnings
+        foreach ((array) $getList as $transaction) {
+            $this->assertEquals($transaction['type_method'], 'wire_transfer');
+        }
+        
+        // transaction_type_method => wallet_account_transfer
+        $getList = PromisePay::Transaction()->getList(
+            array(
+                'transaction_type_method' => 'wallet_account_transfer'
+            )
+        );
+        
+        foreach ($getList as $transaction) {
+            $this->assertTrue(
+                $transaction['type_method'] == 'wallet_account'
+                ||
+                $transaction['account_type'] == 'wallet_account'
+                ||
+                (
+                    isset($transaction['related']['transactions'][0]['account_type'])
+                    &&
+                    $transaction['related']['transactions'][0]['account_type'] == 'wallet_account'
+                )
+            );
+        }
+        
+        $this->markTestIncomplete(); // because of wire_transfer case
+    }
+    
+    /**
+     * @group filters-direction
+     */
+    public function testListTransactionsWithFilterDirection() {
+        // direction => debit
+        $getList = PromisePay::Transaction()->getList(
+            array(
+                'direction' => 'debit'
+            )
+        );
+        
+        foreach ($getList as $transaction) {
+            $this->assertEquals($transaction['debit_credit'], 'debit');
+        }
+        
+        // direction => credit
+        $getList = PromisePay::Transaction()->getList(
+            array(
+                'direction' => 'credit'
+            )
+        );
+        
+        foreach ($getList as $transaction) {
+            $this->assertEquals($transaction['debit_credit'], 'credit');
+        }
+    }
+    
     public function testGetById() {
         $getTransaction = PromisePay::Transaction()->get($this->transactionId);
         

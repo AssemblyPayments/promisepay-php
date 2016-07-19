@@ -139,17 +139,29 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
      * @group failing
      */
     public function testGetBankAccount() {
-        $this->markTestIncomplete();
         // create Item
         $itemData = array(
             "id"              => GUID(),
             "name"            => 'Item #12893489',
             "amount"          => 1000,
             "payment_type"    => 2,
-            "buyer_id"        => "fdf58725-96bd-4bf8-b5e6-9b61be20662e",
-            "seller_id"       => "ec9bf096-c505-4bef-87f6-18822b9dbf2c",
+            "buyer_id"        => "ec9bf096-c505-4bef-87f6-18822b9dbf2c",
+            "seller_id"       => "fdf58725-96bd-4bf8-b5e6-9b61be20662e",
             "description"     => "This is item's description."
         );
+        
+        require_once __DIR__ . '/BankAccountTest.php';
+        
+        $bankAccount = new BankAccountTest;
+        $bankAccount->setUp();
+        
+        // CREATE BANK ACCOUNT FOR BUYER
+        $bankAccount->setBankAccountUserId($itemData['buyer_id']);
+        $buyerBankAccount = $bankAccount->testCreateBankAccount();
+        
+        // CREATE BANK ACCOUNT FOR SELLER
+        $bankAccount->setBankAccountUserId($itemData['seller_id']);
+        $buyerBankAccount = $bankAccount->testCreateBankAccount();
         
         $buyerBank = PromisePay::User()->getBankAccount(
             $itemData['buyer_id']
@@ -158,12 +170,6 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
         $sellerBank = PromisePay::User()->getBankAccount(
             $itemData['seller_id']
         );
-        
-        // DEBUG/EXPERIMENTAL: maybe seller needs a PP disbursement account?
-        PromisePay::PayPalAccount()->create(array(
-            'user_id' => $itemData['seller_id'],
-            'paypal_email' => $itemData['seller_id'] . '@paypal.com'
-        ));
         
         $item = PromisePay::Item()->create($itemData);
         
@@ -191,21 +197,31 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
             )
         );
         
+        // this is weird:
+        // $makePayment["payment_method"]=>string(7) "pending"
+        // shouldn't it be bank account?
+        // also
+        // $makePayment['state'] is payment_pending, instead of completed
+        
         $wireDetails = PromisePay::Item()->getWireDetails($item['id']);
-        $this->assertNotNull($wireDetails); // this passes
+        $this->assertNotNull($wireDetails);
         
-        $this->markTestIncomplete();
+        //$releasePayment = PromisePay::Item()->releasePayment(
+        //    $item['id']
+        //);
+        // yields Error Message: item: action is invalid, state transition invalid
         
-        print_r($makePayment); // state is payment_pending, instead of completed
+        /*
+            1) PromisePay\Tests\TransactionTest::testGetBankAccount
+            PromisePay\Exception\Unauthorized:
+            Response Code: 401
+            Error Message: not_authorized: to access that record
+        */
         
-        $itemTransactions = PromisePay::Transaction()->getList(
-            array(
-                'limit' => 200,
-                'item_id' => $item['id']
-            )
-        );
+        $this->markTestSkipped();
         
-        var_dump($itemTransactions); // yields NULL instead of array
+        // $transactionBankAccount = PromisePay::Transaction()->getBankAccount($makePayment['id']);
+        // Error Message: not_authorized: to access that record
     }
     
     public function testGetCardAccount() {

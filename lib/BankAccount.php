@@ -41,4 +41,5 @@ class BankAccount {
         
         return PromisePay::getDecodedResponse('routing_number');
     }
+    
 }

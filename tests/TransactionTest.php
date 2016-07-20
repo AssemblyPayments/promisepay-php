@@ -30,11 +30,15 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
      */
     public function testListTransactionsWithFilterTransactionType() {
         // transaction type => payment
-        $getList = $getListPayment = PromisePay::Transaction()->getList(
-            array(
-                'transaction_type' => 'payment'
-            )
-        );
+        $getList = getAllResults(function($limit, $offset) {
+            return PromisePay::Transaction()->getList(
+                array(
+                    'limit' => $limit,
+                    'offset' => $offset,
+                    'transaction_type' => 'payment'
+                )
+            );
+        });
         
         foreach ($getList as $transaction) {
             $this->assertEquals($transaction['type'], 'payment');

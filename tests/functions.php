@@ -3,7 +3,7 @@ namespace PromisePay\Tests;
 
 use PromisePay\PromisePay;
 
-function getAllResults($request, $limit = 200, $offset = 0) {
+function getAllResults($request, $limit = 200, $offset = 0, $async = false) {
     // can't use callable argument typehint as the 
     // minimal version of PHP we're supporting is 5.3
     
@@ -38,7 +38,7 @@ function getAllResults($request, $limit = 200, $offset = 0) {
         fwrite(
             STDOUT,
             sprintf(
-                "offset is %d, total is %d" . PHP_EOL,
+                "Progress: offset is %d, results count is %d" . PHP_EOL,
                 $offset,
                 $total
             )
@@ -52,8 +52,18 @@ function getAllResults($request, $limit = 200, $offset = 0) {
             $total = isset($meta['total']) ? $meta['total'] : 0;
         }
         
+        if ($async) {
+            PromisePay::beginAsync();
+        }
+        
         $offset += $limit;
     } while ($offset < $total);
+    
+    if ($async) {
+        $results = array_merge($results, PromisePay::asyncRequest());
+        
+        PromisePay::finishAsync();
+    }
     
     return $results;
 }

@@ -25,9 +25,11 @@ class PromisePay {
         if ($indexName !== null) {
             if (isset(self::$jsonResponse[$indexName])) {
                 return self::$jsonResponse[$indexName];
+            } elseif (self::$sendAsync) {
+                return array(); // not to break BC
+            } else {
+                return null;
             }
-            
-            return null;
         } else {
             return self::$jsonResponse;
         }
@@ -69,7 +71,7 @@ class PromisePay {
         }
     }
     
-    public static function checks() {
+    protected static function checks() {
         if (!extension_loaded('curl')) {
             die(
                 sprintf(
@@ -80,8 +82,88 @@ class PromisePay {
             );
         }
         
+        // Check whether critical constants are defined.
+        if (!defined(__NAMESPACE__ . '\API_URL'))
+            die('Fatal error: API_URL constant missing. Check if environment has been set.');
+        
+        if (!defined(__NAMESPACE__ . '\API_LOGIN'))
+            die('Fatal error: API_LOGIN constant missing.');
+        
+        if (!defined(__NAMESPACE__ . '\API_PASSWORD'))
+            die('Fatal error: API_PASSWORD constant missing.');
+        
         self::$checksPassed = true;
     }
+    
+    public static function beginAsync() {
+        self::$sendAsync = true;
+    }
+    
+    public static function finishAsync() {
+        self::$sendAsync = false;
+    }
+    
+    public static function asyncRequest() {
+        $multiHandle = curl_multi_init();
+        
+        $connections = array();
+        
+        foreach (self::$pendingRequests as $index => $requestParams) {
+            list($method, $uri) = $requestParams;
+            
+            $connections[$index] = curl_init($uri);
+            
+            curl_setopt($connections[$index], CURLOPT_URL, $uri);
+            curl_setopt($connections[$index], CURLOPT_HEADER, false);
+            curl_setopt($connections[$index], CURLOPT_RETURNTRANSFER, true);
+            
+            curl_setopt(
+                $connections[$index],
+                CURLOPT_USERPWD,
+                sprintf(
+                    '%s:%s',
+                    constant(__NAMESPACE__ . '\API_LOGIN'),
+                    constant(__NAMESPACE__ . '\API_PASSWORD')
+                )
+            );
+            
+            curl_multi_add_handle($multiHandle, $connections[$index]);
+        }
+        
+        $active = false;
+        
+        do {
+            $multiProcess = curl_multi_exec($multiHandle, $active);
+        } while ($multiProcess === CURLM_CALL_MULTI_PERFORM);
+        
+        while ($active && $multiProcess === CURLM_OK) {
+            if (curl_multi_select($multiHandle) === -1) {
+                // if there's a problem at the moment, delay execution
+                // by 100 miliseconds, as suggested on
+                // https://curl.haxx.se/libcurl/c/curl_multi_fdset.html
+                usleep(100000);
+            }
+            
+            do {
+                $multiProcess = curl_multi_exec($multiHandle, $active);
+            } while ($multiProcess === CURLM_CALL_MULTI_PERFORM);
+        }
+        
+        $responses = array();
+        
+        foreach($connections as $index => $connection) {
+            $responses[] = curl_multi_getcontent($connection);
+            
+            curl_multi_remove_handle($multiHandle, $connection);
+        }
+        
+        curl_multi_close($multiHandle);
+        
+        return $responses;
+    }
+    
+    protected static $sendAsync = false;
+    protected static $pendingRequests = array();
 
     /**
      * Method for performing requests to PromisePay endpoints.
@@ -95,21 +177,25 @@ class PromisePay {
         if (!self::$checksPassed)
             self::checks();
         
-        // Check whether critical constants are defined.
-        if (!defined(__NAMESPACE__ . '\API_URL'))
-            die('Fatal error: API_URL constant missing. Check if environment has been set.');
-        
-        if (!defined(__NAMESPACE__ . '\API_LOGIN'))
-            die('Fatal error: API_LOGIN constant missing.');
-        
-        if (!defined(__NAMESPACE__ . '\API_PASSWORD'))
-            die('Fatal error: API_PASSWORD constant missing.');
-        
         if (!is_scalar($payload) && $payload !== null) {
             $payload = http_build_query($payload);
         }
         
         $url = constant(__NAMESPACE__ . '\API_URL') . $entity . '?' . $payload;
+        
+        if (self::$sendAsync) {
+            self::$pendingRequests[] = array(
+                $method,
+                $url    
+            );
+            
+            // set and return an empty array instead of null
+            // to avoid breaking any BC
+            
+            self::$jsonResponse = array();
+            
+            return array();
+        }
         
         switch ($method) {
             case 'get':

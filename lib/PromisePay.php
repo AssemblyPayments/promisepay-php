@@ -12,6 +12,9 @@ class PromisePay {
     
     protected static $checksPassed;
     
+    protected static $sendAsync = false;
+    protected static $pendingRequests = array();
+    
     public static function getDecodedResponse($indexName = null) {
         if (!is_string($indexName) && $indexName !== null) {
             throw new \InvalidArgumentException(
@@ -103,18 +106,22 @@ class PromisePay {
         self::$sendAsync = false;
     }
     
-    public static function asyncRequest() {
+    public static function getPendingRequests() {
+        return self::$pendingRequests;
+    }
+    
+    public static function AsyncClient(array $requests) {
         $multiHandle = curl_multi_init();
         
         $connections = array();
         
-        foreach (self::$pendingRequests as $index => $requestParams) {
+        foreach ($requests as $index => $requestParams) {
             list($method, $uri) = $requestParams;
             
             $connections[$index] = curl_init($uri);
             
             curl_setopt($connections[$index], CURLOPT_URL, $uri);
-            curl_setopt($connections[$index], CURLOPT_HEADER, false);
+            curl_setopt($connections[$index], CURLOPT_HEADER, true);
             curl_setopt($connections[$index], CURLOPT_RETURNTRANSFER, true);
             
             curl_setopt(
@@ -152,18 +159,21 @@ class PromisePay {
         $responses = array();
         
         foreach($connections as $index => $connection) {
-            $responses[] = curl_multi_getcontent($connection);
+            $response = curl_multi_getcontent($connections[$index]);
             
-            curl_multi_remove_handle($multiHandle, $connection);
+            $jsonArray = json_decode($response, true);
+            
+            if (is_array($jsonArray)) {
+                $responses = array_merge($responses, $jsonArray);
+            }
+            
+            curl_multi_remove_handle($multiHandle, $connections[$index]);
         }
         
         curl_multi_close($multiHandle);
         
         return $responses;
     }
-    
-    protected static $sendAsync = false;
-    protected static $pendingRequests = array();
 
     /**
      * Method for performing requests to PromisePay endpoints.

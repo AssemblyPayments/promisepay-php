@@ -60,7 +60,9 @@ function getAllResults($request, $limit = 200, $offset = 0, $async = false) {
     } while ($offset < $total);
     
     if ($async) {
-        $results = array_merge($results, PromisePay::asyncRequest());
+        $results = array_merge($results, PromisePay::AsyncClient(
+            PromisePay::getPendingRequests()
+        ));
         
         PromisePay::finishAsync();
     }

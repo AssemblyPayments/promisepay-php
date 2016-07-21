@@ -29,6 +29,26 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
      * @group filters-type
      */
     public function testListTransactionsWithFilterTransactionType() {
+        // ASYNC EXPERIMENT
+        /*
+        PromisePay::enableDebug();
+        
+        $getList = getAllResults(function($limit, $offset) {
+            return PromisePay::Transaction()->getList(
+                array(
+                    'limit' => $limit,
+                    'offset' => $offset,
+                    'transaction_type' => 'payment'
+                )
+            );
+        }, 200, 0, true);
+        
+        var_dump("FINAL RESULT: ", $getList);
+        
+        $this->markTestIncomplete();
+        */
+        // ENDS ASYNC EXPERIMENT
+        
         // transaction type => payment
         $getList = getAllResults(function($limit, $offset) {
             return PromisePay::Transaction()->getList(

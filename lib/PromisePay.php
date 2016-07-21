@@ -15,6 +15,8 @@ class PromisePay {
     protected static $sendAsync = false;
     protected static $pendingRequests = array();
     
+    protected static $debug = false;
+    
     public static function getDecodedResponse($indexName = null) {
         if (!is_string($indexName) && $indexName !== null) {
             throw new \InvalidArgumentException(
@@ -103,6 +105,7 @@ class PromisePay {
     }
     
     public static function finishAsync() {
+        self::$pendingRequests = self::$asyncResponses = self::$asyncPendingRequestsHistoryCounts = array();
         self::$sendAsync = false;
     }
     
@@ -110,19 +113,34 @@ class PromisePay {
         return self::$pendingRequests;
     }
     
-    public static function AsyncClient(array $requests) {
+    private static $asyncResponses = array();
+    private static $asyncPendingRequestsHistoryCounts = array();
+    
+    public static function AsyncClient(array $requests = null) {
         $multiHandle = curl_multi_init();
         
         $connections = array();
+        
+        if ($requests === null) {
+            $requests = self::getPendingRequests();
+        }
         
         foreach ($requests as $index => $requestParams) {
             list($method, $uri) = $requestParams;
             
             $connections[$index] = curl_init($uri);
             
+            if (self::$debug) {
+                fwrite(
+                    STDOUT,
+                    "#$index => $uri added." . PHP_EOL
+                );
+            }
+            
             curl_setopt($connections[$index], CURLOPT_URL, $uri);
             curl_setopt($connections[$index], CURLOPT_HEADER, true);
             curl_setopt($connections[$index], CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($connections[$index], CURLOPT_USERAGENT, 'promisepay-php-sdk/1.0');
             
             curl_setopt(
                 $connections[$index],
@@ -148,6 +166,14 @@ class PromisePay {
                 // if there's a problem at the moment, delay execution
                 // by 100 miliseconds, as suggested on
                 // https://curl.haxx.se/libcurl/c/curl_multi_fdset.html
+                
+                if (self::$debug) {
+                    fwrite(
+                        STDOUT,
+                        "Pausing for 100 miliseconds." . PHP_EOL
+                    );
+                }
+                
                 usleep(100000);
             }
             
@@ -156,23 +182,99 @@ class PromisePay {
             } while ($multiProcess === CURLM_CALL_MULTI_PERFORM);
         }
         
-        $responses = array();
-        
         foreach($connections as $index => $connection) {
-            $response = curl_multi_getcontent($connections[$index]);
+            $response = curl_multi_getcontent($connection);
             
-            $jsonArray = json_decode($response, true);
+            // we're gonna remove headers from $response
+            $responseHeaders = curl_getinfo($connection);
+            $responseBody = trim(substr($response, $responseHeaders['header_size']));
             
-            if (is_array($jsonArray)) {
-                $responses = array_merge($responses, $jsonArray);
+            if (self::$debug) {
+                fwrite(
+                    STDOUT,
+                    sprintf("#$index content: %s" . PHP_EOL, $responseBody)
+                );
+                
+                fwrite(
+                    STDOUT,
+                    "#$index headers: " . print_r($responseHeaders, true) . PHP_EOL
+                );
             }
             
-            curl_multi_remove_handle($multiHandle, $connections[$index]);
+            if (substr($responseHeaders['http_code'], 0, 1) == '2') {
+                // processed successfully, remove from queue
+                foreach ($requests as $index => $requestParams) {
+                    list($method, $url) = $requestParams;
+                    
+                    if ($url == $responseHeaders['url']) {
+                        if (self::$debug) {
+                            fwrite(
+                                STDOUT,
+                                "Unsetting $index from requests." . PHP_EOL
+                            );
+                        }
+                        
+                        unset($requests[$index]);
+                    }
+                }
+            }
+            
+            $jsonArray = json_decode($responseBody, true);
+            
+            if (is_array($jsonArray)) {
+                self::$asyncResponses = array_merge(self::$asyncResponses, $jsonArray);
+            }
+            
+            curl_multi_remove_handle($multiHandle, $connection);
         }
         
         curl_multi_close($multiHandle);
         
-        return $responses;
+        self::$asyncPendingRequestsHistoryCounts[] = count($requests);
+        
+        if (self::$debug) {
+            fwrite(
+                STDOUT,
+                sprintf(
+                    "asyncResponses contains %d members." . PHP_EOL,
+                    count(self::$asyncResponses)
+                )
+            );
+        }
+        
+        // if a single request hasn't succeed in the past 2 request batches,
+        // terminate and return result.
+        foreach (self::$asyncPendingRequestsHistoryCounts as $index => $pendingRequestsCount) {
+            if ($index === 0) continue;
+            
+            if (self::$asyncPendingRequestsHistoryCounts[$index - 1] == $pendingRequestsCount) {
+                if (self::$debug) {
+                    fwrite(
+                        STDOUT,
+                        'Server 5xx detected; returning what was obtained thus far.' . PHP_EOL
+                    );
+                }
+                
+                return self::$asyncResponses;
+            }
+        }
+        
+        if (empty($requests)) {
+            return self::$asyncResponses;
+        }
+        
+        if (self::$debug) {
+            fwrite(STDOUT, PHP_EOL . '<<STARTING RECURSIVE CALL>>' . PHP_EOL);
+            
+            fwrite(
+                STDOUT,
+                'REQUESTS: ' . print_r($requests, true) .
+                PHP_EOL .
+                'RESPONSES: ' . print_r(self::$asyncResponses, true)
+            );
+        }
+        
+        return self::AsyncClient($requests);
     }
 
     /**
@@ -286,6 +388,14 @@ class PromisePay {
         }
         
         return $response;
+    }
+    
+    public static function enableDebug() {
+        self::$debug = true;
+    }
+    
+    public static function disableDebug() {
+        self::$debug = false;
     }
     
     protected static function buildErrorMessage($response) {

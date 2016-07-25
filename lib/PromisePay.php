@@ -17,6 +17,16 @@ class PromisePay {
     
     protected static $debug = false;
     
+    protected static $lastUsedIndexName;
+    
+    private static $asyncResponses = array();
+    private static $asyncPendingRequestsHistoryCounts = array();
+    private static $asyncIteratorCount = 0;
+    
+    public static function getLastUsedIndexName() {
+        return self::$lastUsedIndexName;
+    }
+    
     public static function getDecodedResponse($indexName = null) {
         if (!is_string($indexName) && $indexName !== null) {
             throw new \InvalidArgumentException(
@@ -26,6 +36,8 @@ class PromisePay {
                 )
             );
         }
+        
+        self::$lastUsedIndexName = $indexName;
         
         if ($indexName !== null) {
             if (isset(self::$jsonResponse[$indexName])) {
@@ -106,6 +118,7 @@ class PromisePay {
     
     public static function finishAsync() {
         self::$pendingRequests = self::$asyncResponses = self::$asyncPendingRequestsHistoryCounts = array();
+        self::$asyncIteratorCount = 0;
         self::$sendAsync = false;
     }
     
@@ -113,10 +126,19 @@ class PromisePay {
         return self::$pendingRequests;
     }
     
-    private static $asyncResponses = array();
-    private static $asyncPendingRequestsHistoryCounts = array();
-    
-    public static function AsyncClient(array $requests = null) {
+    /**
+     * Method for performing async requests against PromisePay endpoints.
+     *
+     * In case all requests don't get processed in the same batch
+     * (because the server or network is over capacity), this method
+     * will call itself recursively until all requests have been processed, unless:
+     * 1) iterator count exceeds $iteratorMaximum param
+     * 2) not a single new 2xx response is received in the last 2 batches
+     *
+     * @param array $requests A set of requests, in format of (http method, full uri)
+     * @param int $iteratorMaximum Maximum amount of recursive method calls
+     */
+    public static function AsyncClient(array $requests = null, $iteratorMaximum = 1) {
         $multiHandle = curl_multi_init();
         
         $connections = array();
@@ -217,12 +239,24 @@ class PromisePay {
                         unset($requests[$index]);
                     }
                 }
-            }
-            
-            $jsonArray = json_decode($responseBody, true);
-            
-            if (is_array($jsonArray)) {
-                self::$asyncResponses = array_merge(self::$asyncResponses, $jsonArray);
+                
+                $jsonArray = json_decode($responseBody, true);
+                
+                if (is_array($jsonArray)) {
+                    if (self::$lastUsedIndexName !== null)
+                        $jsonArray = $jsonArray[self::$lastUsedIndexName];
+                    
+                    self::$asyncResponses = array_merge(self::$asyncResponses, $jsonArray);
+                    
+                } else {
+                    if (self::$debug) {
+                        fwrite(
+                            STDOUT,
+                            'An invalid response was received: ' . PHP_EOL . $responseBody . PHP_EOL
+                        );
+                    }
+                }
+                
             }
             
             curl_multi_remove_handle($multiHandle, $connection);
@@ -242,7 +276,7 @@ class PromisePay {
             );
         }
         
-        // if a single request hasn't succeed in the past 2 request batches,
+        // if a single request hasn't succeeded in the past 2 request batches,
         // terminate and return result.
         foreach (self::$asyncPendingRequestsHistoryCounts as $index => $pendingRequestsCount) {
             if ($index === 0) continue;
@@ -259,7 +293,9 @@ class PromisePay {
             }
         }
         
-        if (empty($requests)) {
+        self::$asyncIteratorCount++;
+        
+        if (empty($requests) || self::$asyncIteratorCount >= $iteratorMaximum) {
             return self::$asyncResponses;
         }
         
@@ -268,9 +304,9 @@ class PromisePay {
             
             fwrite(
                 STDOUT,
-                'REQUESTS: ' . print_r($requests, true) .
+                'REMAINING REQUESTS: ' . print_r($requests, true) .
                 PHP_EOL .
-                'RESPONSES: ' . print_r(self::$asyncResponses, true)
+                'PROCESSED RESPONSES: ' . print_r(self::$asyncResponses, true)
             );
         }
         
@@ -390,12 +426,98 @@ class PromisePay {
         return $response;
     }
     
+    public static function getAllResults($request, $limit = 200, $offset = 0, $async = false) {
+        // can't use callable argument typehint as the 
+        // minimal version of PHP we're supporting is 5.3,
+        // and callable didn't get introduced until 5.4
+        
+        if (!is_callable($request)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    '%s requires its first argument to be
+                    a closure, but %s was given instead.',
+                    __FUNCTION__,
+                    gettype($request)
+                )
+            );
+        }
+        
+        if (!is_int($limit) || !is_int($offset)) {
+            if (self::isDebug()) {
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        '%s requires its second and third argument
+                        to be integers, but %s and %s, respectively,
+                        were given instead.',
+                        __FUNCTION__,
+                        gettype($limit),
+                        gettype($offset)
+                    )
+                );
+            } else {
+                $limit = 200;
+                $offset = 0;
+            }
+        }
+        
+        $results = array();
+        $total = null;
+        
+        do {
+            fwrite(
+                STDOUT,
+                sprintf(
+                    "Progress: offset is %d, results count is %d" . PHP_EOL,
+                    $offset,
+                    $total
+                )
+            );
+            
+            $request($limit, $offset);
+            
+            $results = array_merge($results, 
+                self::getDecodedResponse(
+                    self::getLastUsedIndexName()
+                )
+            );
+            
+            if ($total === null) {
+                $meta = self::getMeta();
+                
+                $total = isset($meta['total']) ? $meta['total'] : 0;
+            }
+            
+            if ($async) {
+                self::beginAsync();
+            }
+            
+            $offset += $limit;
+        } while ($offset < $total);
+        
+        if ($async) {
+            $asyncRequests = self::AsyncClient();
+            $results = array_merge($results, $asyncRequests);
+            
+            self::finishAsync();
+        }
+        
+        return $results;
+    }
+    
+    public static function getAllResultsAsync($request, $limit = 200, $offset = 0) {
+        return self::getAllResults($request, $limit, $offset, true);
+    }
+    
     public static function enableDebug() {
         self::$debug = true;
     }
     
     public static function disableDebug() {
         self::$debug = false;
+    }
+    
+    public static function isDebug() {
+        return self::$debug;
     }
     
     protected static function buildErrorMessage($response) {

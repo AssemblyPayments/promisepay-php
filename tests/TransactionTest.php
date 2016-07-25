@@ -26,31 +26,11 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
     }
     
     /**
-     * @group filters-type
+     * @group async
      */
-    public function testListTransactionsWithFilterTransactionType() {
-        // ASYNC EXPERIMENT
-        /*
-        PromisePay::enableDebug();
-        
-        $getList = getAllResults(function($limit, $offset) {
-            return PromisePay::Transaction()->getList(
-                array(
-                    'limit' => $limit,
-                    'offset' => $offset,
-                    'transaction_type' => 'payment'
-                )
-            );
-        }, 200, 0, true);
-        
-        var_dump("FINAL RESULT: ", $getList);
-        
-        $this->markTestIncomplete();
-        */
-        // ENDS ASYNC EXPERIMENT
-        
-        // transaction type => payment
-        $getList = getAllResults(function($limit, $offset) {
+    public function testListTransactionsWithFilterTransactionTypePayment() {
+        // transaction type => refund
+        $getList = PromisePay::getAllResultsAsync(function($limit, $offset) {
             return PromisePay::Transaction()->getList(
                 array(
                     'limit' => $limit,
@@ -64,6 +44,10 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
             $this->assertEquals($transaction['type'], 'payment');
         }
         
+        waitForServerToBecomeResponsiveAgain();
+    }
+    
+    public function testListTransactionsWithFilterTransactionType() {
         // transaction type => refund
         $getList = PromisePay::Transaction()->getList(
             array(

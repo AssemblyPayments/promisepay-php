@@ -44,7 +44,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase {
             $this->assertEquals($transaction['type'], 'payment');
         }
         
-        waitForServerToBecomeResponsiveAgain();
+        PromisePay::helper()->waitForServerToBecomeResponsiveAgain();
     }
     
     public function testListTransactionsWithFilterTransactionType() {

@@ -25,7 +25,8 @@ class PromisePay {
     /** @var array Pending requests; to be executed asynchronously */
     protected static $pendingRequests = array();
     
-    protected static $lastUsedIndexName;
+    protected static $lastUsedResponseIndexName;
+    protected static $usedResponseIndexNames = array();
     protected static $asyncResponses = array();
     protected static $asyncPendingRequestsHistoryCounts = array();
     protected static $asyncIteratorCount = 0;
@@ -76,7 +77,7 @@ class PromisePay {
             
             self::$jsonResponse = array();
             
-            return array();
+            return self::$jsonResponse;
         }
         
         switch ($method) {
@@ -166,7 +167,11 @@ class PromisePay {
     }
     
     public static function finishAsync() {
-        self::$pendingRequests = self::$asyncResponses = self::$asyncPendingRequestsHistoryCounts = array();
+        self::$pendingRequests = 
+        self::$asyncResponses = 
+        self::$asyncPendingRequestsHistoryCounts = 
+        array();
+        
         self::$asyncIteratorCount = 0;
         self::$sendAsync = false;
     }
@@ -292,8 +297,13 @@ class PromisePay {
                 $jsonArray = json_decode($responseBody, true);
                 
                 if (is_array($jsonArray)) {
-                    if (self::$lastUsedIndexName !== null)
-                        $jsonArray = $jsonArray[self::$lastUsedIndexName];
+                    foreach (self::$usedResponseIndexNames as $responseIndex) {
+                        if (isset($jsonArray[$responseIndex])) {
+                            $jsonArray = $jsonArray[$responseIndex];
+                            
+                            break;
+                        }
+                    }
                     
                     self::$asyncResponses = array_merge(self::$asyncResponses, $jsonArray);
                     
@@ -362,8 +372,8 @@ class PromisePay {
         return self::AsyncClient($requests);
     }
     
-    protected static function getLastUsedIndexName() {
-        return self::$lastUsedIndexName;
+    protected static function getLastUsedResponseIndexName() {
+        return self::$lastUsedResponseIndexName;
     }
     
     public static function getDecodedResponse($indexName = null) {
@@ -376,7 +386,10 @@ class PromisePay {
             );
         }
         
-        self::$lastUsedIndexName = $indexName;
+        self::$lastUsedResponseIndexName = $indexName;
+        
+        if (!isset(self::$usedResponseIndexNames))
+            self::$usedResponseIndexNames[] = $indexName;
         
         if ($indexName !== null) {
             if (isset(self::$jsonResponse[$indexName])) {
@@ -426,7 +439,7 @@ class PromisePay {
                 sprintf(
                     '%s requires its first argument to be
                     a closure, but %s was given instead.',
-                    __FUNCTION__,
+                    __METHOD__,
                     gettype($request)
                 )
             );
@@ -439,7 +452,7 @@ class PromisePay {
                         '%s requires its second and third argument
                         to be integers, but %s and %s, respectively,
                         were given instead.',
-                        __FUNCTION__,
+                        __METHOD__,
                         gettype($limit),
                         gettype($offset)
                     )
@@ -496,6 +509,33 @@ class PromisePay {
     
     public static function getAllResultsAsync($request, $limit = 200, $offset = 0) {
         return self::getAllResults($request, $limit, $offset, true);
+    }
+    
+    public static function asyncRequests() {
+        self::beginAsync();
+        
+        $args = func_get_args();
+        
+        foreach ($args as $key => $arg) {
+            if (!is_callable($arg)) {
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        "%d. argument for %s function is not a callable;
+                        all arguments should be callables.",
+                        $key,
+                        __METHOD__
+                    )
+                );
+            }
+            
+            $arg();
+        }
+        
+        $results = self::AsyncClient();
+        
+        self::finishAsync();
+        
+        return $results;
     }
     
     public static function enableDebug() {

@@ -36,7 +36,6 @@ class Helper {
         $this->checksPassed = true;
     }
     
-    // TODO REFACTOR
     /**
      * Composes an error message to be shown in case of Exceptions being thrown.
      *
@@ -44,6 +43,8 @@ class Helper {
      * @return string
      */
     public function buildErrorMessage($response) {
+        // TODO REFACTOR
+        
         $jsonResponse = json_decode($response->raw_body);
         
         $message = isset($jsonResponse->message) ? $jsonResponse->message : null;

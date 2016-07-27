@@ -372,63 +372,6 @@ class PromisePay {
         return self::AsyncClient($requests);
     }
     
-    protected static function getLastUsedResponseIndexName() {
-        return self::$lastUsedResponseIndexName;
-    }
-    
-    public static function getDecodedResponse($indexName = null) {
-        if (!is_string($indexName) && $indexName !== null) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Argument for %s should be a string.',
-                    __METHOD__
-                )
-            );
-        }
-        
-        self::$lastUsedResponseIndexName = $indexName;
-        
-        if (!isset(self::$usedResponseIndexNames))
-            self::$usedResponseIndexNames[] = $indexName;
-        
-        if ($indexName !== null) {
-            if (isset(self::$jsonResponse[$indexName])) {
-                return self::$jsonResponse[$indexName];
-            } elseif (self::$sendAsync) {
-                return array(); // not to break BC
-            } else {
-                return null;
-            }
-        } else {
-            return self::$jsonResponse;
-        }
-    }
-    
-    public static function getMeta() {
-        return self::helper()->arrayValueByKeyRecursive(
-            'meta',
-            self::$jsonResponse
-        );
-    }
-    
-    public static function getLinks() {
-        return self::helper()->arrayValueByKeyRecursive(
-            'links',
-            self::$jsonResponse
-        );
-    }
-    
-    public static function getDebugData() {
-        return self::$debugData;
-    }
-    
-    public static function helper() {
-        if (self::$helper === null)
-            self::$helper = new Helper;
-        
-        return self::$helper;
-    }
-    
     public static function getAllResults($request, $limit = 200, $offset = 0, $async = false) {
         // can't use callable argument typehint as the 
         // minimal version of PHP we're supporting is 5.3,
@@ -467,20 +410,22 @@ class PromisePay {
         $total = null;
         
         do {
-            fwrite(
-                STDOUT,
-                sprintf(
-                    "Progress: offset is %d, results count is %d" . PHP_EOL,
-                    $offset,
-                    $total
-                )
-            );
+            if (self::isDebug()) {
+                fwrite(
+                    STDOUT,
+                    sprintf(
+                        "Progress: offset is %d, results count is %d" . PHP_EOL,
+                        $offset,
+                        $total
+                    )
+                );
+            }
             
             $request($limit, $offset);
             
             $results = array_merge($results, 
                 self::getDecodedResponse(
-                    self::getLastUsedIndexName()
+                    self::$lastUsedResponseIndexName
                 )
             );
             
@@ -536,6 +481,59 @@ class PromisePay {
         self::finishAsync();
         
         return $results;
+    }
+    
+    public static function getDecodedResponse($indexName = null) {
+        if (!is_string($indexName) && $indexName !== null) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Argument for %s should be a string.',
+                    __METHOD__
+                )
+            );
+        }
+        
+        self::$lastUsedResponseIndexName = $indexName;
+        
+        if (!isset(self::$usedResponseIndexNames))
+            self::$usedResponseIndexNames[] = $indexName;
+        
+        if ($indexName !== null) {
+            if (isset(self::$jsonResponse[$indexName])) {
+                return self::$jsonResponse[$indexName];
+            } elseif (self::$sendAsync) {
+                return array(); // not to break BC
+            } else {
+                return null;
+            }
+        } else {
+            return self::$jsonResponse;
+        }
+    }
+    
+    public static function getMeta() {
+        return self::helper()->arrayValueByKeyRecursive(
+            'meta',
+            self::$jsonResponse
+        );
+    }
+    
+    public static function getLinks() {
+        return self::helper()->arrayValueByKeyRecursive(
+            'links',
+            self::$jsonResponse
+        );
+    }
+    
+    public static function getDebugData() {
+        return self::$debugData;
+    }
+    
+    public static function helper() {
+        if (self::$helper === null)
+            self::$helper = new Helper;
+        
+        return self::$helper;
     }
     
     public static function enableDebug() {

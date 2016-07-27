@@ -119,6 +119,7 @@ class Helper {
     }
     
     public function waitForServerToBecomeResponsiveAgain() {
+        // the 503 lockout is usually 120 seconds
         $start = microtime(true);
         
         while (true) {

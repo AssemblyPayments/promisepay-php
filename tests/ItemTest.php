@@ -229,10 +229,21 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
     }
     
     public function testListAllItems() {
-        $fetchList = PromisePay::Item()->getList(200);
+        $itemsList = PromisePay::Item()->getList(
+            array(
+                'limit' => 200
+            )
+        );
         
-        $this->assertNotNull($fetchList);
-        $this->assertTrue(count($fetchList) > 0);
+        $this->assertNotNull($itemsList);
+        $this->assertTrue(is_array($itemsList));
+        
+        $meta = PromisePay::getMeta();
+        
+        if ($meta['total'] < 200)
+            $this->assertEquals(count($itemsList), $meta['total']);
+        else
+            $this->assertEquals(count($itemsList), 200);
     }
     
     public function testGetItem() {

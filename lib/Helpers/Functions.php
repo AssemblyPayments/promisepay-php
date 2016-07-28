@@ -1,39 +1,58 @@
 <?php
-namespace PromisePay;
+namespace PromisePay\Helpers;
 
-class Helper {
-    protected $checksPassed = false;
+class Functions {
+    
+    public static function getBaseNamespace() {
+        $namespacePaths = explode('\\', __NAMESPACE__);
+        
+        return $namespacePaths[0];
+    }
     
     /**
      * Performs runtime environment checks.
      *
      * @return void
      */
-    public function runtimeChecks() {
-        if ($this->checksPassed)
+    public static function runtimeChecks() {
+        static $checksPassed;
+        
+        if ($checksPassed === true)
             return;
+        
+        $packageNamespace = self::getBaseNamespace();
         
         if (!extension_loaded('curl')) {
             die(
                 sprintf(
                     'curl extension is missing, and is required for %s package.',
-                    __NAMESPACE__
+                    $packageNamespace
                 )
                 . PHP_EOL
             );
         }
         
+        if (version_compare(PHP_VERSION, '5.3.3', '<')) {
+            die(
+                sprintf(
+                    "Fatal error: The minimum version of PHP 
+                    needed for %s package is 5.3.3. Exiting.",
+                    $packageNamespace
+                )
+            );
+        }
+        
         // Check whether critical constants are defined.
-        if (!defined(__NAMESPACE__ . '\API_URL'))
+        if (!defined($packageNamespace . '\API_URL'))
             die('Fatal error: API_URL constant missing. Check if environment has been set.');
         
-        if (!defined(__NAMESPACE__ . '\API_LOGIN'))
+        if (!defined($packageNamespace . '\API_LOGIN'))
             die('Fatal error: API_LOGIN constant missing.');
         
-        if (!defined(__NAMESPACE__ . '\API_PASSWORD'))
+        if (!defined($packageNamespace . '\API_PASSWORD'))
             die('Fatal error: API_PASSWORD constant missing.');
         
-        $this->checksPassed = true;
+        $checksPassed = true;
     }
     
     /**
@@ -42,7 +61,7 @@ class Helper {
      * @param string $response Exception's error message
      * @return string
      */
-    public function buildErrorMessage($response) {
+    public static function buildErrorMessage($response) {
         // TODO REFACTOR
         
         $jsonResponse = json_decode($response->raw_body);
@@ -90,7 +109,7 @@ class Helper {
      *
      * @return string
      */
-    public function arrayValueByKeyRecursive($needle, array $array) {
+    public static function arrayValueByKeyRecursive($needle, array $array) {
         if (!is_scalar($needle)) {
             if (PromisePay::isDebug()) {
                 throw new \InvalidArgumentException(
@@ -118,7 +137,7 @@ class Helper {
         return false;
     }
     
-    public function waitForServerToBecomeResponsiveAgain() {
+    public static function waitForServerToBecomeResponsiveAgain() {
         // the 503 lockout is usually 120 seconds
         $start = microtime(true);
         

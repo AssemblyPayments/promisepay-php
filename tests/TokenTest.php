@@ -42,9 +42,6 @@ class TokenTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($cardToken['user_id'], $this->userId);
     }
     
-    /**
-     * @group failing
-     */
     public function testRequestSessionToken() {
         $requestSessionToken = PromisePay::Token()->requestSessionToken(
             $this->sessionTokenData

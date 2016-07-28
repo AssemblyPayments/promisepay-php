@@ -66,15 +66,24 @@ class AsyncStorage {
             );
         }
         
-        $i = 0;
+        $jsonCount = count($this->json);
         
-        foreach ($this->responses as $response) {
-            if ($i + 1 < $argCount)
-                break;
-            
+        if ($argCount > $jsonCount) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    "Too much args supplied to %s;
+                    %d were requsted, %d are available.",
+                    __METHOD__,
+                    $argCount,
+                    $jsonCount
+                )
+            );
+        }
+        
+        for ($i = 0; $i < $argCount; $i++) {
             $paramName = "arg$i";
             
-            $$paramName = array(
+            $$paramName = (object) array(
                 'json' => $this->json[$i],
                 'meta' => $this->meta[$i],
                 'links' => $this->links[$i],

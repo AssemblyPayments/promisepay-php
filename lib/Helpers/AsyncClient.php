@@ -167,7 +167,6 @@ class AsyncClient {
                     $this->storage->storeMeta(array());
                     $this->storage->storeLinks(array());
                     $this->storage->storeDebug(array());
-                    
                 } else {
                     if (PromisePay::isDebug()) {
                         fwrite(
@@ -209,14 +208,14 @@ class AsyncClient {
                     );
                 }
                 
-                return $this->asyncResponses;
+                return $this->storage;
             }
         }
         
         $this->asyncIteratorCount++;
         
         if (empty($requests) || $this->asyncIteratorCount >= $iteratorMaximum) {
-            return $this->asyncResponses;
+            return $this->storage;
         }
         
         if (PromisePay::isDebug()) {
@@ -230,7 +229,7 @@ class AsyncClient {
             );
         }
         
-        return $this->storage;
+        return $this->Client($requests);
     }
     
 }

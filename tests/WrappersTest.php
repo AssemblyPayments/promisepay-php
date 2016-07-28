@@ -67,10 +67,13 @@ class WrappersTest extends \PHPUnit_Framework_TestCase {
         
         PromisePay::AsyncClient(
             $cardToken,
-            $cardTokenAgain
-        )->done($res1);
+            $cardTokenAgain,
+            $transaction,
+            $transactionAgain,
+            $transactionUser
+        )->done($res1, $res2, $res3, $res4, $res5);
         
-        var_dump($res1);
+        var_dump($res1->json, $res2->json, $res3->json, $res4->json, $res5->json);
     }
     
     public function testGetAllResultsForItems() {

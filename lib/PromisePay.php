@@ -220,7 +220,11 @@ class PromisePay {
         
         self::finishAsync($asyncClient);
         
-        return $asyncClient->Client(self::$pendingRequests);
+        $asyncResults = $asyncClient->Client(self::$pendingRequests);
+        
+        self::$pendingRequests = array();
+        
+        return $asyncResults;
     }
     
     public static function finishAsync() {

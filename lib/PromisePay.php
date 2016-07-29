@@ -23,9 +23,6 @@ class PromisePay {
     /** @var bool Debug state; togglers: enableDebug(), disableDebug() */
     protected static $debug = false;
     
-    /** @var object Helper class; getter: helper() */
-    protected static $helper;
-    
     /** @var array JSON-decoded response; getter: getDecodedResponse() */
     protected static $jsonResponse;
     
@@ -150,7 +147,7 @@ class PromisePay {
         // check for errors
         // TODO REFACTOR
         if ($response->hasErrors()) {
-            $errors = self::helper()->buildErrorMessage($response);
+            $errors = Helpers\Functions::buildErrorMessage($response);
             
             switch ($response->code) {
                 case 401:

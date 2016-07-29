@@ -136,7 +136,7 @@ class AsyncClient {
                 if (is_array($jsonArray)) {
                     // SCENARIO #1
                     // Response JSON is self-contained under a master key
-                    foreach (PromisePay::$usedResponseIndexNames as $responseIndex) {
+                    foreach (PromisePay::$usedResponseIndexes as $responseIndex) {
                         if (isset($jsonArray[$responseIndex])) {
                             $jsonArray = $jsonArray[$responseIndex];
                             

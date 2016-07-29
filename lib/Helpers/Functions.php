@@ -146,8 +146,7 @@ class Functions {
                 $getList = PromisePay::Transaction()->getList(
                     array(
                         'limit' => 1,
-                        'offset' => 0,
-                        'transaction_type' => 'refund'
+                        'offset' => 0
                     )
                 );
                 

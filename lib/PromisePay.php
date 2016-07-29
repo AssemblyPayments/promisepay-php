@@ -10,8 +10,8 @@ class PromisePay {
     /** @var array Pending requests; to be executed asynchronously */
     protected static $pendingRequests = array();
     
-    protected static $lastUsedResponseIndexName = array();
-    public static $usedResponseIndexNames = array();
+    protected static $lastUsedResponseIndex = array();
+    public static $usedResponseIndexes = array();
     
     /** 
      @var bool Whether or not to retry requests on 503 or 504 HTTP responses;
@@ -315,8 +315,8 @@ class PromisePay {
         return self::getAllResults($request, $limit, $offset, true);
     }
     
-    public static function getDecodedResponse($indexName = null) {
-        if (!is_string($indexName) && $indexName !== null) {
+    public static function getDecodedResponse($index = null) {
+        if (!is_string($index) && $index !== null) {
             throw new \InvalidArgumentException(
                 sprintf(
                     'Argument for %s should be a string.',
@@ -325,22 +325,25 @@ class PromisePay {
             );
         }
         
-        self::$lastUsedResponseIndexName = $indexName;
+        self::$lastUsedResponseIndex = $index;
         
-        if (!in_array($indexName, self::$usedResponseIndexNames))
-            self::$usedResponseIndexNames[] = $indexName;
+        if (!in_array($index, self::$usedResponseIndexes))
+            self::$usedResponseIndexes[] = $index;
         
-        if ($indexName !== null) {
-            if (isset(self::$jsonResponse[$indexName])) {
-                return self::$jsonResponse[$indexName];
-            } elseif (self::$sendAsync) {
-                return array(); // not to break BC
-            } else {
-                return null;
-            }
-        } else {
+        if ($index === null)
             return self::$jsonResponse;
+        
+        if (isset(self::$jsonResponse[$index])) {
+            return self::$jsonResponse[$index];
+        } elseif (self::$sendAsync) {
+            return array(); // not to break BC
+        } else {
+            return null;
         }
+    }
+    
+    public static function getJson($index = null) {
+        return self::getDecodedResponse($index);
     }
     
     public static function getMeta($json = null) {

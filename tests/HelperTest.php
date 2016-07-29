@@ -1,12 +1,12 @@
 <?php
 namespace PromisePay\Tests;
 
-use PromisePay\PromisePay;
-
 class HelperTest extends \PHPUnit_Framework_TestCase {
     
-    public function testRuntimeChecks() {
-        $this->assertNull(PromisePay::helper()->runtimeChecks());
+    public function testRuntimeChecksReturnType() {
+        $this->assertNull(
+            \Helpers\Functions::runtimeChecks()
+        );
     }
     
     public function testBuildErrorMessage() {

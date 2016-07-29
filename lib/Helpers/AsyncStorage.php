@@ -19,6 +19,35 @@ class AsyncStorage implements \ArrayAccess, \Iterator {
         $this->iteratorPosition = 0;
     }
     
+    // json/meta/links and debug getters
+    public function getJson($index = null) {
+        if ($index !== null)
+            return isset($this->json[$index]) ? $this->json[$index] : null;
+        
+        return $this->json;
+    }
+    
+    public function getMeta($index = null) {
+        if ($index !== null)
+            return isset($this->meta[$index]) ? $this->meta[$index] : null;
+        
+        return $this->meta;
+    }
+    
+    public function getLinks($index = null) {
+        if ($index !== null)
+            return isset($this->links[$index]) ? $this->links[$index] : null;
+        
+        return $this->links;
+    }
+    
+    public function getDebug($index = null) {
+        if ($index !== null)
+            return isset($this->debug[$index]) ? $this->debug[$index] : null;
+        
+        return $this->debug;
+    }
+    
     // the next 4 methods are needed by ArrayAccess interface
     public function offsetSet($offset, $value) {
         if (is_null($offset))
@@ -58,35 +87,6 @@ class AsyncStorage implements \ArrayAccess, \Iterator {
     
     public function valid() {
         return isset($this->json[$this->iteratorPosition]);
-    }
-    
-    // json/meta/links and debug getters
-    public function getJson($index = null) {
-        if ($index !== null)
-            return isset($this->json[$index]) ? $this->json[$index] : null;
-        
-        return $this->json;
-    }
-    
-    public function getMeta($index = null) {
-        if ($index !== null)
-            return isset($this->meta[$index]) ? $this->meta[$index] : null;
-        
-        return $this->meta;
-    }
-    
-    public function getLinks($index = null) {
-        if ($index !== null)
-            return isset($this->links[$index]) ? $this->links[$index] : null;
-        
-        return $this->links;
-    }
-    
-    public function getDebug($index = null) {
-        if ($index !== null)
-            return isset($this->debug[$index]) ? $this->debug[$index] : null;
-        
-        return $this->debug;
     }
     
 }

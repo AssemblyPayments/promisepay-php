@@ -57,7 +57,7 @@ class AsyncStorageHandler {
         if ($argCount > $maxArgCount) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    '%s method supports up to %d parameters, but %d were given instead.' . PHP_EOL,
+                    '%s method supports up to %d arguments, but %d were given instead.' . PHP_EOL,
                     __METHOD__,
                     $maxArgCount,
                     $argCount
@@ -70,7 +70,7 @@ class AsyncStorageHandler {
         if ($argCount > $jsonCount) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    "Too much args supplied to %s; %d were requsted, %d are available.",
+                    "Too much arguments supplied to %s; %d were requsted, %d are available.",
                     __METHOD__,
                     $argCount,
                     $jsonCount

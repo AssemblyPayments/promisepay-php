@@ -281,7 +281,7 @@ class PromisePay {
             
             $results = array_merge($results, 
                 self::getDecodedResponse(
-                    self::$lastUsedResponseIndexName
+                    self::$lastUsedResponseIndex
                 )
             );
             

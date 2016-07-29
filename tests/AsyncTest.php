@@ -79,4 +79,16 @@ class AsyncTest extends \PHPUnit_Framework_TestCase {
         }
     }
     
+    /**
+     @group errors-handling
+     */
+    public function testAsyncRequestsWithErrors() {
+        PromisePay::AsyncClient(
+            function () {
+                // try a fetch a fee using ID that doesn't exist
+                PromisePay::Fee()->get(GUID());
+            }
+        )->done($response);
+    }
+    
 }

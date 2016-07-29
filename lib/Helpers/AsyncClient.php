@@ -114,7 +114,9 @@ class AsyncClient {
                 );
             }
             
-            if (substr($responseHeaders['http_code'], 0, 1) == '2') {
+            $jsonArray = json_decode($responseBody, true);
+            
+            if (substr($responseHeaders['http_code'], 0, 1) == '2' && is_array($jsonArray)) {
                 // processed successfully, remove from queue
                 foreach ($requests as $index => $requestParams) {
                     list($method, $url) = $requestParams;
@@ -131,56 +133,55 @@ class AsyncClient {
                     }
                 }
                 
-                $jsonArray = json_decode($responseBody, true);
-                
-                if (is_array($jsonArray)) {
-                    // SCENARIO #1
-                    // Response JSON is self-contained under a master key
-                    foreach (PromisePay::$usedResponseIndexes as $responseIndex) {
-                        if (isset($jsonArray[$responseIndex])) {
-                            $jsonArray = $jsonArray[$responseIndex];
-                            
-                            break;
-                        } else {
-                            unset($responseIndex);
-                        }
-                    }
-                    
-                    // SCENARIO #2
-                    // Response JSON is NOT self-contained under a master key
-                    if (!isset($responseIndex)) {
-                        // for these scenarios, we'll store them under their endpoint name.
-                        // for example, requestSessionToken() internally calls getDecodedResponse()
-                        // without a key param.
-                        $responseIndex = trim(
-                            parse_url($responseHeaders['url'], PHP_URL_PATH),
-                            '/'
-                        );
+                // SCENARIO #1
+                // Response JSON is self-contained under a master key
+                foreach (PromisePay::$usedResponseIndexes as $responseIndex) {
+                    if (isset($jsonArray[$responseIndex])) {
+                        $jsonArray = $jsonArray[$responseIndex];
                         
-                        $slashLookup = strpos($responseIndex, '/');
-                        
-                        if ($slashLookup !== false)
-                            $responseIndex = substr($responseIndex, 0, $slashLookup);
-                    }
-                    
-                    $this->responses[$responseIndex][] = $jsonArray;
-                    
-                    $this->storageHandler->storeJson($jsonArray);
-                    $this->storageHandler->storeMeta(PromisePay::getMeta($jsonArray));
-                    $this->storageHandler->storeLinks(PromisePay::getLinks($jsonArray));
-                    $this->storageHandler->storeDebug($responseHeaders);
-                    
-                    unset($responseIndex);
-                } else {
-                    if (PromisePay::isDebug()) {
-                        fwrite(
-                            STDOUT,
-                            'An invalid response was received: ' . PHP_EOL . $responseBody . PHP_EOL
-                        );
+                        break;
+                    } else {
+                        unset($responseIndex);
                     }
                 }
                 
+                // SCENARIO #2
+                // Response JSON is NOT self-contained under a master key
+                if (!isset($responseIndex)) {
+                    // for these scenarios, we'll store them under their endpoint name.
+                    // for example, requestSessionToken() internally calls getDecodedResponse()
+                    // without a key param.
+                    $responseIndex = trim(
+                        parse_url($responseHeaders['url'], PHP_URL_PATH),
+                        '/'
+                    );
+                    
+                    $slashLookup = strpos($responseIndex, '/');
+                    
+                    if ($slashLookup !== false)
+                        $responseIndex = substr($responseIndex, 0, $slashLookup);
+                }
+            } else {
+                if (PromisePay::isDebug()) {
+                    fwrite(
+                        STDOUT,
+                        'An invalid response was received: ' . PHP_EOL . $responseBody . PHP_EOL
+                    );
+                }
+                
+                // handle errors
+                $responseIndex = array_keys($jsonArray);
+                $responseIndex = $responseIndex[0];
             }
+            
+            $this->responses[$responseIndex][] = $jsonArray;
+            
+            $this->storageHandler->storeJson($jsonArray);
+            $this->storageHandler->storeMeta(PromisePay::getMeta($jsonArray));
+            $this->storageHandler->storeLinks(PromisePay::getLinks($jsonArray));
+            $this->storageHandler->storeDebug($responseHeaders);
+            
+            unset($responseIndex);
             
             curl_multi_remove_handle($multiHandle, $connection);
         }

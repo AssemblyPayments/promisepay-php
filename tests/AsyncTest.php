@@ -86,7 +86,9 @@ class AsyncTest extends \PHPUnit_Framework_TestCase {
         PromisePay::AsyncClient(
             function () {
                 // try a fetch a fee using ID that doesn't exist
-                PromisePay::Fee()->get(GUID());
+                $randomId = GUID();
+                
+                PromisePay::Fee()->get($randomId);
             }
         )->done($response);
     }

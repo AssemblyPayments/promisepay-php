@@ -145,7 +145,6 @@ class PromisePay {
         }
         
         // check for errors
-        // TODO REFACTOR
         if ($response->hasErrors()) {
             $errors = Helpers\Functions::buildErrorMessage($response);
             
@@ -215,7 +214,7 @@ class PromisePay {
             $arg();
         }
         
-        self::finishAsync($asyncClient);
+        self::finishAsync();
         
         $asyncResults = $asyncClient->Client(self::$pendingRequests);
         

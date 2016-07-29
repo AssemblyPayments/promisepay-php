@@ -5,9 +5,9 @@ use PromisePay\PromisePay;
 
 class AsyncClient {
     
-    protected $asyncResponses = array();
-    protected $asyncPendingRequestsHistoryCounts = array();
-    protected $asyncIteratorCount = 0;
+    protected $responses = array();
+    protected $pendingRequestsHistoryCounts = array();
+    protected $iteratorCount = 0;
     
     private $storageHandler;
     
@@ -163,7 +163,7 @@ class AsyncClient {
                             $responseIndex = substr($responseIndex, 0, $slashLookup);
                     }
                     
-                    $this->asyncResponses[$responseIndex][] = $jsonArray;
+                    $this->responses[$responseIndex][] = $jsonArray;
                     
                     $this->storageHandler->storeJson($jsonArray);
                     $this->storageHandler->storeMeta(PromisePay::getMeta($jsonArray));
@@ -187,24 +187,24 @@ class AsyncClient {
         
         curl_multi_close($multiHandle);
         
-        $this->asyncPendingRequestsHistoryCounts[] = count($requests);
+        $this->pendingRequestsHistoryCounts[] = count($requests);
         
         if (PromisePay::isDebug()) {
             fwrite(
                 STDOUT,
                 sprintf(
-                    "asyncResponses contains %d members." . PHP_EOL,
-                    count($this->asyncResponses)
+                    "responses contains %d members." . PHP_EOL,
+                    count($this->responses)
                 )
             );
         }
         
         // if a single request hasn't succeeded in the past 2 request batches,
         // terminate and return result.
-        foreach ($this->asyncPendingRequestsHistoryCounts as $index => $pendingRequestsCount) {
+        foreach ($this->pendingRequestsHistoryCounts as $index => $pendingRequestsCount) {
             if ($index === 0) continue;
             
-            if ($this->asyncPendingRequestsHistoryCounts[$index - 1] == $pendingRequestsCount) {
+            if ($this->pendingRequestsHistoryCounts[$index - 1] == $pendingRequestsCount) {
                 if (PromisePay::isDebug()) {
                     fwrite(
                         STDOUT,
@@ -216,9 +216,9 @@ class AsyncClient {
             }
         }
         
-        $this->asyncIteratorCount++;
+        $this->iteratorCount++;
         
-        if (empty($requests) || $this->asyncIteratorCount >= $iteratorMaximum) {
+        if (empty($requests) || $this->iteratorCount >= $iteratorMaximum) {
             return $this->storageHandler;
         }
         
@@ -229,7 +229,7 @@ class AsyncClient {
                 STDOUT,
                 'REMAINING REQUESTS: ' . print_r($requests, true) .
                 PHP_EOL .
-                'PROCESSED RESPONSES: ' . print_r($this->asyncResponses, true)
+                'PROCESSED RESPONSES: ' . print_r($this->responses, true)
             );
         }
         

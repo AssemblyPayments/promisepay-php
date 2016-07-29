@@ -11,7 +11,7 @@ class PromisePay {
     protected static $pendingRequests = array();
     
     protected static $lastUsedResponseIndexName = array();
-    protected static $usedResponseIndexNames = array();
+    public static $usedResponseIndexNames = array();
     
     /** 
      @var bool Whether or not to retry requests on 503 or 504 HTTP responses;
@@ -343,18 +343,28 @@ class PromisePay {
         }
     }
     
-    public static function getMeta() {
-        return Helpers\Functions::arrayValueByKeyRecursive(
-            'meta',
-            self::$jsonResponse
-        );
+    public static function getMeta($json = null) {
+        if ($json === null)
+            $json = self::$jsonResponse;
+        
+        if (isset($json['meta']))
+            return $json['meta'];
+        
+        $recursiveLookup = Helpers\Functions::arrayValueByKeyRecursive('meta', $json);
+        
+        return empty($recursiveLookup) ? array() : $recursiveLookup;
     }
     
-    public static function getLinks() {
-        return Helpers\Functions::arrayValueByKeyRecursive(
-            'links',
-            self::$jsonResponse
-        );
+    public static function getLinks($json = null) {
+        if ($json === null)
+            $json = self::$jsonResponse;
+        
+        if (isset($json['links']))
+            return $json['links'];
+        
+        $recursiveLookup = Helpers\Functions::arrayValueByKeyRecursive('links', $json);
+        
+        return empty($recursiveLookup) ? array() : $recursiveLookup;
     }
     
     public static function getDebugData() {

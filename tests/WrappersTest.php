@@ -65,15 +65,23 @@ class WrappersTest extends \PHPUnit_Framework_TestCase {
             PromisePay::Transaction()->getUser($transactionId);
         };
         
+        $batchTransactions = function() {
+            PromisePay::BatchTransactions()->listTransactions(
+                array(
+                    'limit' => 2,
+                    'offset' => 0
+                )
+            );
+        };
+        
         PromisePay::AsyncClient(
             $cardToken,
             $cardTokenAgain,
             $transaction,
             $transactionAgain,
-            $transactionUser
-        )->done($res1, $res2, $res3, $res4, $res5);
-        
-        var_dump($res1->json, $res2->json, $res3->json, $res4->json, $res5->json);
+            $transactionUser,
+            $batchTransactions
+        )->done($res1, $res2, $res3, $res4, $res5, $res6);
     }
     
     public function testGetAllResultsForItems() {

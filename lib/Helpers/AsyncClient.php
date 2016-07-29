@@ -5,15 +5,14 @@ use PromisePay\PromisePay;
 
 class AsyncClient {
     
-    protected $usedResponseIndexNames = array();
     protected $asyncResponses = array();
     protected $asyncPendingRequestsHistoryCounts = array();
     protected $asyncIteratorCount = 0;
     
-    private $storage;
+    private $storageHandler;
     
     public function __construct() {
-        $this->storage = new AsyncStorage;
+        $this->storageHandler = new AsyncStorageHandler;
     }
     
     /**
@@ -99,7 +98,7 @@ class AsyncClient {
         foreach($connections as $index => $connection) {
             $response = curl_multi_getcontent($connection);
             
-            // we're gonna remove headers from $response
+            // we're gonna separate headers and response body
             $responseHeaders = curl_getinfo($connection);
             $responseBody = trim(substr($response, $responseHeaders['header_size']));
             
@@ -137,36 +136,41 @@ class AsyncClient {
                 if (is_array($jsonArray)) {
                     // SCENARIO #1
                     // Response JSON is self-contained under a master key
-                    foreach ($this->usedResponseIndexNames as $responseIndex) {
+                    foreach (PromisePay::$usedResponseIndexNames as $responseIndex) {
                         if (isset($jsonArray[$responseIndex])) {
                             $jsonArray = $jsonArray[$responseIndex];
                             
-                            //$this->asyncResponses[$responseIndex][] = $jsonArray;
-                            
-                            unset($responseIndex);
-                            
                             break;
+                        } else {
+                            unset($responseIndex);
                         }
                     }
                     
                     // SCENARIO #2
                     // Response JSON is NOT self-contained under a master key
-                    if (isset($responseIndex)) {
+                    if (!isset($responseIndex)) {
                         // for these scenarios, we'll store them under their endpoint name.
                         // for example, requestSessionToken() internally calls getDecodedResponse()
                         // without a key param.
-                        $endpoint = trim(
+                        $responseIndex = trim(
                             parse_url($responseHeaders['url'], PHP_URL_PATH),
                             '/'
                         );
                         
-                        //$this->asyncResponses[$endpoint][] = $jsonArray;
+                        $slashLookup = strpos($responseIndex, '/');
+                        
+                        if ($slashLookup !== false)
+                            $responseIndex = substr($responseIndex, 0, $slashLookup);
                     }
                     
-                    $this->storage->storeJson($jsonArray);
-                    $this->storage->storeMeta(array());
-                    $this->storage->storeLinks(array());
-                    $this->storage->storeDebug(array());
+                    $this->asyncResponses[$responseIndex][] = $jsonArray;
+                    
+                    $this->storageHandler->storeJson($jsonArray);
+                    $this->storageHandler->storeMeta(PromisePay::getMeta($jsonArray));
+                    $this->storageHandler->storeLinks(PromisePay::getLinks($jsonArray));
+                    $this->storageHandler->storeDebug($responseHeaders);
+                    
+                    unset($responseIndex);
                 } else {
                     if (PromisePay::isDebug()) {
                         fwrite(
@@ -208,14 +212,14 @@ class AsyncClient {
                     );
                 }
                 
-                return $this->storage;
+                return $this->storageHandler;
             }
         }
         
         $this->asyncIteratorCount++;
         
         if (empty($requests) || $this->asyncIteratorCount >= $iteratorMaximum) {
-            return $this->storage;
+            return $this->storageHandler;
         }
         
         if (PromisePay::isDebug()) {

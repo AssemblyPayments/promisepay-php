@@ -701,7 +701,7 @@ $healthStatus = PromisePay::Tools()->getHealth();
 
 #4. Async and Wrappers
 ##Async
-Asynchronous requests provide a much faster solution, as compared to normal synchronous execution.
+Asynchronous execution provides a significant speed improvement, as compared to synchronous execution.
 ```php
 PromisePay::AsyncClient(
     function() {
@@ -723,7 +723,7 @@ PromisePay::AsyncClient(
     $batchTransactions
 );
 ```
-Response variables are placed inside `done()` method; they can be used both as arrays and objects, but using them as objects provides more fine grainer control. For example, the following will return equivalent data: `$cardToken['user_id']` and `$cardToken->getJson('user_id')`.
+Response variables are placed inside `done()` method; they can be used both as arrays and objects, but using them as objects provides finer grained control. For example, the following will return equivalent data: `$cardToken['user_id']` and `$cardToken->getJson('user_id')`.
 
 Response variables contain the following methods/getters:
    - `getJson()` -> full response JSON
@@ -732,7 +732,7 @@ Response variables contain the following methods/getters:
    - `getDebug()` -> response headers
 
 ##Wrappers
-Two wrappers are available: `PromisePay::getAllResults()` and `PromisePay::getAllResultsAsync()`. They can be used to get all results from sets of results pages, instead of up to 200 per request. For example, they can be used to fetch all batch transactions at once. Note that these requests may take some time depending on amount requested. If getting all results is mandatory, no matter how big the size, use the synchronous version. For a faster version, use async version, but not all requests are guaranteed to be returned. Generally, asynchronous execution is fine for up to 25 pages, each containing up to 200 results, yielding 5000 results within a few seconds.
+Two wrappers are available: `PromisePay::getAllResults()` and `PromisePay::getAllResultsAsync()`. They can be used to get all results from sets of result pages, instead of up to 200 per request. For example, they can be used to fetch all batch transactions at once. Note that these requests may take some time depending on amount requested. If getting all results is mandatory, no matter how big the size, use the synchronous version. For a faster version, use async version, but not all requests are guaranteed to be returned. Generally, asynchronous execution is fine for up to 20 pages, each containing up to 200 results, yielding 4000 results within a few seconds.
 
 Synchronous execution
 ```php

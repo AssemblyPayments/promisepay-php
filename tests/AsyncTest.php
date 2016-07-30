@@ -80,7 +80,7 @@ class AsyncTest extends \PHPUnit_Framework_TestCase {
     }
     
     /**
-     @group errors-handling
+     * @group errors-handling
      */
     public function testAsyncRequestsWithErrors() {
         PromisePay::AsyncClient(

@@ -11,6 +11,7 @@ class PromisePay {
     protected static $pendingRequests = array();
     
     protected static $lastUsedResponseIndex = array();
+    public static $allResultsCount;
     public static $usedResponseIndexes = array();
     
     /** 
@@ -139,7 +140,7 @@ class PromisePay {
             }
             
             return forward_static_call_array(
-                array('PromisePay', 'RestClient'),
+                array(__NAMESPACE__ . '\PromisePay', 'RestClient'),
                 func_get_args()
             );
         }
@@ -261,8 +262,9 @@ class PromisePay {
             }
         }
         
-        $results = array();
+        $results = $callbacks = array();
         $total = null;
+        $i = 0;
         
         do {
             if (self::$debug) {
@@ -276,30 +278,67 @@ class PromisePay {
                 );
             }
             
-            $request($limit, $offset);
+            if ($i === 0 || !$async)
+                $request($limit, $offset);
+            else {
+                $callbacks[] = function() use ($request, $limit, $offset) {
+                    $request($limit, $offset);
+                };
+            }
             
-            $results = array_merge($results, 
-                self::getDecodedResponse(
-                    self::$lastUsedResponseIndex
-                )
-            );
+            // if the execution is async, then only merge on first iteration
+            // if the execution is sync, then merge on all iterations
+            if (
+                ($async && $i === 0)
+                ||
+                !$async
+            ) {
+                $results = array_merge($results,
+                    self::getDecodedResponse(
+                        self::$lastUsedResponseIndex
+                    )
+                );
+            }
             
             if ($total === null) {
                 $meta = self::getMeta();
                 
-                $total = isset($meta['total']) ? $meta['total'] : 0;
+                $total = self::$allResultsCount = isset($meta['total']) ? $meta['total'] : 0;
             }
             
-            if ($async) {
+            if ($async && $i === 0) {
                 self::beginAsync();
             }
             
             $offset += $limit;
+            $i++;
         } while ($offset < $total);
         
         if ($async) {
-            $asyncRequests = self::AsyncClient();
-            $results = array_merge($results, $asyncRequests);
+            $callbacksCount = count($callbacks);
+            
+            if ($callbacksCount > 0) {
+                $asyncResponses = forward_static_call_array(
+                    array(__NAMESPACE__ . '\PromisePay', 'AsyncClient'),
+                    $callbacks
+                );
+                
+                $responseVars = array();
+                
+                for ($i = 0; $i < $callbacksCount; $i++) {
+                    $responseVar = "response$i";
+                    
+                    $$responseVar = null;
+                    
+                    $responseVars[] = &$$responseVar;
+                }
+                
+                call_user_func_array(array($asyncResponses, 'done'), $responseVars);
+                
+                foreach ($responseVars as $response) {
+                    $results = array_merge($results, $response->getJson());
+                }
+            }
             
             self::finishAsync();
         }

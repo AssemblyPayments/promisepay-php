@@ -25,13 +25,12 @@ class AsyncClient {
      * 1) iterator count exceeds $iteratorMaximum param
      * 2) not a single new 2xx response is received in the last 2 batches
      *
-     * @param array $requests A set of requests, in format of (http method, full uri)
+     * @param array $requests A set of requests, in format of [http method, full uri]
      * @param int $iteratorMaximum Maximum amount of recursive method calls
      */
     public function Client(
         array $requests,
-        $iteratorMaximum = 1,
-        $resultsNeeded = PHP_INT_MAX
+        $iteratorMaximum = 1
     ) {
         $multiHandle = curl_multi_init();
         

@@ -186,6 +186,12 @@ class PromisePay {
         return new Helpers\AsyncClient;
     }
     
+    /**
+     * Asynchronous HTTP client for executing requests towards PromisePay endpoints.
+     *
+     * @param callable Accepts a variable list of callables.
+     * @return Helpers\AsyncStorageHandler
+    */
     public static function AsyncClient() {
         $args = func_get_args();
         
@@ -228,6 +234,16 @@ class PromisePay {
         self::$sendAsync = false;
     }
     
+    /**
+     * Get all results for a request, synchronously.
+     *
+     * Expects a callable as argument (i.e. get a list of all fees)
+     *
+     * @param callable $request 
+     * @param int $limit How much results to obtain per request. Defaults to 200.
+     * @param int $offset Pagination offset. Defaults to 0.
+     * @param bool $async Optionally, execute the requests asynchronously.
+     */
     public static function getAllResults($request, $limit = 200, $offset = 0, $async = false) {
         // can't use callable argument typehint as the 
         // minimal version of PHP we're supporting is 5.3,
@@ -278,9 +294,9 @@ class PromisePay {
                 );
             }
             
-            if ($i === 0 || !$async)
+            if ($i === 0 || !$async) {
                 $request($limit, $offset);
-            else {
+            } else {
                 $callbacks[] = function() use ($request, $limit, $offset) {
                     $request($limit, $offset);
                 };
@@ -346,6 +362,9 @@ class PromisePay {
         return $results;
     }
     
+    /**
+     * Alias for asynchronous execution of PromisePay::getAllResults()
+     */
     public static function getAllResultsAsync($request, $limit = 200, $offset = 0) {
         return self::getAllResults($request, $limit, $offset, true);
     }

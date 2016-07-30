@@ -95,4 +95,24 @@ class WrappersTest extends \PHPUnit_Framework_TestCase {
         //$this->assertEquals(count($batchedTransactionsList), PromisePay::$allResultsCount);
     }
     
+    private function readmeExamples() {
+        $batchedTransactionsList = PromisePay::getAllResults(function($limit, $offset) {
+            PromisePay::BatchTransactions()->listTransactions(
+                array(
+                    'limit' => $limit,
+                    'offset' => $offset
+                )
+            );
+        });
+        
+        $batchedTransactionsList = PromisePay::getAllResultsAsync(function($limit, $offset) {
+            PromisePay::BatchTransactions()->listTransactions(
+                array(
+                    'limit' => $limit,
+                    'offset' => $offset
+                )
+            );
+        });
+    }
+    
 }

@@ -93,4 +93,26 @@ class AsyncTest extends \PHPUnit_Framework_TestCase {
         )->done($response);
     }
     
+    private function readmeExamples() {
+        PromisePay::AsyncClient(
+            function() {
+                PromisePay::Token()->generateCardToken('CARD_TOKEN_ID');
+            },
+            function() {
+                PromisePay::Transaction()->get('TRANSACTION_ID');
+            },
+            function() {
+                PromisePay::Transaction()->getUser('USER_ID');
+            },
+            function() {
+                PromisePay::BatchTransactions()->listTransactions();
+            }
+        )->done(
+            $cardToken,
+            $transaction,
+            $transactionUser,
+            $batchTransactions
+        );
+    }
+    
 }

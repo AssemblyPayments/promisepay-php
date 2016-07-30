@@ -5,7 +5,8 @@ use PromisePay\PromisePay;
 
 class ChargesTest extends \PHPUnit_Framework_TestCase {
     
-    protected $chargeData,
+    protected 
+    $chargeData,
     $bankTest,
     $userTest,
     $userData;
@@ -56,7 +57,9 @@ class ChargesTest extends \PHPUnit_Framework_TestCase {
             )
         );
     }
-    
+    /**
+     * @group charge
+     */
     public function testCreate() {
         $authority = $this->createAuthority(
             $this->chargeData['account_id'],
@@ -86,7 +89,9 @@ class ChargesTest extends \PHPUnit_Framework_TestCase {
         
         return $createCharge;
     }
-    
+    /**
+     * @group get-list
+     */
     public function testGetList() {
         $createCharge = $this->testCreate();
         

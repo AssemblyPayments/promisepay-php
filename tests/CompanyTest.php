@@ -17,8 +17,9 @@ class CompanyTest extends \PHPUnit_Framework_TestCase {
             'country'    => 'AUS'
         );
     }
+    
     /**
-     * @group backend_issues
+     * @group backend-issues
      */
     public function testListOfCompanies() {
         try {
@@ -41,6 +42,10 @@ class CompanyTest extends \PHPUnit_Framework_TestCase {
                 substr($meta->code, 0, 1),
                 '5'
             );
+            
+            //print_r($meta);
+            
+            $this->markTestIncomplete();
         }
     }
 

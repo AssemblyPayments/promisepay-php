@@ -7,47 +7,31 @@ namespace PromisePay;
  * @package PromisePay
  */
 class PromisePay {
+    /** @var array Pending requests; to be executed asynchronously */
+    protected static $pendingRequests = array();
+    
+    protected static $lastUsedResponseIndex = array();
+    public static $allResultsCount;
+    public static $usedResponseIndexes = array();
+    
+    /** 
+     @var bool Whether or not to retry requests on 503 or 504 HTTP responses;
+     only synchronous requests are affected;
+     togglers: enableRetries(), disableRetries()
+     */
+    protected static $retryOnServerTimeout = false;
+    
+    /** @var bool Debug state; togglers: enableDebug(), disableDebug() */
+    protected static $debug = false;
+    
+    /** @var array JSON-decoded response; getter: getDecodedResponse() */
     protected static $jsonResponse;
+    
+    /** @var object Raw response data; getter: getDebugData() */
     protected static $debugData;
     
-    public static function getDecodedResponse($indexName = null) {
-        if (!is_string($indexName) && $indexName !== null) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Argument for %s should be a string.',
-                    __METHOD__
-                )
-            );
-        }
-        
-        if ($indexName !== null) {
-            if (isset(self::$jsonResponse[$indexName])) {
-                return self::$jsonResponse[$indexName];
-            }
-            
-            return null;
-        } else {
-            return self::$jsonResponse;
-        }
-    }
-    
-    public static function getDebugData() {
-        return self::$debugData;
-    }
-    
-    public static function getMeta() {
-        return self::getArrayValuesByKeyRecursive(
-            'meta',
-            self::$jsonResponse
-        );
-    }
-    
-    public static function getLinks() {
-        return self::getArrayValuesByKeyRecursive(
-            'links',
-            self::$jsonResponse
-        );
-    }
+    /** @var bool Async requests state; togglers: beginAsync() and finishAsync() */
+    protected static $sendAsync = false;
     
     /**
      * Static method invoker.
@@ -66,7 +50,7 @@ class PromisePay {
             throw new Exception\NotFound("Repository $class not found");
         }
     }
-
+    
     /**
      * Method for performing requests to PromisePay endpoints.
      *
@@ -76,21 +60,27 @@ class PromisePay {
      * @param string $mime optional Set specific MIME type.
      */
     public static function RestClient($method, $entity, $payload = null, $mime = null) {
-        // Check whether critical constants are defined.
-        if (!defined(__NAMESPACE__ . '\API_URL'))
-            die('Fatal error: API_URL constant missing. Check if environment has been set.');
-        
-        if (!defined(__NAMESPACE__ . '\API_LOGIN'))
-            die('Fatal error: API_LOGIN constant missing.');
-        
-        if (!defined(__NAMESPACE__ . '\API_PASSWORD'))
-            die('Fatal error: API_PASSWORD constant missing.');
+        Helpers\Functions::runtimeChecks();
         
         if (!is_scalar($payload) && $payload !== null) {
             $payload = http_build_query($payload);
         }
         
         $url = constant(__NAMESPACE__ . '\API_URL') . $entity . '?' . $payload;
+        
+        if (self::$sendAsync) {
+            self::$pendingRequests[] = array(
+                $method,
+                $url
+            );
+            
+            // set and return an empty array instead of null
+            // to avoid breaking any BC
+            
+            self::$jsonResponse = array();
+            
+            return self::$jsonResponse;
+        }
         
         switch ($method) {
             case 'get':
@@ -138,9 +128,26 @@ class PromisePay {
         
         self::$debugData = $response;
         
+        if (self::isRetry() && ($response->http_code === 503 || $response->http_code === 504)) {
+            if (self::$debug) {
+                fwrite(
+                    STDOUT,
+                    sprintf(
+                        "HTTP Code %d detected while retrying is enabled; retrying" . PHP_EOL,
+                        $response->http_code
+                    )
+                );
+            }
+            
+            return forward_static_call_array(
+                array(__NAMESPACE__ . '\PromisePay', 'RestClient'),
+                func_get_args()
+            );
+        }
+        
         // check for errors
         if ($response->hasErrors()) {
-            $errors = static::buildErrorMessage($response);
+            $errors = Helpers\Functions::buildErrorMessage($response);
             
             switch ($response->code) {
                 case 401:
@@ -173,64 +180,281 @@ class PromisePay {
         return $response;
     }
     
-    protected static function buildErrorMessage($response) {
-        $jsonResponse = json_decode($response->raw_body);
+    public static function beginAsync() {
+        self::$sendAsync = true;
         
-        $message = isset($jsonResponse->message) ? $jsonResponse->message : null;
-        
-        if (isset($jsonResponse->errors)) {
-            foreach($jsonResponse->errors as $attribute => $content) {
-                if (is_array($content)) {
-                    $content = implode(" ", $content);
-                }
-                if (is_object($content)) {
-                    $content = json_encode($content);
-                }
-                
-                $message .= sprintf(
-                    '%s: %s%s',
-                    $attribute,
-                    $content,
-                    PHP_EOL
-                );
-            }
-            
-            return sprintf(
-                '%sResponse Code: %d%sError Message: %s%s',
-                PHP_EOL,
-                isset($response->code) ? $response->code : 0,
-                PHP_EOL,
-                $message,
-                PHP_EOL
-            );
-        }
-        
-        return null;
+        return new Helpers\AsyncClient;
     }
     
-    public static function getArrayValuesByKeyRecursive($needle, array $array) {
-        if (!is_scalar($needle)) {
+    /**
+     * Asynchronous HTTP client for executing requests towards PromisePay endpoints.
+     *
+     * @param callable Accepts a variable list of callables.
+     * @return Helpers\AsyncStorageHandler
+    */
+    public static function AsyncClient() {
+        $args = func_get_args();
+        
+        if (empty($args)) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    'First argument for %s should be a scalar value.',
+                    "%s requires at least one argument.",
                     __METHOD__
                 )
             );
         }
         
-        $iterator = new \RecursiveArrayIterator($array);
+        $asyncClient = self::beginAsync();
         
-        $recursive = new \RecursiveIteratorIterator(
-            $iterator,
-            \RecursiveIteratorIterator::SELF_FIRST
-        );
+        foreach ($args as $key => $arg) {
+            if (!is_callable($arg)) {
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        "%d. argument for %s function is not a callable;
+                        all arguments should be callables.",
+                        $key + 1,
+                        __METHOD__
+                    )
+                );
+            }
+            
+            $arg();
+        }
         
-        foreach ($recursive as $key => $value) {
-            if ($key === $needle) {
-                return $value;
+        self::finishAsync();
+        
+        $asyncResults = $asyncClient->Client(self::$pendingRequests);
+        
+        self::$pendingRequests = array();
+        
+        return $asyncResults;
+    }
+    
+    public static function finishAsync() {
+        self::$sendAsync = false;
+    }
+    
+    /**
+     * Get all results for a request, synchronously.
+     *
+     * Expects a callable as argument (i.e. get a list of all fees)
+     *
+     * @param callable $request 
+     * @param int $limit How much results to obtain per request. Defaults to 200.
+     * @param int $offset Pagination offset. Defaults to 0.
+     * @param bool $async Optionally, execute the requests asynchronously.
+     */
+    public static function getAllResults($request, $limit = 200, $offset = 0, $async = false) {
+        // can't use callable argument typehint as the 
+        // minimal version of PHP we're supporting is 5.3,
+        // and callable didn't get introduced until 5.4
+        
+        if (!is_callable($request)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    '%s requires its first argument to be
+                    a callable, but %s was given instead.',
+                    __METHOD__,
+                    gettype($request)
+                )
+            );
+        }
+        
+        if (!is_int($limit) || !is_int($offset)) {
+            if (self::$debug) {
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        '%s requires its second and third argument
+                        to be integers, but %s and %s, respectively,
+                        were given instead.',
+                        __METHOD__,
+                        gettype($limit),
+                        gettype($offset)
+                    )
+                );
+            } else {
+                $limit = 200;
+                $offset = 0;
             }
         }
         
-        return false;
+        $results = $callbacks = array();
+        $total = null;
+        $i = 0;
+        
+        do {
+            if (self::$debug) {
+                fwrite(
+                    STDOUT,
+                    sprintf(
+                        "Progress: offset is %d, results count is %d" . PHP_EOL,
+                        $offset,
+                        $total
+                    )
+                );
+            }
+            
+            if ($i === 0 || !$async) {
+                $request($limit, $offset);
+            } else {
+                $callbacks[] = function() use ($request, $limit, $offset) {
+                    $request($limit, $offset);
+                };
+            }
+            
+            // if the execution is async, then only merge on first iteration
+            // if the execution is sync, then merge on all iterations
+            if (
+                ($async && $i === 0)
+                ||
+                !$async
+            ) {
+                $results = array_merge($results,
+                    self::getDecodedResponse(
+                        self::$lastUsedResponseIndex
+                    )
+                );
+            }
+            
+            if ($total === null) {
+                $meta = self::getMeta();
+                
+                $total = self::$allResultsCount = isset($meta['total']) ? $meta['total'] : 0;
+            }
+            
+            if ($async && $i === 0) {
+                self::beginAsync();
+            }
+            
+            $offset += $limit;
+            $i++;
+        } while ($offset < $total);
+        
+        if ($async) {
+            $callbacksCount = count($callbacks);
+            
+            if ($callbacksCount > 0) {
+                $asyncResponses = forward_static_call_array(
+                    array(__NAMESPACE__ . '\PromisePay', 'AsyncClient'),
+                    $callbacks
+                );
+                
+                $responseVars = array();
+                
+                for ($i = 0; $i < $callbacksCount; $i++) {
+                    $responseVar = "response$i";
+                    
+                    $$responseVar = null;
+                    
+                    $responseVars[] = &$$responseVar;
+                }
+                
+                call_user_func_array(array($asyncResponses, 'done'), $responseVars);
+                
+                foreach ($responseVars as $response) {
+                    $results = array_merge($results, $response->getJson());
+                }
+            }
+            
+            self::finishAsync();
+        }
+        
+        return $results;
+    }
+    
+    /**
+     * Alias for asynchronous execution of PromisePay::getAllResults()
+     */
+    public static function getAllResultsAsync($request, $limit = 200, $offset = 0) {
+        return self::getAllResults($request, $limit, $offset, true);
+    }
+    
+    public static function getDecodedResponse($index = null) {
+        if (!is_string($index) && $index !== null) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Argument for %s should be a string.',
+                    __METHOD__
+                )
+            );
+        }
+        
+        self::$lastUsedResponseIndex = $index;
+        
+        if (!in_array($index, self::$usedResponseIndexes))
+            self::$usedResponseIndexes[] = $index;
+        
+        if ($index === null)
+            return self::$jsonResponse;
+        
+        if (isset(self::$jsonResponse[$index])) {
+            return self::$jsonResponse[$index];
+        } elseif (self::$sendAsync) {
+            return array(); // not to break BC
+        } else {
+            return null;
+        }
+    }
+    
+    public static function getJson($index = null) {
+        return self::getDecodedResponse($index);
+    }
+    
+    public static function getMeta($json = null) {
+        if ($json === null)
+            $json = self::$jsonResponse;
+        
+        if (isset($json['meta']))
+            return $json['meta'];
+        
+        $recursiveLookup = Helpers\Functions::arrayValueByKeyRecursive('meta', $json);
+        
+        return empty($recursiveLookup) ? array() : $recursiveLookup;
+    }
+    
+    public static function getLinks($json = null) {
+        if ($json === null)
+            $json = self::$jsonResponse;
+        
+        if (isset($json['links']))
+            return $json['links'];
+        
+        $recursiveLookup = Helpers\Functions::arrayValueByKeyRecursive('links', $json);
+        
+        return empty($recursiveLookup) ? array() : $recursiveLookup;
+    }
+    
+    public static function getDebugData() {
+        return self::$debugData;
+    }
+    
+    public static function enableRetries() {
+        self::$retryOnServerTimeout = true;
+    }
+    
+    public static function disableRetries() {
+        self::$retryOnServerTimeout = false;
+    }
+    
+    public static function isRetry() {
+        return self::$retryOnServerTimeout;
+    }
+    
+    public static function enableDebug() {
+        self::$debug = true;
+    }
+    
+    public static function disableDebug() {
+        self::$debug = false;
+    }
+    
+    public static function isDebug() {
+        return self::$debug;
+    }
+    
+    public function __toString() {
+        // disallow leaking of credentials
+        // TODO IMPROVE
+        return new stdClass;
     }
 }

@@ -25,4 +25,28 @@ class Transaction {
         
         return PromisePay::getDecodedResponse('fees');
     }
+    
+    public function getWalletAccount($id) {
+        PromisePay::RestClient('get', 'transactions/' . $id . '/wallet_accounts');
+        
+        return PromisePay::getDecodedResponse('wallet_accounts');
+    }
+    
+    public function getBankAccount($id) {
+        PromisePay::RestClient('get', 'transactions/' . $id . '/bank_accounts');
+        
+        return PromisePay::getDecodedResponse();
+    }
+    
+    public function getCardAccount($id) {
+        PromisePay::RestClient('get', 'transactions/' . $id . '/card_accounts');
+        
+        return PromisePay::getDecodedResponse('card_accounts');
+    }
+    
+    public function getPayPalAccount($id) {
+        PromisePay::RestClient('get', 'transactions/' . $id . '/paypal_accounts');
+        
+        return PromisePay::getDecodedResponse();
+    }
 }

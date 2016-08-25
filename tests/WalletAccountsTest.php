@@ -174,10 +174,13 @@ class WalletAccountsTest extends \PHPUnit_Framework_TestCase {
             'PayPal Disbursement'
         );
         $this->assertEquals($withdrawal['paypal_email'], $user['email']);
+        
+        return array(
+            'paypalAccount' => $payPalAccount,
+            'paypalWithdrawal' => $withdrawal
+        );
     }
-    /**
-     * @group dev
-     */
+    
     public function testWithdrawToBankAccount() {
         extract($this->testDeposit());
         

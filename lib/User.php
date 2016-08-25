@@ -47,6 +47,10 @@ class User {
 
         return PromisePay::getDecodedResponse('bank_accounts');
     }
+    
+    public function getBankAccount($id) {
+        return $this->getListOfBankAccounts($id);
+    }
 
     public function getListOfCardAccounts($id) {
         PromisePay::RestClient('get', 'users/' . $id . '/card_accounts');

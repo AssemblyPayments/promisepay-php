@@ -249,6 +249,10 @@ $requestTaxInvoice = PromisePay::Item()->requestTaxInvoice(
     'ITEM_ID'
 );
 ```
+#####List Item Batch Transactions
+```php
+$batchTransactions = PromisePay::Item()->listBatchTransactions('ITEM_ID');
+```
 #####Send Tax Invoice
 ```php
 $sendTaxInvoice = PromisePay::Item()->sendTaxInvoice(
@@ -480,6 +484,18 @@ $account = PromisePay::PayPalAccount()->delete('PAYPAL_ACCOUNT_ID');
 $user = PromisePay::PayPalAccount()->getUser('PAYPAL_ACCOUNT_ID');
 ```
 
+##Batch Transactions
+#####List Batch Transactions
+```php
+$batches = PromisePay::BatchTransactions()->listTransactions();
+```
+#####Show Batch Transaction
+```php
+$batch = PromisePay::BatchTransactions()->showTransaction(
+    'BATCH_TRANSACTION_ID'
+);
+```
+
 ##Charges
 #####Create Charge
 ```php
@@ -511,6 +527,12 @@ $buyer = PromisePay::Charges()->showBuyer('CHARGE_ID');
 #####Show Charge Status
 ```php
 $status = PromisePay::Charges()->showStatus('CHARGE_ID');
+```
+
+##Marketplaces
+#####Show Marketplace
+```php
+$marketplaces = PromisePay::Marketplaces()->show();
 ```
 
 ##Token Auth
@@ -651,6 +673,19 @@ $user = PromisePay::Transaction()->getUser('TRANSACTION_ID');
 ```php
 $fee = PromisePay::Transaction()->getFee('TRANSACTION_ID');
 ```
+#####Show Transaction Wallet Account
+```php
+$walletAccount = PromisePay::Transaction()->getWalletAccount(
+    'TRANSACTION_ID'
+);
+```
+#####Show Transaction Card Account
+```php
+$cardAccount = PromisePay::Transaction()->getCardAccount(
+    'TRANSACTION_ID'
+);
+```
+
 
 ##Addresses
 #####Show Address
@@ -664,7 +699,66 @@ $address = PromisePay::Address()->get('ADDRESS_ID');
 $healthStatus = PromisePay::Tools()->getHealth();
 ```
 
-#4. Contributing
+#4. Async and Wrappers
+##Async
+Asynchronous execution provides a significant speed improvement, as compared to synchronous execution.
+```php
+PromisePay::AsyncClient(
+    function() {
+        PromisePay::Token()->generateCardToken('CARD_TOKEN_ID');
+    },
+    function() {
+        PromisePay::Transaction()->get('TRANSACTION_ID');
+    },
+    function() {
+        PromisePay::Transaction()->getUser('USER_ID');
+    },
+    function() {
+        PromisePay::BatchTransactions()->listTransactions();
+    }
+)->done(
+    $cardToken,
+    $transaction,
+    $transactionUser,
+    $batchTransactions
+);
+```
+Response variables are placed inside `done()` method; they can be used both as arrays and objects, but using them as objects provides finer grained control. For example, the following will return equivalent data: `$cardToken['user_id']` and `$cardToken->getJson('user_id')`.
+
+Response variables contain the following methods/getters:
+   - `getJson()` -> full response JSON
+   - `getMeta()` -> meta array extracted from response JSON, if present
+   - `getLinks()` -> links array extracted from response JSON, if present
+   - `getDebug()` -> response headers
+
+##Wrappers
+Two wrappers are available: `PromisePay::getAllResults()` and `PromisePay::getAllResultsAsync()`. They can be used to get all results from sets of result pages, instead of up to 200 per request. For example, they can be used to fetch all batch transactions at once. Note that these requests may take some time depending on amount requested. If getting all results is mandatory, no matter how big the size, use the synchronous version. For a faster version, use async version, but not all requests are guaranteed to be returned. Generally, asynchronous execution is fine for up to 20 pages, each containing up to 200 results, yielding 4000 results within a few seconds.
+
+Synchronous execution
+```php
+$batchedTransactionsList = PromisePay::getAllResults(function($limit, $offset) {
+    PromisePay::BatchTransactions()->listTransactions(
+        array(
+            'limit' => $limit,
+            'offset' => $offset
+        )
+    );
+});
+```
+
+Asynchronous execution
+```php
+$batchedTransactionsList = PromisePay::getAllResultsAsync(function($limit, $offset) {
+    PromisePay::BatchTransactions()->listTransactions(
+        array(
+            'limit' => $limit,
+            'offset' => $offset
+        )
+    );
+});
+```
+
+#5. Contributing
 	1. Fork it ( https://github.com/PromisePay/promisepay-php/fork )
 	2. Create your feature branch (`git checkout -b my-new-feature`)
 	3. Commit your changes (`git commit -am 'Add some feature'`)

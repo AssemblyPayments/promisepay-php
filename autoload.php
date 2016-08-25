@@ -16,13 +16,14 @@ spl_autoload_register(function ($class) {
     if (file_exists($file)) {
         require $file;
     } else {
-        die(
-            sprintf(
-                "%s (path: %s) wasn't found.",
-                $class,
-                $file
-            )
+        printf("%s (path: %s) wasn't found." . PHP_EOL, $class, $file);
+        
+        printf(
+            'Debug backtrace: %s' . PHP_EOL,
+            print_r(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS), true)
         );
+        
+        die();
     }
 });
 

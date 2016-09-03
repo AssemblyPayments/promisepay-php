@@ -6,7 +6,7 @@ class ConfigurationsTest extends \PHPUnit_Framework_TestCase {
 
     protected $configuration = array(
         'name' => 'partial_refunds',
-        'enabled' => false
+        'enabled' => true
     );
 
     protected static $configurationId;

@@ -699,6 +699,40 @@ $address = PromisePay::Address()->get('ADDRESS_ID');
 $healthStatus = PromisePay::Tools()->getHealth();
 ```
 
+##Configurations
+#####Create Configuration
+```php
+$configuration = PromisePay::Configurations()->create(array(
+    'name' => 'partial_refunds',
+    'enabled' => true
+));
+```
+
+#####Show Configuration
+```php
+$configuration = PromisePay::Configurations()->get('ca321b3f-db87-4d75-ba05-531c7f1bb515');
+```
+
+##### List Configurations
+```php
+$configurations = PromisePay::Configurations()->getList();
+```
+
+##### Update Configuration
+```php
+$configuration = PromisePay::Configurations()->update(array(
+    'id' => 'ca321b3f-db87-4d75-ba05-531c7f1bb515',
+    'max' => 12345,
+    'name' => 'partial_refunds',
+    'enabled' => true
+));
+```
+
+##### Delete Configuration
+```php
+PromisePay::Configurations()->delete('ca321b3f-db87-4d75-ba05-531c7f1bb515');
+```
+
 ##Payment Restrictions
 #####List Payment Restrictions
 ```php

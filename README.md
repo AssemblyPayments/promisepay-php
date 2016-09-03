@@ -721,7 +721,7 @@ $configurations = PromisePay::Configurations()->getList();
 ##### Update Configuration
 ```php
 $configuration = PromisePay::Configurations()->update(array(
-    'id' => 'CONFIGURTION_ID',
+    'id' => 'CONFIGURATION_ID',
     'max' => 12345,
     'name' => 'partial_refunds',
     'enabled' => true

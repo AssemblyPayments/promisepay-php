@@ -66,4 +66,29 @@ class ConfigurationsTest extends \PHPUnit_Framework_TestCase {
         $this->assertEmpty($configuration);
     }
 
+    private function readmeExamples() {
+        // CREATE
+        $configuration = PromisePay::Configurations()->create(array(
+            'name' => 'partial_refunds',
+            'enabled' => true
+        ));
+
+        // GET
+        $configuration = PromisePay::Configurations()->get('ca321b3f-db87-4d75-ba05-531c7f1bb515');
+
+        // GET LIST
+        $configurations = PromisePay::Configurations()->getList();
+
+        // UPDATE
+        $configuration = PromisePay::Configurations()->update(array(
+            'id' => 'ca321b3f-db87-4d75-ba05-531c7f1bb515',
+            'max' => 12345,
+            'name' => 'partial_refunds',
+            'enabled' => true
+        ));
+
+        // DELETE
+        PromisePay::Configurations()->delete('ca321b3f-db87-4d75-ba05-531c7f1bb515');
+    }
+
 }

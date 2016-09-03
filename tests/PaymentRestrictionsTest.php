@@ -23,4 +23,10 @@ class PaymentRestrictionsTest extends \PHPUnit_Framework_TestCase {
         //PromisePay::PaymentRestrictions()->get();
     }
 
+    private function readmeExamples() {
+        $list = PromisePay::PaymentRestrictions()->getList();
+
+        $paymentRestriction = PromisePay::PaymentRestrictions()->get('PAYMENT_RESTRICTION_ID');
+    }
+
 }

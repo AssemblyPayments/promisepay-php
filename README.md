@@ -699,6 +699,17 @@ $address = PromisePay::Address()->get('ADDRESS_ID');
 $healthStatus = PromisePay::Tools()->getHealth();
 ```
 
+##Payment Restrictions
+#####List Payment Restrictions
+```php
+$list = PromisePay::PaymentRestrictions()->getList();
+```
+
+#####Show Payment Restriction
+```php
+$paymentRestriction = PromisePay::PaymentRestrictions()->get('PAYMENT_RESTRICTION_ID');
+```
+
 #4. Async and Wrappers
 ##Async
 Asynchronous execution provides a significant speed improvement, as compared to synchronous execution.

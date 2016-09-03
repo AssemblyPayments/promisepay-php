@@ -710,7 +710,7 @@ $configuration = PromisePay::Configurations()->create(array(
 
 #####Show Configuration
 ```php
-$configuration = PromisePay::Configurations()->get('ca321b3f-db87-4d75-ba05-531c7f1bb515');
+$configuration = PromisePay::Configurations()->get('CONFIGURATION_ID');
 ```
 
 ##### List Configurations
@@ -721,7 +721,7 @@ $configurations = PromisePay::Configurations()->getList();
 ##### Update Configuration
 ```php
 $configuration = PromisePay::Configurations()->update(array(
-    'id' => 'ca321b3f-db87-4d75-ba05-531c7f1bb515',
+    'id' => 'CONFIGURTION_ID',
     'max' => 12345,
     'name' => 'partial_refunds',
     'enabled' => true
@@ -730,7 +730,7 @@ $configuration = PromisePay::Configurations()->update(array(
 
 ##### Delete Configuration
 ```php
-PromisePay::Configurations()->delete('ca321b3f-db87-4d75-ba05-531c7f1bb515');
+PromisePay::Configurations()->delete('CONFIGURATION_ID');
 ```
 
 ##Payment Restrictions

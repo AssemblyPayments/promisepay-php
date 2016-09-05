@@ -62,6 +62,8 @@ class ConfigurationsTest extends \PHPUnit_Framework_TestCase {
     public function testDelete($id = null) {
         $id = $id !== null ? $id : self::$configurationId;
 
+        fwrite(STDOUT, "deleting $id" . PHP_EOL);
+
         PromisePay::Configurations()->delete($id);
 
         // test if it's been properly deleted
@@ -71,10 +73,15 @@ class ConfigurationsTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testDeleteAllPartialPaymentsRestrictions() {
-        $configurations = $this->testGetList();
+        $configurations = PromisePay::getAllResultsAsync(function($limit, $offset) {
+            return PromisePay::Configurations()->getList(array(
+                'offset' => 0,
+                'limit' => 200
+            ));
+        });
 
         foreach ($configurations as $configuration) {
-            if ($configuration['name'] == 'partial_refunds' && !empty($configuration['enabled'])) {
+            if ($configuration['name'] == 'partial_refunds') {
                 $this->testDelete($configuration['id']);
             }
         }

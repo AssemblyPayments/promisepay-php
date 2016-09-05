@@ -55,15 +55,29 @@ class ConfigurationsTest extends \PHPUnit_Framework_TestCase {
         foreach ($configurations as $configuration) {
             $this->assertConfiguration($configuration, true);
         }
+
+        return $configurations;
     }
 
-    public function testDelete() {
-        PromisePay::Configurations()->delete(self::$configurationId);
+    public function testDelete($id = null) {
+        $id = $id !== null ? $id : self::$configurationId;
+
+        PromisePay::Configurations()->delete($id);
 
         // test if it's been properly deleted
-        $configuration = PromisePay::Configurations()->get(self::$configurationId);
+        $configuration = PromisePay::Configurations()->get($id);
 
         $this->assertEmpty($configuration);
+    }
+
+    public function testDeleteAllPartialPaymentsRestrictions() {
+        $configurations = $this->testGetList();
+
+        foreach ($configurations as $configuration) {
+            if ($configuration['name'] == 'partial_refunds' && !empty($configuration['enabled'])) {
+                $this->testDelete($configuration['id']);
+            }
+        }
     }
 
     private function readmeExamples() {

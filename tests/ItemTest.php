@@ -473,6 +473,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
     }
     /**
      * @group dev
+     * @group release-payment
+     * @group failing
      */
     public function testReleasePayment() {
         extract($this->makePayment());

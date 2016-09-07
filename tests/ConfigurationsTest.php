@@ -47,6 +47,9 @@ class ConfigurationsTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($updatedConfigurationSettings['max'], $configuration['max']);
     }
 
+    /**
+     * @group get-list
+     */
     public function testGetList() {
         $configurations = PromisePay::Configurations()->getList();
 
@@ -61,8 +64,6 @@ class ConfigurationsTest extends \PHPUnit_Framework_TestCase {
 
     public function testDelete($id = null) {
         $id = $id !== null ? $id : self::$configurationId;
-
-        fwrite(STDOUT, "deleting $id" . PHP_EOL);
 
         PromisePay::Configurations()->delete($id);
 

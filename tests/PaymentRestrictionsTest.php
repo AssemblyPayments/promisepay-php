@@ -11,6 +11,7 @@ class PaymentRestrictionsTest extends \PHPUnit_Framework_TestCase {
 
         if ($meta['total'] === 0) {
             $this->assertEmpty($list);
+            $this->markTestSkipped();
 
             return;
         }
@@ -20,7 +21,9 @@ class PaymentRestrictionsTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testGet() {
-        //PromisePay::PaymentRestrictions()->get();
+        $this->markTestSkipped();
+
+        PromisePay::PaymentRestrictions()->get();
     }
 
     private function readmeExamples() {

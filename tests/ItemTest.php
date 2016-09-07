@@ -471,7 +471,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase {
             (int) $this->itemData['amount'] - (int) $halfThePrice
         );
     }
-    
+    /**
+     * @group dev
+     * @group release-payment
+     * @group failing
+     */
     public function testReleasePayment() {
         extract($this->makePayment());
         

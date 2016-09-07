@@ -699,6 +699,51 @@ $address = PromisePay::Address()->get('ADDRESS_ID');
 $healthStatus = PromisePay::Tools()->getHealth();
 ```
 
+##Configurations
+#####Create Configuration
+```php
+$configuration = PromisePay::Configurations()->create(array(
+    'name' => 'partial_refunds',
+    'enabled' => true
+));
+```
+
+#####Show Configuration
+```php
+$configuration = PromisePay::Configurations()->get('CONFIGURATION_ID');
+```
+
+##### List Configurations
+```php
+$configurations = PromisePay::Configurations()->getList();
+```
+
+##### Update Configuration
+```php
+$configuration = PromisePay::Configurations()->update(array(
+    'id' => 'CONFIGURATION_ID',
+    'max' => 12345,
+    'name' => 'partial_refunds',
+    'enabled' => true
+));
+```
+
+##### Delete Configuration
+```php
+PromisePay::Configurations()->delete('CONFIGURATION_ID');
+```
+
+##Payment Restrictions
+#####List Payment Restrictions
+```php
+$list = PromisePay::PaymentRestrictions()->getList();
+```
+
+#####Show Payment Restriction
+```php
+$paymentRestriction = PromisePay::PaymentRestrictions()->get('PAYMENT_RESTRICTION_ID');
+```
+
 #4. Async and Wrappers
 ##Async
 Asynchronous execution provides a significant speed improvement, as compared to synchronous execution.

@@ -29,14 +29,14 @@ Install the package.
 Require the package in the controller where you'll be using it.
 
 ```php
-use PromisePay\Promisepay;
+use PromisePay\PromisePay;
 ```
 
 ###Manual Installation
 Download the latest release from GitHub, then require the package in the relevant controller.
 
 ```php
-use PromisePay\Promisepay;
+use PromisePay\PromisePay;
 ```
 
 ### Prerequisites

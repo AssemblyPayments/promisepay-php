@@ -29,14 +29,14 @@ Install the package.
 Require the package in the controller where you'll be using it.
 
 ```php
-use PromisePay;
+use PromisePay\Promisepay;
 ```
 
 ###Manual Installation
 Download the latest release from GitHub, then require the package in the relevant controller.
 
 ```php
-use PromisePay;
+use PromisePay\Promisepay;
 ```
 
 ### Prerequisites
@@ -330,7 +330,9 @@ $accounts = PromisePay::User()->getListOfWalletAccounts('USER_ID');
 ```
 #####Set a user's disbursement account
 ```php
-$account = PromisePay::User()->setDisbursementAccount('ACCOUNT_ID');
+$account = PromisePay::User()->setDisbursementAccount('USER_ID', array(
+    'account_id' => 'ACCOUNT_ID'
+));
 ```
 
 ##Wallet Accounts

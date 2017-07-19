@@ -1,7 +1,5 @@
 #PHP SDK - PromisePay API
 
-[![Join the chat at https://gitter.im/PromisePay/promisepay-php](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/NinoSkopac/promisepay-php?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 [![Build Status](https://travis-ci.org/PromisePay/promisepay-php.svg)](https://travis-ci.org/NinoSkopac/promisepay-php) [![Latest Stable Version](https://poser.pugx.org/promisepay/promisepay-php/v/stable)](https://packagist.org/packages/promisepay/promisepay-php)
 [![Total Downloads](https://poser.pugx.org/promisepay/promisepay-php/downloads)](https://packagist.org/packages/promisepay/promisepay-php)
 [![Code Climate](https://codeclimate.com/github/PromisePay/promisepay-php/badges/gpa.svg)](https://codeclimate.com/github/PromisePay/promisepay-php)
@@ -46,9 +44,9 @@ use PromisePay;
    
 
 #2. Configuration
-Before interacting with PromisePay API, you need to generate an API token. See [http://docs.promisepay.com/v2.2/docs/request_token](http://docs.promisepay.com/v2.2/docs/request_token) for more information.
+Before interacting with PromisePay API, you'll need to [create a prelive account](https://management.prelive.promisepay.com/#/sign-up/prelive) and get an API token.
 
-Afterwards, you need to declare environment, login (your email address) and password (token), thus:
+Afterwards, you need to declare environment, login (your email address) and password (API token), thus:
 
 ```php
 PromisePay::Configuration()->environment('prelive'); // Use 'production' for the production environment.

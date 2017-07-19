@@ -50,7 +50,7 @@ class PromisePay {
             throw new Exception\NotFound("Repository $class not found");
         }
     }
-    
+
     /**
      * Method for performing requests to PromisePay endpoints.
      *
@@ -58,6 +58,11 @@ class PromisePay {
      * @param string $entity Endpoint name
      * @param string $payload optional URL encoded data query
      * @param string $mime optional Set specific MIME type.
+     * @return \Httpful\Response|array
+     * @throws Exception\Api
+     * @throws Exception\ApiUnsupportedRequestMethod
+     * @throws Exception\NotFound
+     * @throws Exception\Unauthorized
      */
     public static function RestClient($method, $entity, $payload = null, $mime = null) {
         Helpers\Functions::runtimeChecks();
@@ -65,6 +70,9 @@ class PromisePay {
         if (!is_scalar($payload) && $payload !== null) {
             $payload = http_build_query($payload);
         }
+
+        // all endpoints are in lower case
+        $entity = strtolower($entity);
         
         $url = constant(__NAMESPACE__ . '\API_URL') . $entity . '?' . $payload;
         
@@ -454,7 +462,6 @@ class PromisePay {
     
     public function __toString() {
         // disallow leaking of credentials
-        // TODO IMPROVE
-        return new stdClass;
+        return '';
     }
 }

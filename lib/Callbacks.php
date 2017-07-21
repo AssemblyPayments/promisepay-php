@@ -2,45 +2,48 @@
 namespace PromisePay;
 
 class Callbacks {
-    public function create($params) {
-        PromisePay::RestClient('POST', __CLASS__, $params);
+    const ENDPOINT = 'callbacks';
+    const RESPONSES_INDEX = 'callback_responses';
 
-        return PromisePay::getDecodedResponse(__CLASS__);
+    public function create($params) {
+        PromisePay::RestClient('POST', self::ENDPOINT, $params);
+
+        return PromisePay::getDecodedResponse(self::ENDPOINT);
     }
 
     public function getList($params = null) {
-        PromisePay::RestClient('GET', __CLASS__, $params);
+        PromisePay::RestClient('GET', self::ENDPOINT, $params);
 
-        return PromisePay::getDecodedResponse(__CLASS__);
+        return PromisePay::getDecodedResponse(self::ENDPOINT);
     }
 
     public function get($callbackId) {
-        PromisePay::RestClient('GET', __CLASS__ . '/' . $callbackId);
+        PromisePay::RestClient('GET', self::ENDPOINT . '/' . $callbackId);
 
-        return PromisePay::getDecodedResponse(__CLASS__);
+        return PromisePay::getDecodedResponse(self::ENDPOINT);
     }
 
-    public function update($params) {
-        PromisePay::RestClient('PATCH', __CLASS__, $params);
+    public function update($callbackId, $params) {
+        PromisePay::RestClient('PATCH', self::ENDPOINT . '/' . $callbackId, $params);
 
-        return PromisePay::getDecodedResponse(__CLASS__);
+        return PromisePay::getDecodedResponse(self::ENDPOINT);
     }
 
     public function delete($callbackId) {
-        PromisePay::RestClient('DELETE', __CLASS__, $callbackId);
+        PromisePay::RestClient('DELETE', self::ENDPOINT . '/' . $callbackId);
 
-        return PromisePay::getDecodedResponse(__CLASS__);
+        return PromisePay::getDecodedResponse(self::ENDPOINT);
     }
 
-    public function getResponses($callbackId) {
-        PromisePay::RestClient('GET', __CLASS__ . '/' . $callbackId . '/responses');
+    public function getListResponses($callbackId) {
+        PromisePay::RestClient('GET', self::ENDPOINT . '/' . $callbackId . '/responses');
 
-        return PromisePay::getDecodedResponse(__CLASS__ . '_responses');
+        return PromisePay::getDecodedResponse(self::RESPONSES_INDEX);
     }
 
     public function getResponse($callbackId, $responseId) {
-        PromisePay::RestClient('GET', __CLASS__ . '/' . $callbackId . '/responses/' . $responseId);
+        PromisePay::RestClient('GET', self::ENDPOINT . '/' . $callbackId . '/responses/' . $responseId);
 
-        return PromisePay::getDecodedResponse(__CLASS__ . '_responses');
+        return PromisePay::getDecodedResponse(self::RESPONSES_INDEX);
     }
 }

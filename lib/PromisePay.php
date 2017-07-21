@@ -71,7 +71,8 @@ class PromisePay {
             $payload = http_build_query($payload);
         }
 
-        // all endpoints are in lower case
+        // normalize endpoints and request mothod to lower case
+        $method = strtolower($method);
         $entity = strtolower($entity);
         
         $url = constant(__NAMESPACE__ . '\API_URL') . $entity . '?' . $payload;
@@ -241,16 +242,17 @@ class PromisePay {
     public static function finishAsync() {
         self::$sendAsync = false;
     }
-    
+
     /**
      * Get all results for a request, synchronously.
      *
      * Expects a callable as argument (i.e. get a list of all fees)
      *
-     * @param callable $request 
+     * @param callable $request
      * @param int $limit How much results to obtain per request. Defaults to 200.
      * @param int $offset Pagination offset. Defaults to 0.
      * @param bool $async Optionally, execute the requests asynchronously.
+     * @return array
      */
     public static function getAllResults($request, $limit = 200, $offset = 0, $async = false) {
         // can't use callable argument typehint as the 

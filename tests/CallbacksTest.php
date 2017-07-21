@@ -47,7 +47,6 @@ class CallbacksTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testGetList() {
-        PromisePay::enableDebug();
         $callbacks = self::$allCallbacks = PromisePay::getAllResults(function($limit, $offset) {
             return PromisePay::Callbacks()->getList([
                 'limit' => $limit,

@@ -14,7 +14,7 @@ class AsyncClient {
     public function __construct() {
         $this->storageHandler = new AsyncStorageHandler;
     }
-    
+
     /**
      * Method for performing async requests against PromisePay endpoints.
      *
@@ -27,6 +27,7 @@ class AsyncClient {
      *
      * @param array $requests A set of requests, in format of [http method, full uri]
      * @param int $iteratorMaximum Maximum amount of recursive method calls
+     * @return AsyncStorageHandler
      */
     public function Client(
         array $requests,

@@ -47,10 +47,11 @@ class CallbacksTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testGetList() {
+        PromisePay::enableDebug();
         $callbacks = self::$allCallbacks = PromisePay::getAllResults(function($limit, $offset) {
             return PromisePay::Callbacks()->getList([
-                'limit' => 200,
-                'offset' => 0
+                'limit' => $limit,
+                'offset' => $offset
             ]);
         });
 
@@ -60,7 +61,12 @@ class CallbacksTest extends \PHPUnit_Framework_TestCase {
         $getListIds = array_column($callbacks, 'id');
 
         foreach ($createdIds as $createdId) {
-            $this->assertTrue(in_array($createdId, $getListIds));
+            $inArray = in_array($createdId, $getListIds);
+
+            if (!$inArray)
+                fwrite(STDERR, print_r([$createdId, $getListIds], true));
+
+            $this->assertTrue($inArray);
         }
     }
 

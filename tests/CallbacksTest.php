@@ -25,6 +25,8 @@ class CallbacksTest extends \PHPUnit_Framework_TestCase {
 
     protected static $createdCallbacks; // populated in testCreate()
     protected static $allCallbacks; // populated in testGetList()
+    protected static $userCallbackResponses; // populated in testGetListResponses()
+    protected static $callbackResponse = ['callback_id' => null, 'response_id' => null]; // // populated in testGetListResponses()
 
     public function testCreate() {
         // create a callback for each object_type possible,
@@ -47,6 +49,9 @@ class CallbacksTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @depends testCreate
+     */
     public function testGetList() {
         $callbacks = self::$allCallbacks = PromisePay::getAllResults(function($limit, $offset) {
             return PromisePay::Callbacks()->getList([
@@ -70,6 +75,9 @@ class CallbacksTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @depends testCreate
+     */
     public function testGet() {
         // take a random ID out of the ones we've created and get it
         $createdCallback = $this->getRandomCreatedCallback();
@@ -82,6 +90,9 @@ class CallbacksTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @depends testCreate
+     */
     public function testUpdate() {
         $createdCallback = $this->getRandomCreatedCallback();
         $params = self::PARAMS;
@@ -101,6 +112,9 @@ class CallbacksTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @depends testGetList
+     */
     public function testDeleteAnyEnabledCallback() {
         $allCallbacksEnabledColumn = array_column(self::$allCallbacks, 'enabled', 'id');
         $enabledCallbacksIds = array_keys($allCallbacksEnabledColumn, true, true);
@@ -111,6 +125,9 @@ class CallbacksTest extends \PHPUnit_Framework_TestCase {
         }
     }
 
+    /**
+     * @depends testCreate
+     */
     public function testGetListResponses() {
         // enable a user callback.
         // create a user,
@@ -118,15 +135,15 @@ class CallbacksTest extends \PHPUnit_Framework_TestCase {
         // check callback responses
 
         // find a callback we created in testCreate() with object_type = users
-        $id = array_search(
+        $callbackId = array_search(
             'users',
             array_column(self::$createdCallbacks, 'object_type', 'id')
         );
 
         // update its enabled property, set it to true
-        $updateEnableUserCallbacks = PromisePay::Callbacks()->update($id, ['enabled' => true]);
+        $updateEnableUserCallbacks = PromisePay::Callbacks()->update($callbackId, ['enabled' => true]);
         $this->assertEquals($updateEnableUserCallbacks['enabled'], true);
-        $this->assertEquals($updateEnableUserCallbacks['id'], $id);
+        $this->assertEquals($updateEnableUserCallbacks['id'], $callbackId);
 
         // create and update a user
         require_once __DIR__ . '/UserTest.php'; // @TODO register an inter-devel autoloading
@@ -145,24 +162,41 @@ class CallbacksTest extends \PHPUnit_Framework_TestCase {
         $updateUser = PromisePay::User()->update($createdUserId, $updatedUserData);
 
         // check callback response
-        $callbackResponsesList = PromisePay::Callbacks()->getListResponses($id);
+        $callbackResponsesList = self::$userCallbackResponses = PromisePay::Callbacks()->getListResponses($callbackId);
 
         $this->assertTrue(is_array($callbackResponsesList));
+        $this->assertTrue(count($callbackResponsesList) > 0);
 
         foreach ($callbackResponsesList as $response) {
             $this->assertArrayHasKey('id', $response);
             $this->assertArrayHasKey('url', $response);
         }
+
+        self::$callbackResponse['callback_id'] = $callbackId;
+        self::$callbackResponse['response_id'] = $callbackResponsesList[0]['id'];
     }
 
+    /**
+     * @depends testGetListResponses
+     */
     public function testGetResponse() {
-        // @TODO
+        $callbackResponse = PromisePay::Callbacks()->getResponse(
+            self::$callbackResponse['callback_id'],
+            self::$callbackResponse['response_id']
+        );
+
+        $this->assertTrue(is_array($callbackResponse));
+        $this->assertArrayHasKey('id', $callbackResponse);
+        $this->assertEquals($callbackResponse['id'], self::$callbackResponse['response_id']);
     }
 
+    /**
+     * @depends testCreate
+     */
     public function testDelete() {
         $deletedCount = 0;
 
-        // delete all callbacks
+        // delete all callbacks created by this script
         foreach (self::$createdCallbacks as $callback) {
             $delete = PromisePay::Callbacks()->delete($callback['id']);
             $deletedCount++;

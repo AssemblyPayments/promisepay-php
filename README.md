@@ -742,6 +742,55 @@ $list = PromisePay::PaymentRestrictions()->getList();
 $paymentRestriction = PromisePay::PaymentRestrictions()->get('PAYMENT_RESTRICTION_ID');
 ```
 
+##Callbacks
+####Create Callback
+```php
+$callback = PromisePay::Callbacks()->create(array(
+    'description' => 'Users Callback',
+    'url' => 'https://domain.tld/your/post/endpoint',
+    'object_type' => 'users',
+    'enabled' => true
+));
+```
+
+####List Callbacks
+```php
+$getList = PromisePay::Callbacks()->getList();
+```
+
+####Show Callback
+```php
+$getCallback = PromisePay::Callbacks()->get('f92d4ca1-4ee5-43f3-9e34-ca5f759c5e76');
+```
+
+####Update Callback
+```php
+$update = PromisePay::Callbacks()->update('f92d4ca1-4ee5-43f3-9e34-ca5f759c5e76', array(
+    'description' => 'Users Callback',
+    'url' => 'https://domain.tld/your/post/endpoint',
+    'object_type' => 'users',
+    'enabled' => false
+));
+```
+
+####Delete Callback
+```php
+$delete = PromisePay::Callbacks()->delete('f92d4ca1-4ee5-43f3-9e34-ca5f759c5e76');
+```
+
+####List Callback Responses
+```php
+$callbackResponsesList = PromisePay::Callbacks()->getListResponses('f92d4ca1-4ee5-43f3-9e34-ca5f759c5e76');
+```
+
+####Show Callback Response
+```php
+$callbackResponse = PromisePay::Callbacks()->getResponse(
+    'f92d4ca1-4ee5-43f3-9e34-ca5f759c5e76',
+    '4476b384-fa48-4473-98ec-8fcdda4a1e84'
+);
+```
+
 #4. Async and Wrappers
 ##Async
 Asynchronous execution provides a significant speed improvement, as compared to synchronous execution.

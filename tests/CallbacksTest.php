@@ -212,4 +212,40 @@ class CallbacksTest extends \PHPUnit_Framework_TestCase {
     protected function getRandomCreatedCallback() {
         return self::$createdCallbacks[array_rand(self::$createdCallbacks)];
     }
+
+    private function readmeExamples() {
+        // create
+        $callback = PromisePay::Callbacks()->create(array(
+            'description' => 'Users Callback',
+            'url' => 'https://domain.tld/your/post/endpoint',
+            'object_type' => 'users',
+            'enabled' => true
+        ));
+
+        // get list
+        $getList = PromisePay::Callbacks()->getList();
+
+        // get one
+        $getCallback = PromisePay::Callbacks()->get('f92d4ca1-4ee5-43f3-9e34-ca5f759c5e76');
+
+        // update
+        $update = PromisePay::Callbacks()->update('f92d4ca1-4ee5-43f3-9e34-ca5f759c5e76', array(
+            'description' => 'Users Callback',
+            'url' => 'https://domain.tld/your/post/endpoint',
+            'object_type' => 'users',
+            'enabled' => false
+        ));
+
+        // delete
+        $delete = PromisePay::Callbacks()->delete('f92d4ca1-4ee5-43f3-9e34-ca5f759c5e76');
+
+        // List Callback Responses
+        $callbackResponsesList = PromisePay::Callbacks()->getListResponses('f92d4ca1-4ee5-43f3-9e34-ca5f759c5e76');
+
+        // Show Callback Response
+        $callbackResponse = PromisePay::Callbacks()->getResponse(
+            'f92d4ca1-4ee5-43f3-9e34-ca5f759c5e76',
+            '4476b384-fa48-4473-98ec-8fcdda4a1e84'
+        );
+    }
 }

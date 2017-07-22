@@ -112,9 +112,10 @@ class CallbacksTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testGetListResponses() {
-        // enable a user callback (testCreate() creates disabled callbacks),
+        // enable a user callback.
         // create a user,
-        // assert there's a callback response in the list
+        // update a user,
+        // check callback responses
 
         // find a callback we created in testCreate() with object_type = users
         $id = array_search(

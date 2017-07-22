@@ -50,7 +50,7 @@ class PromisePay {
             throw new Exception\NotFound("Repository $class not found");
         }
     }
-    
+
     /**
      * Method for performing requests to PromisePay endpoints.
      *
@@ -58,6 +58,11 @@ class PromisePay {
      * @param string $entity Endpoint name
      * @param string $payload optional URL encoded data query
      * @param string $mime optional Set specific MIME type.
+     * @return \Httpful\Response|array
+     * @throws Exception\Api
+     * @throws Exception\ApiUnsupportedRequestMethod
+     * @throws Exception\NotFound
+     * @throws Exception\Unauthorized
      */
     public static function RestClient($method, $entity, $payload = null, $mime = null) {
         Helpers\Functions::runtimeChecks();
@@ -65,6 +70,10 @@ class PromisePay {
         if (!is_scalar($payload) && $payload !== null) {
             $payload = http_build_query($payload);
         }
+
+        // normalize endpoints and request mothod to lower case
+        $method = strtolower($method);
+        $entity = strtolower($entity);
         
         $url = constant(__NAMESPACE__ . '\API_URL') . $entity . '?' . $payload;
         
@@ -185,26 +194,45 @@ class PromisePay {
         
         return new Helpers\AsyncClient;
     }
+
+    public static function clearAsync() {
+        self::$pendingRequests = array();
+    }
+
+    public static function finishAsync() {
+        self::$sendAsync = false;
+    }
     
     /**
      * Asynchronous HTTP client for executing requests towards PromisePay endpoints.
      *
-     * @param callable Accepts a variable list of callables.
+     * If called without an argument, it'll use self::$pendingRequests.
+     * Make sure to disable async mode yourself by calling PromisePay::finishAsync()
+     *
+     * Otherwise, pass callables into it.
+     * This will disable async mode for you.
+     *
      * @return Helpers\AsyncStorageHandler
     */
     public static function AsyncClient() {
         $args = func_get_args();
+        $asyncClient = self::beginAsync();
         
         if (empty($args)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "%s requires at least one argument.",
-                    __METHOD__
-                )
-            );
+            if (empty(self::$pendingRequests)) {
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        "%s requires at least one argument when there are no pending requests.",
+                        __METHOD__
+                    )
+                );
+            }
+
+            $results = $asyncClient->Client(self::$pendingRequests);
+            self::clearAsync();
+
+            return $results;
         }
-        
-        $asyncClient = self::beginAsync();
         
         foreach ($args as $key => $arg) {
             if (!is_callable($arg)) {
@@ -220,29 +248,30 @@ class PromisePay {
             
             $arg();
         }
-        
+
+        $results = $asyncClient->Client(self::$pendingRequests);
+        self::clearAsync();
         self::finishAsync();
         
-        $asyncResults = $asyncClient->Client(self::$pendingRequests);
-        
-        self::$pendingRequests = array();
-        
-        return $asyncResults;
+        return $results;
     }
-    
-    public static function finishAsync() {
-        self::$sendAsync = false;
+
+    public static function executeAsync() {
+        $asyncClient = self::beginAsync();
+
+        return $asyncClient->Client(self::$pendingRequests);
     }
-    
+
     /**
      * Get all results for a request, synchronously.
      *
      * Expects a callable as argument (i.e. get a list of all fees)
      *
-     * @param callable $request 
+     * @param callable $request
      * @param int $limit How much results to obtain per request. Defaults to 200.
      * @param int $offset Pagination offset. Defaults to 0.
      * @param bool $async Optionally, execute the requests asynchronously.
+     * @return array
      */
     public static function getAllResults($request, $limit = 200, $offset = 0, $async = false) {
         // can't use callable argument typehint as the 
@@ -406,6 +435,10 @@ class PromisePay {
         
         if (isset($json['meta']))
             return $json['meta'];
+
+        // for DELETE cases
+        if (!is_array($json))
+            $json = array($json);
         
         $recursiveLookup = Helpers\Functions::arrayValueByKeyRecursive('meta', $json);
         
@@ -418,7 +451,11 @@ class PromisePay {
         
         if (isset($json['links']))
             return $json['links'];
-        
+
+        // for DELETE cases
+        if (!is_array($json))
+            $json = array($json);
+
         $recursiveLookup = Helpers\Functions::arrayValueByKeyRecursive('links', $json);
         
         return empty($recursiveLookup) ? array() : $recursiveLookup;
@@ -454,7 +491,6 @@ class PromisePay {
     
     public function __toString() {
         // disallow leaking of credentials
-        // TODO IMPROVE
-        return new stdClass;
+        return '';
     }
 }

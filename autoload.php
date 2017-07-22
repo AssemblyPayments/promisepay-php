@@ -29,14 +29,17 @@ spl_autoload_register(function ($class) {
 
 // Was the package installed through Composer?
 // If not, fallback to included versions of vendor files
-$vendorFiles = array(
+$httpfulFiles = array(
     __DIR__ . '/lib/Vendors/Httpful/Bootstrap.php',
     __DIR__ . '/lib/Vendors/Httpful/Http.php',
     __DIR__ . '/lib/Vendors/Httpful/Request.php'
 );
 
 if (!class_exists('Httpful\Request')) {
-    foreach ($vendorFiles as $file) {
+    foreach ($httpfulFiles as $file) {
         require_once $file;
     }
+
+    // polyfill for array_column
+    require_once __DIR__ . '/lib/Vendors/ramsey/array_column/src/array_column.php';
 }

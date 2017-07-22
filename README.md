@@ -85,7 +85,7 @@ $token = PromisePay::Token()->requestSessionToken(array(
 ```php
 $item = PromisePay::Item()->create(array(
     "id"              => 'ITEM_ID',
-    "name"            => 'Test Item # 1',
+    "name"            => 'Test Item #1',
     "amount"          => 1000,
     "payment_type_id" => 1,
     "buyer_id"        => 'BUYER_ID',
@@ -109,7 +109,7 @@ $items = PromisePay::Item()->getList(array(
 ```php
 $item = PromisePay::Item()->update('ITEM_ID', array(
     "id"              => 'ITEM_ID',
-    "name"            => 'Test Item # 1',
+    "name"            => 'Test Item #1',
     "amount"          => 1000,
     "payment_type_id" => 1,
     "buyer_id"        => 'BUYER_ID',

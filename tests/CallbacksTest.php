@@ -4,13 +4,13 @@ namespace PromisePay\Tests;
 use PromisePay\PromisePay;
 
 class CallbacksTest extends \PHPUnit_Framework_TestCase {
-    const PARAMS = [
+    const PARAMS = array(
         'description' => null,
         'url' => null,
         'object_type' => null,
         'enabled' => null
-    ];
-    const OBJECT_TYPES = [
+    );
+    const OBJECT_TYPES = array(
         'items',
         'users',
         'companies',
@@ -19,14 +19,16 @@ class CallbacksTest extends \PHPUnit_Framework_TestCase {
         'disbursements',
         'transactions',
         'batch_transactions'
-    ];
+    );
     const DESCRIPTION_TEMPLATE = 'Callback for %s (created as a test in PHP SDK)';
     const URL = 'https://httpbin.org/post';
 
     protected static $createdCallbacks; // populated in testCreate()
     protected static $allCallbacks; // populated in testGetList()
     protected static $userCallbackResponses; // populated in testGetListResponses()
-    protected static $callbackResponse = ['callback_id' => null, 'response_id' => null]; // // populated in testGetListResponses()
+    protected static $callbackResponse = array(
+        'callback_id' => null, 'response_id' => null
+    ); // // populated in testGetListResponses()
 
     public function testCreate() {
         // create a callback for each object_type possible,

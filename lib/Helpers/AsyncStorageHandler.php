@@ -8,8 +8,10 @@ class AsyncStorageHandler {
     private $links = array();
     private $debug = array();
     
-    public function storeJson(array $response) {
-        $this->json[] = $response;
+    public function storeJson($response) {
+        // $response is usually an array, but can be a string
+        // too, in case of DELETE ("Successfully redacted")
+        $this->json[] = is_array($response) ? $response : array($response);
     }
     
     public function storeMeta(array $meta) {

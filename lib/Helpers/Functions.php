@@ -104,12 +104,12 @@ class Functions {
      * Returns null if invalid params are supplied, or false if
      * the key is not found.
      *
-     * @param scalar $needle Key name being sought
-     * @param array $array Input array
+     * @param string|int $needle Key name being sought
+     * @param array $haystack Input array
      *
      * @return string
      */
-    public static function arrayValueByKeyRecursive($needle, array $array) {
+    public static function arrayValueByKeyRecursive($needle, array $haystack) {
         if (!is_scalar($needle)) {
             if (PromisePay::isDebug()) {
                 throw new \InvalidArgumentException(
@@ -124,7 +124,7 @@ class Functions {
         }
         
         $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveArrayIterator($array),
+            new \RecursiveArrayIterator($haystack),
             \RecursiveIteratorIterator::SELF_FIRST
         );
         

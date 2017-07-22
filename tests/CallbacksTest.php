@@ -4,13 +4,16 @@ namespace PromisePay\Tests;
 use PromisePay\PromisePay;
 
 class CallbacksTest extends \PHPUnit_Framework_TestCase {
-    const PARAMS = array(
+    const DESCRIPTION_TEMPLATE = 'Callback for %s (created as a test in PHP SDK)';
+    const URL = 'https://httpbin.org/post';
+
+    protected $params = array(
         'description' => null,
         'url' => null,
         'object_type' => null,
         'enabled' => null
     );
-    const OBJECT_TYPES = array(
+    protected $objectTypes = array(
         'items',
         'users',
         'companies',
@@ -20,8 +23,6 @@ class CallbacksTest extends \PHPUnit_Framework_TestCase {
         'transactions',
         'batch_transactions'
     );
-    const DESCRIPTION_TEMPLATE = 'Callback for %s (created as a test in PHP SDK)';
-    const URL = 'https://httpbin.org/post';
 
     protected static $createdCallbacks; // populated in testCreate()
     protected static $allCallbacks; // populated in testGetList()
@@ -34,8 +35,8 @@ class CallbacksTest extends \PHPUnit_Framework_TestCase {
         // create a callback for each object_type possible,
         // but set enable => false because there can only be one callback
         // enabled for each object_type
-        foreach (self::OBJECT_TYPES as $type) {
-            $params = self::PARAMS;
+        foreach ($this->objectTypes as $type) {
+            $params = $this->params;
             $params['description'] = sprintf(self::DESCRIPTION_TEMPLATE, $type);
             $params['url'] = self::URL;
             $params['object_type'] = $type;
@@ -87,7 +88,7 @@ class CallbacksTest extends \PHPUnit_Framework_TestCase {
 
         // make sure that all properties we've set when creating
         // this callback are equal to the ones present
-        foreach (self::PARAMS as $param => $placeholderValue) {
+        foreach ($this->params as $param => $placeholderValue) {
             $this->assertEquals($createdCallback[$param], $getCallback[$param]);
         }
     }
@@ -97,10 +98,10 @@ class CallbacksTest extends \PHPUnit_Framework_TestCase {
      */
     public function testUpdate() {
         $createdCallback = $this->getRandomCreatedCallback();
-        $params = self::PARAMS;
+        $params = $this->params;
         $params['description'] = self::DESCRIPTION_TEMPLATE . ' (UPDATED)';
         $params['url'] = self::URL;
-        $params['object_type'] = self::OBJECT_TYPES[array_rand(self::OBJECT_TYPES)];
+        $params['object_type'] = $this->objectTypes[array_rand($this->objectTypes)];
 
         $update = PromisePay::Callbacks()->update($createdCallback['id'], $params);
 

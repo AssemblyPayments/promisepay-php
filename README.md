@@ -786,8 +786,8 @@ $callbackResponsesList = PromisePay::Callbacks()->getListResponses('f92d4ca1-4ee
 #### Show Callback Response
 ```php
 $callbackResponse = PromisePay::Callbacks()->getResponse(
-    'f92d4ca1-4ee5-43f3-9e34-ca5f759c5e76',
-    '4476b384-fa48-4473-98ec-8fcdda4a1e84'
+    'f92d4ca1-4ee5-43f3-9e34-ca5f759c5e76', // callback ID
+    '4476b384-fa48-4473-98ec-8fcdda4a1e84' // response ID
 );
 ```
 

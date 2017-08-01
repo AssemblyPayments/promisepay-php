@@ -4,6 +4,8 @@ namespace PromisePay\Tests;
 use PromisePay\PromisePay;
 
 class UserTest extends \PHPUnit_Framework_TestCase {
+
+    public static $createdUser;
     
     protected $GUID,
     $userData,
@@ -67,12 +69,26 @@ class UserTest extends \PHPUnit_Framework_TestCase {
             'user_id'      => '',
             'paypal_email' => 'test@paypalname.com'
         );
-        
     }
-    
+
+    /**
+     * Property getter.
+     *
+     * getUserData(), getPayPalData() etc
+     *
+     * @param $name
+     * @param $arguments
+     */
+    public function __call($name, $arguments)
+    {
+        $property = lcfirst(substr($name, 3));
+
+        return $this->$property;
+    }
+
     public function testUserCreate() {
         // First, create the user
-        $createUser = PromisePay::User()->create($this->userData);
+        $createUser = self::$createdUser = PromisePay::User()->create($this->userData);
         
         // Second, fetch its data
         $getUser = PromisePay::User()->get($createUser['id']);
@@ -93,13 +109,9 @@ class UserTest extends \PHPUnit_Framework_TestCase {
     
     public function testEditUser() {
         $userData = $this->userData;
-        
         $createUser = PromisePay::User()->create($this->userData);
-        
         $userData['first_name'] = 'Edited First name';
-        
         $updateUser = PromisePay::User()->update($createUser['id'], $userData);
-        
         $this->assertEquals($userData['first_name'], $updateUser['first_name']);
     }
     

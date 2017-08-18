@@ -70,10 +70,6 @@ class PromisePay {
         if (!is_scalar($payload) && $payload !== null) {
             $payload = http_build_query($payload);
         }
-
-        // normalize endpoints and request mothod to lower case
-        $method = strtolower($method);
-        $entity = strtolower($entity);
         
         $url = constant(__NAMESPACE__ . '\API_URL') . $entity . '?' . $payload;
         

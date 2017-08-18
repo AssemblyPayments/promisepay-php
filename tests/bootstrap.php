@@ -21,8 +21,8 @@ require_once __DIR__ . '/functions.php';
 require __DIR__ . '/../autoload.php';
 
 // PHPUnit 6 introduced a breaking change that
-// removes PHPUnit_Framework_TestCase as a base class,
-// and replaces it with \PHPUnit\Framework\TestCase
+// removed PHPUnit_Framework_TestCase as a base class,
+// and replaced it with \PHPUnit\Framework\TestCase
 if (!class_exists('\PHPUnit_Framework_TestCase') && class_exists('\PHPUnit\Framework\TestCase'))
     class_alias('\PHPUnit\Framework\TestCase', '\PHPUnit_Framework_TestCase');
 

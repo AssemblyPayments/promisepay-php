@@ -70,6 +70,9 @@ class PromisePay {
         if (!is_scalar($payload) && $payload !== null) {
             $payload = http_build_query($payload);
         }
+
+        // Httpful only accepts lowercase request methods
+        $method = strtolower($method);
         
         $url = constant(__NAMESPACE__ . '\API_URL') . $entity . '?' . $payload;
         

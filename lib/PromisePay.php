@@ -5,6 +5,28 @@ namespace PromisePay;
  * Class PromisePay
  *
  * @package PromisePay
+ *
+ * @method static Address Address()
+ * @method static BankAccount BankAccount()
+ * @method static BatchTransactions BatchTransactions()
+ * @method static Callbacks Callbacks()
+ * @method static CardAccount CardAccount()
+ * @method static Charges Charges()
+ * @method static Company Company()
+ * @method static Configuration Configuration()
+ * @method static Configurations Configurations()
+ * @method static DirectDebitAuthority DirectDebitAuthority()
+ * @method static Disbursement Disbursement()
+ * @method static Fee Fee()
+ * @method static Item Item()
+ * @method static Marketplaces Marketplaces()
+ * @method static PaymentRestrictions PaymentRestrictions()
+ * @method static PayPalAccount PayPalAccount()
+ * @method static Token Token()
+ * @method static Tools Tools()
+ * @method static Transaction Transaction()
+ * @method static User User()
+ * @method static WalletAccounts WalletAccounts()
  */
 class PromisePay {
     /** @var array Pending requests; to be executed asynchronously */

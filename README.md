@@ -9,12 +9,13 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [1. Installation](#1-installation)
+
+- [Installation](#installation)
     - [Composer](#composer)
     - [Manual Installation](#manual-installation)
     - [Prerequisites](#prerequisites)
-- [2. Configuration](#2-configuration)
-- [3. Examples](#3-examples)
+- [Configuration](#configuration)
+- [Examples](#examples)
   - [Tokens](#tokens)
     - [Example 1 - Request session token](#example-1---request-session-token)
   - [Items](#items)
@@ -136,14 +137,14 @@
       - [Delete Callback](#delete-callback)
       - [List Callback Responses](#list-callback-responses)
       - [Show Callback Response](#show-callback-response)
-- [4. Async and Wrappers](#4-async-and-wrappers)
+- [Async and Wrappers](#async-and-wrappers)
   - [Async](#async)
   - [Wrappers](#wrappers)
-- [5. Contributing](#5-contributing)
+- [Contributing](#contributing)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# 1. Installation
+# Installation
 
 ### Composer
 
@@ -180,7 +181,7 @@ use PromisePay\PromisePay;
    - [curl](http://php.net/manual/en/book.curl.php) and [json](http://php.net/manual/en/book.json.php)  extensions must be enabled
    
 
-# 2. Configuration
+# Configuration
 Before interacting with PromisePay API, you'll need to [create a prelive account](https://management.prelive.promisepay.com/#/sign-up/prelive) and get an API token.
 
 Afterwards, you need to declare environment, login (your email address) and password (API token), thus:
@@ -192,7 +193,7 @@ PromisePay::Configuration()->password('your_token');
 ```
 
 
-# 3. Examples
+# Examples
 ## Tokens
 ### Example 1 - Request session token
 The below example shows the request for a marketplace configured to have the Item and User IDs generated automatically for them.
@@ -930,7 +931,7 @@ $callbackResponse = PromisePay::Callbacks()->getResponse(
 );
 ```
 
-# 4. Async and Wrappers
+# Async and Wrappers
 ## Async
 Asynchronous execution provides a significant speed improvement, as compared to synchronous execution.
 ```php
@@ -989,7 +990,7 @@ $batchedTransactionsList = PromisePay::getAllResultsAsync(function($limit, $offs
 });
 ```
 
-# 5. Contributing
+# Contributing
 	1. Fork it ( https://github.com/PromisePay/promisepay-php/fork )
 	2. Create your feature branch (`git checkout -b my-new-feature`)
 	3. Commit your changes (`git commit -am 'Add some feature'`)

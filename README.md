@@ -1,8 +1,14 @@
+# PHP SDK - PromisePay API
+
+[![Build Status](https://travis-ci.org/PromisePay/promisepay-php.svg)](https://travis-ci.org/NinoSkopac/promisepay-php) [![Latest Stable Version](https://poser.pugx.org/promisepay/promisepay-php/v/stable)](https://packagist.org/packages/promisepay/promisepay-php)
+[![Total Downloads](https://poser.pugx.org/promisepay/promisepay-php/downloads)](https://packagist.org/packages/promisepay/promisepay-php)
+[![Code Climate](https://codeclimate.com/github/PromisePay/promisepay-php/badges/gpa.svg)](https://codeclimate.com/github/PromisePay/promisepay-php)
+
+ Note: The api only responds to the models which are included with the php package.
+ 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [PHP SDK - PromisePay API](#php-sdk---promisepay-api)
 - [1. Installation](#1-installation)
     - [Composer](#composer)
     - [Manual Installation](#manual-installation)
@@ -136,14 +142,6 @@
 - [5. Contributing](#5-contributing)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-# PHP SDK - PromisePay API
-
-[![Build Status](https://travis-ci.org/PromisePay/promisepay-php.svg)](https://travis-ci.org/NinoSkopac/promisepay-php) [![Latest Stable Version](https://poser.pugx.org/promisepay/promisepay-php/v/stable)](https://packagist.org/packages/promisepay/promisepay-php)
-[![Total Downloads](https://poser.pugx.org/promisepay/promisepay-php/downloads)](https://packagist.org/packages/promisepay/promisepay-php)
-[![Code Climate](https://codeclimate.com/github/PromisePay/promisepay-php/badges/gpa.svg)](https://codeclimate.com/github/PromisePay/promisepay-php)
-
- Note: The api only responds to the models which are included with the php package.
 
 # 1. Installation
 

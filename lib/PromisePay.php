@@ -58,13 +58,14 @@ class PromisePay {
      * @param string $entity Endpoint name
      * @param string $payload optional URL encoded data query
      * @param string $mime optional Set specific MIME type.
+     * @param int $timeout optional Set request timeout value (60 by default).
      * @return \Httpful\Response|array
      * @throws Exception\Api
      * @throws Exception\ApiUnsupportedRequestMethod
      * @throws Exception\NotFound
      * @throws Exception\Unauthorized
      */
-    public static function RestClient($method, $entity, $payload = null, $mime = null) {
+    public static function RestClient($method, $entity, $payload = null, $mime = null, $timeout = 60) {
         Helpers\Functions::runtimeChecks();
         
         if (!is_scalar($payload) && $payload !== null) {
@@ -93,6 +94,7 @@ class PromisePay {
         switch ($method) {
             case 'get':
                 $response = \Httpful\Request::get($url)
+                ->timeoutIn($timeout)
                 ->authenticateWith(
                     constant(__NAMESPACE__ . '\API_LOGIN'),
                     constant(__NAMESPACE__ . '\API_PASSWORD')
@@ -101,6 +103,7 @@ class PromisePay {
                 break;
             case 'post':
                 $response = \Httpful\Request::post($url)
+                ->timeoutIn($timeout)
                 ->body($payload, $mime)
                 ->authenticateWith(
                     constant(__NAMESPACE__ . '\API_LOGIN'),
@@ -110,6 +113,7 @@ class PromisePay {
                 break;
             case 'delete':
                 $response = \Httpful\Request::delete($url)
+                ->timeoutIn($timeout)
                 ->authenticateWith(
                     constant(__NAMESPACE__ . '\API_LOGIN'),
                     constant(__NAMESPACE__ . '\API_PASSWORD'))
@@ -118,6 +122,7 @@ class PromisePay {
                 break;
             case 'patch':
                 $response = \Httpful\Request::patch($url)
+                ->timeoutIn($timeout)
                 ->body($payload, $mime)
                 ->authenticateWith(
                     constant(__NAMESPACE__ . '\API_LOGIN'),

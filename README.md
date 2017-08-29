@@ -17,7 +17,7 @@
 - [Configuration](#configuration)
 - [Examples](#examples)
   - [Tokens](#tokens)
-    - [Example 1 - Request session token](#example-1---request-session-token)
+    - [Request session token](#request-session-token)
   - [Items](#items)
     - [Create an item](#create-an-item)
     - [Get an item](#get-an-item)
@@ -195,7 +195,7 @@ PromisePay::Configuration()->password('your_token');
 
 # Examples
 ## Tokens
-### Example 1 - Request session token
+### Request session token
 The below example shows the request for a marketplace configured to have the Item and User IDs generated automatically for them.
 
 ```php

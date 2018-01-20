@@ -97,7 +97,7 @@ class PromisePay {
         // Httpful only accepts lowercase request methods
         $method = strtolower($method);
         
-        $url = constant(__NAMESPACE__ . '\API_URL') . $entity . '?' . $payload;
+        $url = constant(__NAMESPACE__ . '\API_URL') . $entity;
         
         if (self::$sendAsync) {
             self::$pendingRequests[] = array(
@@ -115,6 +115,7 @@ class PromisePay {
         
         switch ($method) {
             case 'get':
+                $url .= '?' . $payload;
                 $response = \Httpful\Request::get($url)
                 ->timeoutIn($timeout)
                 ->authenticateWith(
@@ -134,6 +135,7 @@ class PromisePay {
                 
                 break;
             case 'delete':
+                $url .= '?' . $payload;
                 $response = \Httpful\Request::delete($url)
                 ->timeoutIn($timeout)
                 ->authenticateWith(

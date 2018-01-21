@@ -115,8 +115,7 @@ class PromisePay {
         
         switch ($method) {
             case 'get':
-                $url .= '?' . $payload;
-                $response = \Httpful\Request::get($url)
+                $response = \Httpful\Request::get($url . '?' . $payload)
                 ->timeoutIn($timeout)
                 ->authenticateWith(
                     constant(__NAMESPACE__ . '\API_LOGIN'),
@@ -135,8 +134,7 @@ class PromisePay {
                 
                 break;
             case 'delete':
-                $url .= '?' . $payload;
-                $response = \Httpful\Request::delete($url)
+                $response = \Httpful\Request::delete($url . '?' . $payload)
                 ->timeoutIn($timeout)
                 ->authenticateWith(
                     constant(__NAMESPACE__ . '\API_LOGIN'),

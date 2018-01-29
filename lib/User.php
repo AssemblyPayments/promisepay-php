@@ -81,4 +81,10 @@ class User {
         
         return $result['users'];
     }
+    
+    public function verifyUser($id) {
+        PromisePay::RestClient('patch', 'users/' . $id . "?type=identity_verified");
+
+        return PromisePay::getDecodedResponse('users');
+    }
 }

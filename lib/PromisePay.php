@@ -97,7 +97,14 @@ class PromisePay {
         // Httpful only accepts lowercase request methods
         $method = strtolower($method);
         
-        $url = constant(__NAMESPACE__ . '\API_URL') . $entity . '?' . $payload;
+		$url = constant(__NAMESPACE__ . '\API_URL') . $entity;
+        if ($payload != '') {
+            if (strpos($url, '?')) {
+                $url .= '&' . $payload;
+            } else {
+                $url .= '?' . $payload;
+            }
+        }
         
         if (self::$sendAsync) {
             self::$pendingRequests[] = array(
